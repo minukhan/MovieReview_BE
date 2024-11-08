@@ -10,5 +10,5 @@ public class MainController {
     public String main(){
         return "main";
     }
-    //test
+    //test입니다.
 }
