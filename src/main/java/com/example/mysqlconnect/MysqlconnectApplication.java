@@ -9,5 +9,5 @@ public class MysqlconnectApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MysqlconnectApplication.class, args);
 	}
-	//좀 돼라..
+	//좀 돼라....
 }
