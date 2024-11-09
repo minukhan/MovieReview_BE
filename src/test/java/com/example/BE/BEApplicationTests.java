@@ -1,10 +1,10 @@
-package com.example.mysqlconnect;
+package com.example.BE;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MysqlconnectApplicationTests {
+class BEApplicationTests {
 
 	@Test
 	void contextLoads() {
