@@ -37,11 +37,13 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
         if(oauthClientName.equals("kakao")){
             userId = "kakao_" + oAuth2User.getAttributes().get("id");
             email = (String) ((Map)oAuth2User.getAttributes().get("kakao_account")).get("email");
-            userEntity = new UserEntity(userId, email, "kakao");
+            userEntity = userRepository.findByUserId("kakao" + userId);
+            if(userEntity == null){
+                userEntity = new UserEntity(userId, email, "kakao");
+                userRepository.save(userEntity);
+            }
+
         }
-
-        userRepository.save(userEntity);
-
         return new CustomOAuth2UserEntity(userId);
     }
 

@@ -3,6 +3,8 @@ package com.example.BE.auth.controller;
 import com.example.BE.auth.dto.request.*;
 import com.example.BE.auth.dto.response.*;
 import com.example.BE.auth.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,10 +53,17 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     public ResponseEntity<?super SignInResponseDto> signIn(
-            @RequestBody @Valid SignInRequestDto requestBody
+            @RequestBody @Valid SignInRequestDto requestBody,
+            HttpServletResponse response
     ){
-        ResponseEntity<? super SignInResponseDto> response = authService.signIn(requestBody);
-        return response;
+        return authService.signIn(requestBody, response);
 
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<? super ResponseDto> logout(HttpServletRequest request, HttpServletResponse response) {
+        // 세션 무효화
+        request.getSession().invalidate();
+        return authService.logout(response);  // 로그아웃 처리
     }
 }

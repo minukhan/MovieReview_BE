@@ -1,6 +1,8 @@
 package com.example.BE.auth.service.implement;
 
 import com.example.BE.auth.common.CertificationNumber;
+import com.example.BE.auth.common.ResponseCode;
+import com.example.BE.auth.common.ResponseMessage;
 import com.example.BE.auth.dto.request.*;
 import com.example.BE.auth.dto.response.*;
 import com.example.BE.auth.provider.EmailProvider;
@@ -10,7 +12,11 @@ import com.example.BE.certification.CertificationEntity;
 import com.example.BE.certification.CertificationRepository;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -120,27 +126,60 @@ public class AuthServiceImplement implements AuthService {
     }
 
     @Override
-    public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
-        String token = null;
+    public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto, HttpServletResponse response) {
+        String token;
         try {
             String userId = dto.getId();
             UserEntity userEntity = userRepository.findByUserId(userId);
 
-            if(userEntity == null) SignInResponseDto.signInFail();
+            // 사용자 존재 여부 확인
+            if (userEntity == null) return SignInResponseDto.signInFail();
 
+            // 비밀번호 검증
             String password = dto.getPassword();
             String encodedPassword = userEntity.getPassword();
             boolean isMatched = passwordEncoder.matches(password, encodedPassword);
-            if(!isMatched) return SignInResponseDto.signInFail();
+            if (!isMatched) return SignInResponseDto.signInFail();
 
+            // JWT 토큰 생성
             token = jwtProvider.create(userId);
+
+            // 발급된 토큰을 쿠키에 저장
+            Cookie cookie = new Cookie("accessToken", token);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true); // HTTPS 환경에서만 전송
+            cookie.setPath("/");
+            cookie.setMaxAge(7 * 24 * 60 * 60); // 7일간 유효
+
+            response.addCookie(cookie);
+
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
 
-        return SignInResponseDto.success(token);
+        // 로그인 성공 응답
+        return SignInResponseDto.success();
     }
 
+    // 로그아웃 처리 메서드
+    public ResponseEntity<? super ResponseDto> logout(HttpServletResponse response) {
+        try {
+            // accessToken 쿠키 삭제
+            Cookie cookie = new Cookie("accessToken", null);
+            cookie.setHttpOnly(true);  // JS에서 접근 불가
+            cookie.setSecure(true);    // HTTPS 환경에서만 전송
+            cookie.setPath("/");
+            cookie.setMaxAge(0);       // 쿠키 만료 시간 0으로 설정
+
+            response.addCookie(cookie); // 쿠키 삭제
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        // 로그아웃 성공 응답
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS));
+    }
 
 }
