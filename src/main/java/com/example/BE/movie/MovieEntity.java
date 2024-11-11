@@ -13,12 +13,15 @@ import java.time.LocalDate;
 public class MovieEntity {
 
     @Id
+    @Column(name="movie_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int movieId;
 
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String overview;
 
     @Column(nullable = false)

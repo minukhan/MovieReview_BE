@@ -13,8 +13,9 @@ import lombok.*;
 public class FollowerEntity {
 
     @Id
+    @Column(name="follower_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long followerId;
 
     @ManyToOne
     @JoinColumn(name = "from_user_id", nullable = false)
