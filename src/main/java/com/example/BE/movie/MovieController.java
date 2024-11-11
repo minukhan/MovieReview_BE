@@ -40,7 +40,7 @@ public class MovieController {
         try {
             // 원래는 영화가 페이지마다 20개씩 넘어오는데 우리 조는 트레일러 영상이 있는 데이터만 사용하기 때문에
             // for문을 통해 적절히 반복하면서 데이터 갯수 조절할 예정(i 범위 조정)
-            for (int i = 1; i <= 30; i++) {
+            for (int i = 1; i <= 60; i++) {
                 // log.info("##########################" + i + "번째 cycle ##############################");
                 String result = "";  // API 호출 결과를 저장할 문자열 변수 result 초기화
                 // API 호출 URL 생성. apiKey와 페이지 번호 i를 포함하여 API 요청 URL을 구성함

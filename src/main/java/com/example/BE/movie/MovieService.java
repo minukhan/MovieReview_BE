@@ -66,7 +66,7 @@ public class MovieService {
             // Movie 데이터 저장
             movieRepository.save(
                     MovieEntity.builder()
-                            .movieId(contents.get("id").getAsLong())
+                            .movieId(contents.get("id").getAsInt())
                             .title(contents.get("title").getAsString())
                             .overview(contents.get("overview").getAsString())
                             .releaseDate(dateFormat.parse(contents.get("release_date").toString().replace("\"", "")).toInstant()

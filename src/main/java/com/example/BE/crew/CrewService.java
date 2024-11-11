@@ -66,7 +66,6 @@ public class CrewService {
                             .crew(crewRepository.findById(contents.get("id").getAsLong()).orElse(null))
                             .job(contents.get("job").getAsString())
                             .build());
-                    log.info("crew 성공 !");
                 }
             }
         } catch (Exception e) {
