@@ -1,13 +1,12 @@
-package com.example.mysqlconnect;
+package com.example.BE;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MysqlconnectApplication {
+public class BEApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MysqlconnectApplication.class, args);
+		SpringApplication.run(BEApplication.class, args);
 	}
-
 }
