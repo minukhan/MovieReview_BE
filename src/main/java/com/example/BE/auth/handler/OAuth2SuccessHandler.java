@@ -24,8 +24,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                                         Authentication authentication) throws IOException, ServletException {
         CustomOAuth2UserEntity oAuth2User = (CustomOAuth2UserEntity) authentication.getPrincipal();
 
-        String userId = oAuth2User.getName();
-        String token = jwtProvider.create(userId);
+        String id = oAuth2User.getName();
+        String token = jwtProvider.create(id);
 
         // 발급된 토큰을 쿠키에 저장
         Cookie cookie = new Cookie("accessToken", token);

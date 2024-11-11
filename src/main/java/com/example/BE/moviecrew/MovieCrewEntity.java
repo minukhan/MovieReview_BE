@@ -14,8 +14,9 @@ import lombok.*;
 public class MovieCrewEntity {
 
     @Id
+    @Column(name="movieCrew_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int movieCrewId;
 
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)

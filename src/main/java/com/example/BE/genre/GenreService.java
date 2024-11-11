@@ -36,7 +36,7 @@ public class GenreService {
             // Genre 데이터 저장
             genreRepository.save(
                     GenreEntity.builder()
-                            .genreId(contents.get("id").getAsLong())
+                            .genreId(contents.get("id").getAsInt())
                             .name(contents.get("name").getAsString().replaceAll("\"", ""))
                             .build()
             );

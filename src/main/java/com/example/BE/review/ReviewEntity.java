@@ -1,6 +1,7 @@
 package com.example.BE.review;
 
 
+import com.example.BE.movie.MovieEntity;
 import com.example.BE.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,15 +17,17 @@ import java.math.BigDecimal;
 public class ReviewEntity {
 
     @Id
+    @Column(name="review_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewId;
+    private int reviewId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(nullable = false)
-    private Integer movieId;
+    @ManyToOne
+    @JoinColumn(name = "movie_id", nullable = false)
+    private MovieEntity movie;
 
     @Column(nullable = false, precision = 2, scale = 1)
     private BigDecimal rating; // double 타입은 고정 소숫점이 안된다고 하여 BigDecimal 사용

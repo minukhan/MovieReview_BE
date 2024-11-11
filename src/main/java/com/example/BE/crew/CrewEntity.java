@@ -12,13 +12,14 @@ import lombok.*;
 public class CrewEntity {
 
     @Id
+    @Column(name = "crew_id")
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int crewId;
 
     @Column(nullable = false)
     private String name;
 
-    // profile_path가 null인 경우가 있어서 null이 가능하도록 주석처리
-//    @Column(nullable = false)
+  //  @Column(nullable = false)
+    @Column
     private String profilePath;
 }

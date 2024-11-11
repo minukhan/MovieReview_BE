@@ -13,7 +13,7 @@ public class CertificationEntity {
 
     @Id
     @Column(nullable = false, length = 255)
-    private String userId;
+    private String id;
 
     @Column(nullable = false, length = 255)
     private String email;

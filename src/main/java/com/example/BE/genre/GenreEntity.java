@@ -12,8 +12,9 @@ import lombok.*;
 public class GenreEntity {
 
     @Id
+    @Column(name = "genre_id")
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int genreId;
 
     @Column(nullable = false)
     private String name;
