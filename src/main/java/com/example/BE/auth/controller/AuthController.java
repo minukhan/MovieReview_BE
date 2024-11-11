@@ -3,21 +3,24 @@ package com.example.BE.auth.controller;
 import com.example.BE.auth.dto.request.*;
 import com.example.BE.auth.dto.response.*;
 import com.example.BE.auth.service.AuthService;
+import com.example.BE.s3.service.ImageUploadService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cinewall/auth")
 public class AuthController {
     private final AuthService authService;
+    private final ImageUploadService imageUploadService;
 
     @PostMapping("/id-check")
     public ResponseEntity<? super IdCheckResponseDto> idCheck(
@@ -45,11 +48,23 @@ public class AuthController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<? super SignUpResponseDto> signUp(
-            @RequestBody @Valid SignUpRequestDto requestBody
+            @RequestParam("image") MultipartFile image,
+            @ModelAttribute @Valid SignUpRequestDto requestBody
     ){
-        ResponseEntity<? super SignUpResponseDto> response = authService.signUp(requestBody);
-        return response;
+        try {
+            // 이미지 업로드
+            String imageUrl = imageUploadService.upload(image);  // 이미지를 S3에 업로드하고 URL 반환
+
+            // 실제 회원 가입 처리 (예: 서비스 호출)
+            ResponseEntity<? super SignUpResponseDto> response = authService.signUp(requestBody, imageUrl);
+
+            return response;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Image upload failed");
+        }
     }
+
 
     @PostMapping("/sign-in")
     public ResponseEntity<?super SignInResponseDto> signIn(
