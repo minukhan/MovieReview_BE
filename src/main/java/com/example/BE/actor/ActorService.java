@@ -55,9 +55,10 @@ public class ActorService {
             for (int k = 0; k < list.size(); k++) {
                 contents = (JsonObject) list.get(k);
 
-                if(contents.get("character").getAsString().contains("(uncredited)")){
+                if(contents.get("character").getAsString().contains("(uncredited)") || contents.get("character").getAsString().contains("(voice)")){
                     continue;
                 }
+                if(contents.get("order").getAsInt() > 9) break;
                 // profile_path 가 null인 경우가 있어서 이 경우 null 값을 넣도록 처리(없으면 Exception 처리됨)
                 // 이 null 값 대신 추후에 default 이미지 같은 거 넣어주면 될 것 같습니다
                 String profile = contents.get("profile_path").isJsonNull() ? null : ImgUrl + contents.get("profile_path").getAsString();
@@ -76,7 +77,7 @@ public class ActorService {
                         .characterName(contents.get("character").getAsString())
                         .build());
 
-//                log.info("actor 성공 !");
+                log.info("actor 성공 !");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -56,7 +56,7 @@ public class CrewService {
                     String profile = contents.get("profile_path").isJsonNull() ? null : ImgUrl + contents.get("profile_path").getAsString();
 
                     crewRepository.save(CrewEntity.builder()
-                            .id(contents.get("id").getAsLong())
+                            .crewId(contents.get("id").getAsInt())
                             .name(contents.get("name").getAsString())
                             .profilePath(profile)
                             .build());

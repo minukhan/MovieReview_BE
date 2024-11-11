@@ -23,7 +23,7 @@ public class MovieActorEntity {
     private MovieEntity movie;
 
     @ManyToOne
-    @JoinColumn(name = "actor_id", nullable = false)
+    @JoinColumn(name = "actor_id")
     private ActorEntity actor;
 
     @Column(nullable = false)
