@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CertificationRepository extends JpaRepository<CertificationEntity, String> {
-    CertificationEntity findByUserId(String userId);
-
     @Transactional
-    void deleteByUserId(String userId);
+    void deleteById(String id);
 }

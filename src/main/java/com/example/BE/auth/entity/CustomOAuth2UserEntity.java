@@ -13,7 +13,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class CustomOAuth2UserEntity implements OAuth2User{
 
-    private String userId;
+    private String id;
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -27,7 +27,7 @@ public class CustomOAuth2UserEntity implements OAuth2User{
 
     @Override
     public String getName() {
-        return this.userId;
+        return this.id;
     }
 
 }
