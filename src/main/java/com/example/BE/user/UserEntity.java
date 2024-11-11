@@ -1,9 +1,6 @@
 package com.example.BE.user;
 import com.example.BE.auth.dto.request.SignUpRequestDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -13,9 +10,13 @@ import lombok.*;
 @Builder
 @Table(name = "user")
 public class UserEntity {
-
     @Id
-    private String userId;
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int userId;
+
+    @Column(nullable = false)
+    private String id;
 
     @Column(nullable = false)
     private String password;
@@ -34,7 +35,7 @@ public class UserEntity {
 
     //일반 회원가입을 위한 생성자
     public UserEntity(SignUpRequestDto dto){
-        this.userId = dto.getId();
+        this.id = dto.getId();
         this.password = dto.getPassword();
         this.email = dto.getEmail();
         this.type = "app";
@@ -44,7 +45,7 @@ public class UserEntity {
 
 //카카오 로그인을 위한 생성자
     public UserEntity(String userId, String email, String type){
-        this.userId = userId;
+        this.id = userId;
         this.password = "passw0rd"; //의미 없기 때문
         this.email = email;
         this.type = type;

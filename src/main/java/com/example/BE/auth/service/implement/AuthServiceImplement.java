@@ -22,6 +22,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService {
@@ -37,8 +39,8 @@ public class AuthServiceImplement implements AuthService {
     @Override
     public ResponseEntity<? super IdCheckResponseDto> idCheck(IdCheckRequestDto dto) {
         try {
-            String userId = dto.getId();
-            boolean isExistId = userRepository.existsByUserId(userId);
+            String id = dto.getId();
+            boolean isExistId = userRepository.existsById(id);
             if(isExistId) return IdCheckResponseDto.duplicateId();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -52,17 +54,17 @@ public class AuthServiceImplement implements AuthService {
     public ResponseEntity<? super com.example.BE.auth.dto.response.EmailCertificationResponseDto> emailCertification(
             EmailCertificationRequestDto dto) {
         try {
-            String userId = dto.getId();
+            String id = dto.getId();
             String email = dto.getEmail();
 
-            boolean isExistId = userRepository.existsByUserId(userId);
+            boolean isExistId = userRepository.existsById(id);
             if(isExistId) return EmailCertificationResponseDto.duplicateId();
 
             String certificationNumber = CertificationNumber.getCertificationNumber();
             boolean isSuccessed = emailProvider.sendCerfiticationMail(email, certificationNumber);
             if(!isSuccessed) return EmailCertificationResponseDto.mailSendFail();
 
-            CertificationEntity certificationEntity = new CertificationEntity(userId, email, certificationNumber);
+            CertificationEntity certificationEntity = new CertificationEntity(id, email, certificationNumber);
             certificationRepository.save(certificationEntity);
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -75,12 +77,19 @@ public class AuthServiceImplement implements AuthService {
     public ResponseEntity<? super com.example.BE.auth.dto.response.CheckCertificationResponseDto> checkCertification(
             CheckCertificationRequestDto dto) {
         try {
-            String userId = dto.getId();
+            String id = dto.getId();
             String email = dto.getEmail();
             String certificationNumber = dto.getCertificationNumber();
 
-            CertificationEntity certificationEntity = certificationRepository.findByUserId(userId);
-            if(certificationEntity == null) return CheckCertificationResponseDto.certificationFail();
+            Optional<CertificationEntity> optionalCertification = certificationRepository.findById(id);
+
+            // 인증 데이터가 없을 경우 실패 응답 반환
+            if (optionalCertification.isEmpty()) {
+                return CheckCertificationResponseDto.certificationFail();
+            }
+
+            // Optional에서 실제 엔티티 추출
+            CertificationEntity certificationEntity = optionalCertification.get();
 
             boolean isMatched = certificationEntity.getEmail().equals(email) && certificationEntity.getCertificationNumber().equals(certificationNumber);
 
@@ -96,14 +105,22 @@ public class AuthServiceImplement implements AuthService {
     @Override
     public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto) {
         try {
-            String userId = dto.getId();
-            boolean isExistId = userRepository.existsById(userId);
+            String id = dto.getId();
+            boolean isExistId = userRepository.existsById(id);
             if(isExistId) return SignUpResponseDto.duplicateId();
 
             String email = dto.getEmail();
             String certificationNumber = dto.getCertificationNumber();
 
-            CertificationEntity certificationEntity = certificationRepository.findByUserId(userId);
+            Optional<CertificationEntity> optionalCertification = certificationRepository.findById(id);
+
+            // 인증 데이터가 없을 경우 실패 응답 반환
+            if (optionalCertification.isEmpty()) {
+                return CheckCertificationResponseDto.certificationFail();
+            }
+
+            // Optional에서 실제 엔티티 추출
+            CertificationEntity certificationEntity = optionalCertification.get();
             boolean isMatched = certificationEntity.getEmail().equals(email) && certificationEntity.getCertificationNumber().equals(certificationNumber);
 
             if(!isMatched) return SignUpResponseDto.certificationFail();
@@ -115,7 +132,7 @@ public class AuthServiceImplement implements AuthService {
             UserEntity userEntity = new UserEntity(dto);
             userRepository.save(userEntity);
 
-            certificationRepository.deleteByUserId(userId);
+            certificationRepository.deleteById(id);
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -129,8 +146,8 @@ public class AuthServiceImplement implements AuthService {
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto, HttpServletResponse response) {
         String token;
         try {
-            String userId = dto.getId();
-            UserEntity userEntity = userRepository.findByUserId(userId);
+            String id = dto.getId();
+            UserEntity userEntity = userRepository.findById(id);
 
             // 사용자 존재 여부 확인
             if (userEntity == null) return SignInResponseDto.signInFail();
@@ -142,7 +159,7 @@ public class AuthServiceImplement implements AuthService {
             if (!isMatched) return SignInResponseDto.signInFail();
 
             // JWT 토큰 생성
-            token = jwtProvider.create(userId);
+            token = jwtProvider.create(id);
 
             // 발급된 토큰을 쿠키에 저장
             Cookie cookie = new Cookie("accessToken", token);
