@@ -12,7 +12,7 @@ public interface AuthService {
     ResponseEntity<? super EmailCertificationResponseDto> emailCertification(EmailCertificationRequestDto dto);
     ResponseEntity<? super CheckCertificationResponseDto> checkCertification(CheckCertificationRequestDto dto);
 
-    ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto);
+    ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto, String profile_url);
     ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto, HttpServletResponse response);
     ResponseEntity<? super ResponseDto> logout(HttpServletResponse response);
 }

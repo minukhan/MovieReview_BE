@@ -103,7 +103,7 @@ public class AuthServiceImplement implements AuthService {
     }
 
     @Override
-    public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto) {
+    public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto, String profile_url) {
         try {
             String id = dto.getId();
             boolean isExistId = userRepository.existsById(id);
@@ -129,7 +129,7 @@ public class AuthServiceImplement implements AuthService {
             String encodedPassword = passwordEncoder.encode(password);
 
             dto.setPassword(encodedPassword);
-            UserEntity userEntity = new UserEntity(dto);
+            UserEntity userEntity = new UserEntity(dto, profile_url);
             userRepository.save(userEntity);
 
             certificationRepository.deleteById(id);
