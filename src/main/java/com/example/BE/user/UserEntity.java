@@ -19,6 +19,9 @@ public class UserEntity {
     private String id;
 
     @Column(nullable = false)
+    private String nickname;
+
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
@@ -39,6 +42,7 @@ public class UserEntity {
     //일반 회원가입을 위한 생성자
     public UserEntity(SignUpRequestDto dto, String profile_url){
         this.id = dto.getId();
+        this.nickname = dto.getNickname();
         this.password = dto.getPassword();
         this.email = dto.getEmail();
         this.type = "app";
@@ -48,8 +52,9 @@ public class UserEntity {
     }
 
 //카카오 로그인을 위한 생성자
-    public UserEntity(String userId, String email, String type, String profile_url){
-        this.id = userId;
+    public UserEntity(String id, String nickname, String email, String type, String profile_url){
+        this.id = id;
+        this.nickname = nickname;
         this.password = "passw0rd"; //의미 없기 때문
         this.email = email;
         this.type = type;
