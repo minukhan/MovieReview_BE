@@ -12,12 +12,13 @@ import lombok.*;
 public class CrewEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    // profile_path가 null인 경우가 있어서 null이 가능하도록 주석처리
+//    @Column(nullable = false)
     private String profilePath;
 }

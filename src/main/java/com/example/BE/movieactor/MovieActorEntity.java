@@ -26,5 +26,5 @@ public class MovieActorEntity {
     private ActorEntity actor;
 
     @Column(nullable = false)
-    private String character_name; //character 가 예약어로 쓰여 character_name 으로 대체
+    private String characterName; //character 가 예약어로 쓰여 character_name 으로 대체
 }
