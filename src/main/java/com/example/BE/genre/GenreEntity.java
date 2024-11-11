@@ -13,7 +13,7 @@ public class GenreEntity {
 
     @Id
     @Column(name = "genre_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int genreId;
 
     @Column(nullable = false)

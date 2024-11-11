@@ -13,7 +13,7 @@ public class CrewEntity {
 
     @Id
     @Column(name = "crew_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int crewId;
 
     @Column(nullable = false)

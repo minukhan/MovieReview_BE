@@ -1,4 +1,8 @@
 package com.example.BE.moviecrew;
 
-public interface MovieCrewRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface MovieCrewRepository extends JpaRepository<MovieCrewEntity, Long> {
 }
