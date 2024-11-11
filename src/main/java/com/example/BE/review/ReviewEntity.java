@@ -16,8 +16,9 @@ import java.math.BigDecimal;
 public class ReviewEntity {
 
     @Id
+    @Column(name="review_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewId;
+    private int reviewId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

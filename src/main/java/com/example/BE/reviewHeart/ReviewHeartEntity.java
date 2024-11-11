@@ -14,8 +14,9 @@ import lombok.*;
 public class ReviewHeartEntity {
 
     @Id
+    @Column(name="revewHeart_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int reviewHeart_id;
 
     @ManyToOne
     @JoinColumn(name = "review_id", nullable = false)

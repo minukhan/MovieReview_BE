@@ -18,6 +18,7 @@ public class ActorEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    // @Column(nullable = false)
+    @Column
     private String profilePath;
 }

@@ -14,8 +14,9 @@ import lombok.*;
 public class MovieActorEntity {
 
     @Id
+    @Column(name="movieActor_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int movieActorId;
 
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
