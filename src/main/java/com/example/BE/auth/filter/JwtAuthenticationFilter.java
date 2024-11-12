@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -32,30 +33,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        System.out.println("############################ Filter ###############################");
 
         try {
-            String token = parseBearerToken(request);
-            if(token == null){
-                filterChain.doFilter(request, response);
-                return;
-            }
+            String accessToken = jwtProvider.getTokenFromCookies(request);
 
-            String id = jwtProvider.validate(token);
-            if(id == null){
-                filterChain.doFilter(request, response);
-                return;
+            if(accessToken != null && jwtProvider.validateToken(accessToken)) {
+                Authentication authentication = jwtProvider.getAuthentication(accessToken);
+                System.out.println(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.println(SecurityContextHolder.getContext().getAuthentication());
             }
-            UserEntity userEntity = userRepository.findById(id);
-            String role = userEntity.getRole(); //ROLE_USER, ROLE_ADMIN
-            System.out.print(role);
-
-            List<GrantedAuthority> authorities  = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(role));
-            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-            AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(id, null, authorities);
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            securityContext.setAuthentication(authenticationToken);
-            SecurityContextHolder.setContext(securityContext);
+            filterChain.doFilter(request, response);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
