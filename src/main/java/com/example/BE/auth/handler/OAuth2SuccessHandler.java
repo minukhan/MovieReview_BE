@@ -34,9 +34,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         cookie.setPath("/");
         cookie.setMaxAge(7 * 24 * 60 * 60); // 7일간 유효
 
-        response.addCookie(cookie);
 
-        response.sendRedirect("https://localhost:3000/auth/oauth-response/" + token + "/3600");
+
+        response.sendRedirect("https://localhost:3000/");
+        response.addCookie(cookie);
 
     }
 }
