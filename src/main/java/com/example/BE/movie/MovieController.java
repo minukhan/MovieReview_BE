@@ -172,4 +172,45 @@ public class MovieController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 그 외의 예외
         }
     }
+
+    @GetMapping("/favorite")
+    public ResponseEntity<List<MovieResponseDto>> favorite(HttpServletRequest request) {
+        UserEntity user = null;
+        int user_id = 0;
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies != null){
+            for(Cookie cookie: cookies){
+                if("accessToken".equals(cookie.getName())){
+                    System.out.println(cookie.getValue());
+                    jwtProvider.getUserRole(cookie.getValue());
+                }
+            }
+
+            // 1. Cookie에서 token 추출
+            String token = jwtProvider.getTokenFromCookies(request);
+
+            if (token == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            // 2. JwtProvider를 사용해 userId 추출
+            String id = jwtProvider.validate(token);
+            System.out.println(id);
+            if (id == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            // 3. userId로 DB에서 사용자 정보 조회
+            user = userService.findById(id);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }else{
+            user = null;
+        }
+
+        if(user != null) user_id = user.getUserId();
+        return movieService.getFavoriteList(user_id);
+    }
 }
