@@ -104,4 +104,54 @@ public class FollowerController {
         System.out.println(user_id);
         return ResponseEntity.ok(followerService.getFollowerList(user_id));
     }
+
+    @PostMapping("/add")
+    public ResponseEntity<Integer> follow(
+            HttpServletRequest request,
+            @RequestParam("to_user_id") int to_user_id
+    ) {
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies != null){
+            for(Cookie cookie: cookies){
+                if("accessToken".equals(cookie.getName())){
+                    System.out.println(cookie.getValue());
+                    jwtProvider.getUserRole(cookie.getValue());
+                }
+            }
+        }else{
+            System.out.println("cookies is null");
+        }
+
+
+        // 1. Cookie에서 token 추출
+        String token = jwtProvider.getTokenFromCookies(request);
+
+        if (token == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // 2. JwtProvider를 사용해 userId 추출
+        String id = jwtProvider.validate(token);
+        System.out.println(id);
+        if (id == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // 3. userId로 DB에서 사용자 정보 조회
+        UserEntity user = userService.findById(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        UserEntity to_user = userService.findByUserId(to_user_id);
+        return followerService.add_follower(user, to_user);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Integer> unfollow(
+            @RequestParam("follower_id") int follower_id
+    ){
+        return followerService.remove_follower(follower_id);
+    }
 }

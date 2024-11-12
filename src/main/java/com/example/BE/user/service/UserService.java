@@ -4,4 +4,5 @@ import com.example.BE.user.UserEntity;
 
 public interface UserService {
     UserEntity findById(String id);
+    UserEntity findByUserId(int user_id);
 }
