@@ -1,5 +1,7 @@
 package com.example.BE.movie.service.implement;
 
+import com.example.BE.favorite.FavoriteEntity;
+import com.example.BE.favorite.FavoriteRepository;
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
 import com.example.BE.movie.dto.response.MovieResponseDto;
@@ -29,6 +31,7 @@ public class MovieServiceImplement implements MovieService {
     private final MovieRepository movieRepository;
     private final MovieVoteRepository movieVoteRepository;
     private final ReviewRepository reviewRepository;
+    private final FavoriteRepository favoriteRepository;
     @Override
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList() {
         List<MovieEntity> movies = movieRepository.findTop5ByOrderByVoteAverageDesc();
@@ -109,5 +112,25 @@ public class MovieServiceImplement implements MovieService {
         BigDecimal sum = ratings.stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         return sum.divide(BigDecimal.valueOf(ratings.size()), 2, RoundingMode.HALF_UP);
+    }
+
+    public ResponseEntity<List<MovieResponseDto>> getFavoriteList(int user_id){
+        List<FavoriteEntity> favorites = favoriteRepository.findAllByUser_UserId(user_id);
+        List<MovieResponseDto> responses = new ArrayList<>();
+        for (FavoriteEntity favorite : favorites) {
+            MovieVoteEntity movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, favorite.getMovie().getMovieId());
+            // movieVote가 null일 경우 user_vote를 0으로 설정
+            double userVote = (movieVote != null) ? movieVote.getVote() : 0;
+
+            MovieResponseDto dto = MovieResponseDto.builder()
+                    .movie_id(favorite.getMovie().getMovieId())
+                    .vote_average(favorite.getMovie().getVoteAverage())
+                    .poster_path(favorite.getMovie().getPosterPath())
+                    .user_vote(userVote)
+                    .build();
+            responses.add(dto);
+        }
+
+        return ResponseEntity.ok(responses);
     }
 }

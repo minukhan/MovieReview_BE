@@ -34,6 +34,7 @@ public interface MovieService {
     public ResponseEntity<List<MovieResponseDto>> getLatestMovieList(int user_id);
     public ResponseEntity<List<MovieResponseDto>> getPopularList(int user_id);
     public BigDecimal getAverageRating(int movieId);
+    public ResponseEntity<List<MovieResponseDto>> getFavoriteList(int user_id);
 //    private final MovieGenreRepository movieGenreRepository;
 //    private final GenreRepository genreRepository;
 //    @Value("${tmdb.key}")

@@ -19,4 +19,5 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
     @Query("SELECT m FROM MovieEntity m ORDER BY m.voteAverage DESC")
     List<MovieEntity> findAllByOrderByVoteAverageDesc();
 
+    MovieEntity findByMovieId(int movieId);
 }
