@@ -70,6 +70,7 @@ public class WebSecurityConfig {
         // 특정 도메인에서만 접근을 허용
         corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
         corsConfiguration.addAllowedOriginPattern("https://cinewalll.netlify.app");
+        corsConfiguration.addAllowedOriginPattern("http://3.38.104.1:8080");
 
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
@@ -77,7 +78,7 @@ public class WebSecurityConfig {
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-  
+
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
