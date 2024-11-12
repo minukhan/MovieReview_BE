@@ -108,4 +108,17 @@ public class MovieController {
         }
     }
 
+    @DeleteMapping("/api/reviews/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable int reviewId) {
+        try {
+            // 리뷰 삭제
+            reviewService.deleteReview(reviewId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 리뷰가 없을 때
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 그 외의 예외
+        }
+    }
+
 }

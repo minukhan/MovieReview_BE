@@ -59,4 +59,12 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
+    public void deleteReview(int reviewId){
+
+        ReviewEntity review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
+
+        reviewRepository.delete(review);
+    }
+
 }
