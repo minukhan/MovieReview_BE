@@ -1,84 +1,136 @@
 package com.example.BE.movie;
-
-import com.example.BE.actor.ActorService;
-import com.example.BE.crew.CrewService;
+;
+//import com.example.BE.actor.ActorService;
+//import com.example.BE.crew.CrewService;
+//import com.example.BE.genre.GenreService;
+import com.example.BE.auth.provider.JwtProvider;
+import com.example.BE.movie.dto.response.MovieResponseDto;
+import com.example.BE.movie.dto.response.TeaserResponseDto;
+import com.example.BE.movie.service.MovieService;
+import com.example.BE.user.UserEntity;
+import com.example.BE.user.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import com.example.BE.genre.GenreService;
 import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.ReviewService;
 import com.example.BE.review.dto.ReviewRequestDto;
-import com.google.gson.JsonObject;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.List;
 
 @Log4j2
 @RestController
+@RequestMapping("/cinewall/movie")
+@RequiredArgsConstructor
 public class MovieController {
+    private final MovieService movieService;
+    private final JwtProvider jwtProvider;
+    private final UserService userService;
+    private final ReviewService reviewService;
 
 
-    // application.properties에 tmdb.key 값 설정한 뒤 가져옴
-    @Value("${tmdb.key}")
-    private String apiKey;
-    @Autowired
-    private ReviewService reviewService;
-    @Autowired
-    private MovieService movieService;
-    @Autowired
-    private ActorService actorService;
-    @Autowired
-    private CrewService crewService;
-    @Autowired
-    private GenreService genreService;
+    @GetMapping("/trailer")
+    public ResponseEntity<List<TeaserResponseDto>> teaser() {
+        return movieService.getTrailerList();
+    }
 
-//    @GetMapping("/get-initial-data")
-//    public String getMovieData() {
+    @GetMapping("/latest")
+    public ResponseEntity<List<MovieResponseDto>> teaserLatest(HttpServletRequest request) {
+        UserEntity user = null;
+        int user_id = 0;
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies != null){
+            for(Cookie cookie: cookies){
+                if("accessToken".equals(cookie.getName())){
+                    System.out.println(cookie.getValue());
+                    jwtProvider.getUserRole(cookie.getValue());
+                }
+            }
 //
-//        String ok = "";
+            // 1. Cookie에서 token 추출
+            String token = jwtProvider.getTokenFromCookies(request);
 //
-//        try {
-//            // 원래는 영화가 페이지마다 20개씩 넘어오는데 우리 조는 트레일러 영상이 있는 데이터만 사용하기 때문에
-//            // for문을 통해 적절히 반복하면서 데이터 갯수 조절할 예정(i 범위 조정)
-//            for (int i = 1; i <= 60; i++) {
-//                // log.info("##########################" + i + "번째 cycle ##############################");
-//                String result = "";  // API 호출 결과를 저장할 문자열 변수 result 초기화
-//                // API 호출 URL 생성. apiKey와 페이지 번호 i를 포함하여 API 요청 URL을 구성함
-//                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey
-//                        + "&release_date.gte=2013-01-01&watch_region=KR&language=ko&page=" + i;
-//
-//                URL url = new URL(apiURL);  // 생성된 API URL을 사용하여 URL 객체를 생성
-//
-//                BufferedReader bf;
-//
-//                // URL의 데이터 스트림을 UTF-8 인코딩으로 BufferedReader에 연결하여 API 응답을 읽을 준비를 함
-//                bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-//
-//                result = bf.readLine();  // API의 응답 내용 중 한 줄을 읽어 result에 저장
-//
-//                ok = movieService.saveInitialData(result);  // API 호출 결과 result를 movieService의 saveInitialData 메서드에 전달하여 초기 데이터를 저장
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return ok;
-//    }
+            if (token == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            // 2. JwtProvider를 사용해 userId 추출
+            String id = jwtProvider.validate(token);
+            System.out.println(id);
+            if (id == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            // 3. userId로 DB에서 사용자 정보 조회
+            user = userService.findById(id);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }else{
+            user = null;
+        }
+
+        if(user != null) user_id = user.getUserId();
+
+        return movieService.getLatestMovieList(user_id);
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<List<MovieResponseDto>> popularity(HttpServletRequest request) {
+        UserEntity user = null;
+        int user_id = 0;
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies != null){
+            for(Cookie cookie: cookies){
+                if("accessToken".equals(cookie.getName())){
+                    System.out.println(cookie.getValue());
+                    jwtProvider.getUserRole(cookie.getValue());
+                }
+            }
+
+            // 1. Cookie에서 token 추출
+            String token = jwtProvider.getTokenFromCookies(request);
+
+            if (token == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            // 2. JwtProvider를 사용해 userId 추출
+            String id = jwtProvider.validate(token);
+            System.out.println(id);
+            if (id == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            // 3. userId로 DB에서 사용자 정보 조회
+            user = userService.findById(id);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }else{
+            user = null;
+        }
+
+        if(user != null) user_id = user.getUserId();
+        return movieService.getPopularList(user_id);
+    }
 
     @GetMapping("/api/movies/{movieId}/average-rating")
     public ResponseEntity<BigDecimal> getAverageRating(@PathVariable int movieId) {
         BigDecimal averageRating = movieService.getAverageRating(movieId);
         return ResponseEntity.ok(averageRating);
     }
+
 
     @PostMapping("/api/movies/{movieId}/reviews")
     public ResponseEntity<ReviewEntity> createReview(@PathVariable int movieId,
@@ -120,5 +172,4 @@ public class MovieController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 그 외의 예외
         }
     }
-
 }

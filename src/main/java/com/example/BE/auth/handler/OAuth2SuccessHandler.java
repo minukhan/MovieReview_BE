@@ -3,6 +3,8 @@ package com.example.BE.auth.handler;
 
 import com.example.BE.auth.entity.CustomOAuth2UserEntity;
 import com.example.BE.auth.provider.JwtProvider;
+import com.example.BE.user.UserEntity;
+import com.example.BE.user.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtProvider jwtProvider;
+    private final UserService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -27,14 +30,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String id = oAuth2User.getName();
         String token = jwtProvider.create(id);
 
-        // 발급된 토큰을 쿠키에 저장
-        Cookie cookie = new Cookie("accessToken", token);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(7 * 24 * 60 * 60); // 7일간 유효
+        UserEntity user = userService.findById(id);
+        String nickname = user.getNickname();
+        String profile_url = user.getProfile_url();
 
-
-        response.addCookie(cookie);
-        response.sendRedirect("http://localhost:3000/");
+        response.sendRedirect("http://localhost:3000?id=" + id + "&AccessToken=" + token + "&Nickname=" + nickname + "&ProfileUrl=" + profile_url);
     }
 }

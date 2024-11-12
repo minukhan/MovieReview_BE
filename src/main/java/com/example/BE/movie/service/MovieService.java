@@ -1,11 +1,14 @@
-package com.example.BE.movie;
+package com.example.BE.movie.service;
 
-import com.example.BE.actor.ActorService;
-import com.example.BE.crew.CrewService;
+//import com.example.BE.actor.ActorService;
+//import com.example.BE.crew.CrewService;
 import com.example.BE.genre.GenreRepository;
+import com.example.BE.movie.MovieEntity;
+import com.example.BE.movie.MovieRepository;
+import com.example.BE.movie.dto.response.MovieResponseDto;
+import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.moviegenre.MovieGenreEntity;
 import com.example.BE.moviegenre.MovieGenreRepository;
-import com.example.BE.review.ReviewRepository;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -13,34 +16,33 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.List;
 
-@Log4j2
-@Service
-@RequiredArgsConstructor
-public class MovieService {
-
-    private final MovieGenreRepository movieGenreRepository;
-    private final GenreRepository genreRepository;
-    @Value("${tmdb.key}")
-    private String apiKey;
-
-    private final MovieRepository movieRepository;
-    private final ActorService actorService;
-    private final CrewService crewService;
-    private final ReviewRepository reviewRepository;
-
+public interface MovieService {
+    public ResponseEntity<List<TeaserResponseDto>> getTrailerList();
+    public ResponseEntity<List<MovieResponseDto>> getLatestMovieList(int user_id);
+    public ResponseEntity<List<MovieResponseDto>> getPopularList(int user_id);
+    public BigDecimal getAverageRating(int movieId);
+//    private final MovieGenreRepository movieGenreRepository;
+//    private final GenreRepository genreRepository;
+//    @Value("${tmdb.key}")
+//    private String apiKey;
+//
+//    private final MovieRepository movieRepository;
+//    private final ActorService actorService;
+//    private final CrewService crewService;
+//
 //    @Transactional
 //    public String saveInitialData(String result) throws ParseException, IOException {
 //        // 영화 데이터는 json에서 results라는 키 값에 리스트로 존재하기 때문에 이를 담기 위한 JsonArray 선언
@@ -102,7 +104,7 @@ public class MovieService {
 //        }
 //        return "Success!";
 //    }
-
+//
 //    // trailer_path 가져오는 메서드
 //    public String getTrailerKey(Long id) throws IOException {
 //        String result = "";
@@ -126,18 +128,4 @@ public class MovieService {
 //            return resultsArray.get(0).getAsJsonObject().get("key").toString();
 //        }
 //    }
-
-    @Transactional
-    public BigDecimal getAverageRating(int movieId) {
-        List<BigDecimal> ratings = reviewRepository.findRatingsByMovieId(movieId);
-
-        if (ratings.isEmpty()) {
-            return BigDecimal.ZERO; // 리뷰가 없을 경우 0 반환
-        }
-
-        BigDecimal sum = ratings.stream()
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return sum.divide(BigDecimal.valueOf(ratings.size()), 2, RoundingMode.HALF_UP);
-    }
-
 }

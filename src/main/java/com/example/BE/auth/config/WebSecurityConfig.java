@@ -47,7 +47,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/cinewall/auth/**", "/oauth2/**", "/api/movies/*/average-rating", "/api/movies/*/reviews", "/api/reviews/*").permitAll() // 인증 없이 접근 가능
+                        .requestMatchers("/", "/cinewall/auth/**", "/oauth2/**", "/cinewall/movie/**", "/api/movies/*/average-rating", "/api/movies/*/reviews", "/api/reviews/*").permitAll() // 인증 없이 접근 가능
                         .requestMatchers("/cinewall/user/**", "/cinewall/follow/**").hasRole("USER")
                         .requestMatchers("/cinewall/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
