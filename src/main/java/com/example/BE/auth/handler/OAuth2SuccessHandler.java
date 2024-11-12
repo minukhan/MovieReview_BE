@@ -36,6 +36,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 
         response.addCookie(cookie);
-        response.sendRedirect("https://localhost:3000/");
+        response.sendRedirect("http://localhost:3000/");
     }
 }
