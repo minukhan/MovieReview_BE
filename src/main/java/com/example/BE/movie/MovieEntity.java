@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 @Table(name = "movie")
 public class MovieEntity {
 
@@ -24,7 +25,7 @@ public class MovieEntity {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String overview;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="release_date")
     private LocalDate releaseDate;
 
     @Column(nullable = false)
