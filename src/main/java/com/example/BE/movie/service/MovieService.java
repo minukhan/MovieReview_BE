@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,7 +33,7 @@ public interface MovieService {
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList();
     public ResponseEntity<List<MovieResponseDto>> getLatestMovieList(int user_id);
     public ResponseEntity<List<MovieResponseDto>> getPopularList(int user_id);
-
+    public BigDecimal getAverageRating(int movieId);
 //    private final MovieGenreRepository movieGenreRepository;
 //    private final GenreRepository genreRepository;
 //    @Value("${tmdb.key}")

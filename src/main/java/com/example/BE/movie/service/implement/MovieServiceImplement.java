@@ -7,7 +7,9 @@ import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.movie_vote.MovieVoteEntity;
 import com.example.BE.movie_vote.MovieVoteRepository;
+import com.example.BE.review.ReviewRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +28,7 @@ import java.util.stream.Collectors;
 public class MovieServiceImplement implements MovieService {
     private final MovieRepository movieRepository;
     private final MovieVoteRepository movieVoteRepository;
+    private final ReviewRepository reviewRepository;
     @Override
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList() {
         List<MovieEntity> movies = movieRepository.findTop5ByOrderByVoteAverageDesc();
@@ -92,5 +97,17 @@ public class MovieServiceImplement implements MovieService {
 
         return ResponseEntity.ok(responses);
 
+    }
+
+    public BigDecimal getAverageRating(int movieId) {
+        List<BigDecimal> ratings = reviewRepository.findRatingsByMovieId(movieId);
+
+        if (ratings.isEmpty()) {
+            return BigDecimal.ZERO; // 리뷰가 없을 경우 0 반환
+        }
+
+        BigDecimal sum = ratings.stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return sum.divide(BigDecimal.valueOf(ratings.size()), 2, RoundingMode.HALF_UP);
     }
 }

@@ -1,5 +1,5 @@
 package com.example.BE.movie;
-
+;
 //import com.example.BE.actor.ActorService;
 //import com.example.BE.crew.CrewService;
 //import com.example.BE.genre.GenreService;
@@ -12,18 +12,18 @@ import com.example.BE.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import com.example.BE.genre.GenreService;
+import com.example.BE.review.ReviewEntity;
+import com.example.BE.review.ReviewService;
+import com.example.BE.review.dto.ReviewRequestDto;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Log4j2
@@ -34,6 +34,8 @@ public class MovieController {
     private final MovieService movieService;
     private final JwtProvider jwtProvider;
     private final UserService userService;
+    private final ReviewService reviewService;
+
 
     @GetMapping("/trailer")
     public ResponseEntity<List<TeaserResponseDto>> teaser() {
@@ -53,10 +55,10 @@ public class MovieController {
                     jwtProvider.getUserRole(cookie.getValue());
                 }
             }
-
+//
             // 1. Cookie에서 token 추출
             String token = jwtProvider.getTokenFromCookies(request);
-
+//
             if (token == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
@@ -121,5 +123,53 @@ public class MovieController {
 
         if(user != null) user_id = user.getUserId();
         return movieService.getPopularList(user_id);
+    }
+
+    @GetMapping("/api/movies/{movieId}/average-rating")
+    public ResponseEntity<BigDecimal> getAverageRating(@PathVariable int movieId) {
+        BigDecimal averageRating = movieService.getAverageRating(movieId);
+        return ResponseEntity.ok(averageRating);
+    }
+
+
+    @PostMapping("/api/movies/{movieId}/reviews")
+    public ResponseEntity<ReviewEntity> createReview(@PathVariable int movieId,
+                                                     @RequestBody ReviewRequestDto reviewRequestDto,
+                                                     @RequestParam int userId) {
+        try {
+            // 리뷰 생성
+            ReviewEntity savedReview = reviewService.createReview(movieId, reviewRequestDto, userId);
+            return new ResponseEntity<>(savedReview, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/api/reviews/{reviewId}")
+    public ResponseEntity<ReviewEntity> updateReview(
+            @PathVariable int reviewId,
+            @RequestBody ReviewRequestDto reviewUpdateRequestDto) {
+        try {
+            // 리뷰 수정
+            ReviewEntity updatedReview = reviewService.updateReview(reviewId, reviewUpdateRequestDto);
+            return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/api/reviews/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable int reviewId) {
+        try {
+            // 리뷰 삭제
+            reviewService.deleteReview(reviewId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 리뷰가 없을 때
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 그 외의 예외
+        }
     }
 }
