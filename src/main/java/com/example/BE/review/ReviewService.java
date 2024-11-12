@@ -3,6 +3,9 @@ package com.example.BE.review;
 
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
+import com.example.BE.review.dto.ResponseReviewDetail;
+import com.example.BE.review.dto.ResponseUserReviewGraph;
+import com.example.BE.review.dto.ResponseUserReviewList;
 import com.example.BE.review.dto.ReviewRequestDto;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,4 +71,22 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
+    public ResponseUserReviewGraph getUserGraph(int userId) {
+
+        ResponseUserReviewGraph graph = reviewRepository.getRatingCounts(userId);
+
+        return graph;
+    }
+
+    public List<ResponseUserReviewList> getUserReviewList(int userId) {
+        List<ResponseUserReviewList> result = reviewRepository.findUserReviewsByUserId(userId);
+
+        return result;
+    }
+
+    public ResponseReviewDetail getReviewDetail(int reviewId) {
+        ReviewEntity review = reviewRepository.findByReviewId(reviewId);
+        ResponseReviewDetail result = new ResponseReviewDetail(review);
+        return result;
+    }
 }
