@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     UserEntity findById(String id);
     boolean existsById(String id);
+    UserEntity findByUserId(int userId);
 }
