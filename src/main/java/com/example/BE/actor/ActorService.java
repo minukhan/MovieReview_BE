@@ -31,7 +31,7 @@ public class ActorService {
     private final ActorRepository actorRepository;
     private final MovieActorRepository movieActorRepository;
 
-    public void saveActor(long id) throws MalformedURLException {
+    public void saveActor(int id) throws MalformedURLException {
 
         try{
             String result = "";

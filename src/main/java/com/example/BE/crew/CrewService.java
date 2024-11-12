@@ -27,7 +27,7 @@ public class CrewService {
     private final CrewRepository crewRepository;
     private final MovieCrewRepository movieCrewRepository;
 
-    public void saveCrew(long id) {
+    public void saveCrew(int id) {
         try{
             String result = "";
             String apiURL = "https://api.themoviedb.org/3/movie/" + id + "/credits?api_key=" + apiKey + "&language=ko";
