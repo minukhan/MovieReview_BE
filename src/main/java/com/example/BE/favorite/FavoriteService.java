@@ -6,6 +6,8 @@ import com.example.BE.movie.MovieRepository;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,10 +18,13 @@ public class FavoriteService {
     private final UserRepository userRepository;
     private final MovieRepository movieRepository;
 
-    public FavoriteEntity addFavorite(int userId, int movieId) {
+    public FavoriteEntity addFavorite(int movieId) {
         // 사용자 조회
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();  // 인증된 사용자의 username (id) 가져오기
+
+        // username을 통해 UserEntity 조회
+        UserEntity user = userRepository.findById(id);
 
         // 영화 조회
         MovieEntity movie = movieRepository.findById(movieId)
@@ -39,9 +44,15 @@ public class FavoriteService {
         return favoriteRepository.save(favorite);
     }
 
-    public void removeFavorite(int userId, int movieId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public void removeFavorite(int movieId) {
+
+        // 사용자 조회
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();  // 인증된 사용자의 username (id) 가져오기
+
+        // username을 통해 UserEntity 조회
+        UserEntity user = userRepository.findById(id);
+
         MovieEntity movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new RuntimeException("Movie not found"));
 
