@@ -6,6 +6,7 @@ import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
 import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
 import com.example.BE.movie.dto.response.MovieResponseDto;
+import com.example.BE.movie.dto.response.MovieSummaryDto;
 import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.movie_vote.MovieVoteEntity;
@@ -165,6 +166,14 @@ public class MovieServiceImplement implements MovieService {
         }
 
         return ResponseEntity.ok(responses);
+    }
+
+
+    public List<MovieSummaryDto> searchMoviesByTitle(String title) {
+        List<MovieEntity> movies = movieRepository.findByTitleContainingIgnoreCase(title);
+        return movies.stream()
+                .map(MovieSummaryDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public ResponseEntity<List<ReviewResponseDto>> getReviewList(){
