@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ResponseReviewDetail {
+public class ResponseReviewPoster {
     private int reviewId;
     private ResponseUserInfo user;
     private MovieEntity movie;
@@ -24,7 +24,7 @@ public class ResponseReviewDetail {
     private String content;
     private java.time.LocalDateTime createDate;
 
-    public ResponseReviewDetail(ReviewEntity review) {
+    public ResponseReviewPoster(ReviewEntity review) {
         this.reviewId = review.getReviewId();
         this.user = new ResponseUserInfo(review.getUser());
         this.movie = review.getMovie();
