@@ -9,6 +9,7 @@ import com.example.BE.movie.dto.response.MovieResponseDto;
 import com.example.BE.movie.dto.response.MovieSummaryDto;
 import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.movie.service.MovieService;
+import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -257,8 +258,14 @@ public class MovieController {
         return movieService.getRecommendList(user_id);
     }
 
+
     @GetMapping("/search")
     public List<MovieSummaryDto> searchMovies(@RequestParam String title) {
         return movieService.searchMoviesByTitle(title);
+
+    @GetMapping("/review")
+    public ResponseEntity<List<ReviewResponseDto>> review(HttpServletRequest request) {
+        return movieService.getReviewList();
+
     }
 }

@@ -11,7 +11,10 @@ import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.movie_vote.MovieVoteEntity;
 import com.example.BE.movie_vote.MovieVoteRepository;
+import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.ReviewRepository;
+import com.example.BE.review.dto.response.ReviewResponseDto;
+import com.example.BE.user.UserEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -165,10 +168,38 @@ public class MovieServiceImplement implements MovieService {
         return ResponseEntity.ok(responses);
     }
 
+
     public List<MovieSummaryDto> searchMoviesByTitle(String title) {
         List<MovieEntity> movies = movieRepository.findByTitleContainingIgnoreCase(title);
         return movies.stream()
                 .map(MovieSummaryDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    public ResponseEntity<List<ReviewResponseDto>> getReviewList(){
+        List<ReviewEntity> reviews = reviewRepository.findAllByCreateDateDesc();
+        List<ReviewEntity> top24reviews = reviews.stream()
+                .limit(24)
+                .collect(Collectors.toList());
+
+        List<ReviewResponseDto> responses = new ArrayList<>();
+        for(ReviewEntity review : top24reviews){
+            MovieEntity movie = review.getMovie();
+            UserEntity user = review.getUser();
+            ReviewResponseDto dto = ReviewResponseDto.builder()
+                    .review_id(review.getReviewId())
+                    .movie_id(movie.getMovieId())
+                    .user_id(user.getUserId())
+                    .movie_title(movie.getTitle())
+                    .poster_path(movie.getPosterPath())
+                    .nickname(user.getNickname())
+                    .profile_url(user.getProfile_url())
+                    .content(review.getContent())
+                    .heart_count(review.getReviewHeartCount())
+                    .build();
+            responses.add(dto);
+        }
+        return ResponseEntity.ok(responses);
+    }
+
 }
