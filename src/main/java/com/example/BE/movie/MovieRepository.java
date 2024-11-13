@@ -20,4 +20,11 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
     List<MovieEntity> findAllByOrderByVoteAverageDesc();
 
     MovieEntity findByMovieId(int movieId);
+
+    @Query("SELECT m FROM MovieEntity m " +
+            "JOIN m.favorites f " +
+            "GROUP BY m.movieId " +
+            "HAVING COUNT(f) > 0 " +
+            "ORDER BY COUNT(f) DESC")
+    List<MovieEntity> findMoviesOrderByFavoriteCount();
 }

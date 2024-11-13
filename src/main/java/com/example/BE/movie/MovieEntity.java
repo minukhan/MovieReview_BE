@@ -1,8 +1,11 @@
 package com.example.BE.movie;
 
+import com.example.BE.favorite.FavoriteEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -42,4 +45,11 @@ public class MovieEntity {
 
     @Column(nullable = false)
     private String trailerPath;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    private List<FavoriteEntity> favorites = new ArrayList<>();
+
+    public int getFavoriteCount() {
+        return favorites.size();
+    }
 }
