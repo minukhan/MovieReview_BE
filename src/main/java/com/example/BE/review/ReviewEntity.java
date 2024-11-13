@@ -1,12 +1,14 @@
 package com.example.BE.review;
 
-
 import com.example.BE.movie.MovieEntity;
+import com.example.BE.reviewHeart.ReviewHeartEntity;
 import com.example.BE.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -41,4 +43,11 @@ public class ReviewEntity {
 
     @Column(nullable = false)
     private java.time.LocalDateTime createDate;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private List<ReviewHeartEntity> hearts = new ArrayList<>();
+
+    public int getReviewHeartCount() {
+        return hearts.size();
+    }
 }

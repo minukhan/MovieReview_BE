@@ -10,6 +10,7 @@ import com.example.BE.movie.dto.response.MovieResponseDto;
 import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.moviegenre.MovieGenreEntity;
 import com.example.BE.moviegenre.MovieGenreRepository;
+import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -37,6 +38,7 @@ public interface MovieService {
     public BigDecimal getAverageRating(int movieId);
     public ResponseEntity<List<MovieResponseDto>> getFavoriteList(int user_id);
     public ResponseEntity<List<MovieRecommendResponseDto>> getRecommendList(int user_id);
+    public ResponseEntity<List<ReviewResponseDto>> getReviewList();
 //    private final MovieGenreRepository movieGenreRepository;
 //    private final GenreRepository genreRepository;
 //    @Value("${tmdb.key}")
