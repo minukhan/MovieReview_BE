@@ -210,8 +210,8 @@ public class MovieServiceImplement implements MovieService {
         List<Object[]> results = reviewRepository.findRatingDistributionByMovieId(movieId);
         Map<Integer, Long> ratingDistribution = new HashMap<>();
 
-        // 0~5 별점 초기화
-        for (int i = 0; i <= 5; i++) {
+        // 1~5 별점 초기화
+        for (int i = 1; i <= 5; i++) {
             ratingDistribution.put(i, 0L);
         }
 
@@ -221,12 +221,11 @@ public class MovieServiceImplement implements MovieService {
             int roundedRating = ratingValue.setScale(0, RoundingMode.HALF_UP).intValue(); // 소수 반올림
             long count = (long) result[1];
 
-            // 0~5 범위 내의 별점에 대해 값 집계
-            if (roundedRating >= 0 && roundedRating <= 5) {
+            // 0.5 이상일 때만 집계, 반올림 결과가 1~5 범위일 경우에만 값 집계
+            if (ratingValue.compareTo(BigDecimal.valueOf(0.5)) >= 0 && roundedRating >= 1 && roundedRating <= 5) {
                 ratingDistribution.put(roundedRating, ratingDistribution.get(roundedRating) + count);
             }
         }
-
 
         return ratingDistribution;
     }

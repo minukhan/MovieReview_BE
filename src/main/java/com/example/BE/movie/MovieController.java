@@ -39,7 +39,6 @@ public class MovieController {
     private final UserService userService;
     private final ReviewService reviewService;
 
-
     @GetMapping("/trailer")
     public ResponseEntity<List<TeaserResponseDto>> teaser() {
         return movieService.getTrailerList();

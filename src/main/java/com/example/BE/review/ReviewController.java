@@ -1,9 +1,6 @@
 package com.example.BE.review;
 
-import com.example.BE.review.dto.ResponseReviewDetail;
-import com.example.BE.review.dto.ResponseReviewPoster;
-import com.example.BE.review.dto.ResponseUserReviewGraph;
-import com.example.BE.review.dto.ResponseUserReviewList;
+import com.example.BE.review.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -89,5 +86,17 @@ public class ReviewController {
         List<ResponseReviewPoster> result = reviewService.getPosterList(userId);
 
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{movieId}/reviews/latest")
+    public ResponseEntity<List<MovieReviewResponseDto>> getLatestReviews(@PathVariable int movieId) {
+        List<MovieReviewResponseDto> reviews = reviewService.getLatestReviewsByMovieId(movieId);
+        return ResponseEntity.ok(reviews);
+    }
+
+    @GetMapping("/{movieId}/reviews/favorite")
+    public ResponseEntity<List<MovieReviewResponseDto>> getFavoriteReviews(@PathVariable int movieId) {
+        List<MovieReviewResponseDto> reviews = reviewService.getFavoriteReviewsByMovieId(movieId);
+        return ResponseEntity.ok(reviews);
     }
 }

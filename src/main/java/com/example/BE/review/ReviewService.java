@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -165,5 +166,43 @@ public class ReviewService {
         }
 
         return result;
+    }
+
+    public List<MovieReviewResponseDto> getLatestReviewsByMovieId(int movieId) {
+        List<ReviewEntity> reviews = reviewRepository.findLatestReviewsByMovieId(movieId);
+
+        // ReviewEntity를 ReviewResponseDto로 변환
+        return reviews.stream()
+                .map(review -> MovieReviewResponseDto.builder()
+                        .movieTitle(review.getMovie().getTitle()) // 영화 제목 가져오기
+                        .posterPath(review.getMovie().getPosterPath()) // 영화 포스터 경로 추가
+                        .nickname(review.getUser().getNickname())
+                        .profileUrl(review.getUser().getProfile_url())
+                        .rating(review.getRating())
+                        .description(review.getDescription())
+                        .content(review.getContent())
+                        .createDate(review.getCreateDate())
+                        .likeCount(review.getReviewHeartCount())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public List<MovieReviewResponseDto> getFavoriteReviewsByMovieId(int movieId) {
+        List<ReviewEntity> reviews = reviewRepository.findFavoriteReviewsByMovieId(movieId);
+        // ReviewEntity를 ReviewResponseDto로 변환
+        return reviews.stream()
+                .map(review -> MovieReviewResponseDto.builder()
+//                        .reviewId(review.getReviewId())
+                        .movieTitle(review.getMovie().getTitle())
+                        .posterPath(review.getMovie().getPosterPath())
+                        .nickname(review.getUser().getNickname())
+                        .profileUrl(review.getUser().getProfile_url())
+                        .rating(review.getRating())
+                        .description(review.getDescription())
+                        .content(review.getContent())
+                        .createDate(review.getCreateDate())
+                        .likeCount(review.getReviewHeartCount()) // 좋아요 수 추가
+                        .build())
+                .collect(Collectors.toList());
     }
 }
