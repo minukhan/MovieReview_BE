@@ -13,6 +13,14 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
+    @Query("SELECT r FROM ReviewEntity r WHERE r.movie.movieId = :movieId ORDER BY SIZE(r.hearts) DESC, r.createDate DESC")
+    List<ReviewEntity> findFavoriteReviewsByMovieId(@Param("movieId") int movieId);
+
+    // 특정 movieId에 해당하는 리뷰를 최신순으로 조회
+    @Query("SELECT r FROM ReviewEntity r WHERE r.movie.movieId = :movieId ORDER BY r.createDate DESC")
+    List<ReviewEntity> findLatestReviewsByMovieId(@Param("movieId") int movieId);
+
+
     // 특정 영화의 모든 리뷰의 평점을 가져오는 쿼리
     @Query("SELECT r.rating FROM ReviewEntity r WHERE r.movie.movieId = :movieId")
     List<BigDecimal> findRatingsByMovieId(@Param("movieId") int movieId);
@@ -22,6 +30,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
     @Query("SELECT r.rating, COUNT(r) FROM ReviewEntity r WHERE r.movie.movieId = :movieId GROUP BY r.rating")
     List<Object[]> findRatingDistributionByMovieId(@Param("movieId") int movieId);
+
     List<ReviewEntity> findByUserUserIdOrderByCreateDateDesc(int userId);
 
     @Query("SELECT COUNT(r) FROM ReviewEntity r " +
@@ -46,6 +55,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
             "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate) " +
             "FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ResponseUserReviewList> findUserReviewsByUserId(@Param("userId") int userId);
+
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.reviewId = :reviewId")
     ReviewEntity findByReviewId(@Param("reviewId") int reviewId);
