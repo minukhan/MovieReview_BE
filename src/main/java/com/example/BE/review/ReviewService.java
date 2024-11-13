@@ -3,10 +3,13 @@ package com.example.BE.review;
 
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
+import com.example.BE.review.dto.ReviewRequestDto;
+import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.example.BE.review.dto.*;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,13 @@ public class ReviewService {
                 .createDate(LocalDateTime.now())  // 리뷰 작성일
                 .build();
 
+        if (!user.isPowerReviewer()) {
+            int reviewCount = reviewRepository.countReviewsByUserWithAtLeastFiveHearts(user.getUserId());
+            if (reviewCount >= 5) {
+                user.setPowerReviewer(true);
+                userRepository.save(user);
+            }
+        }
         // 리뷰 저장
         return reviewRepository.save(review);
     }
@@ -69,6 +79,27 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
+    public ResponseEntity<List<ReviewResponseDto>> getPowerReviewList() {
+        List<UserEntity> powerUsers = userRepository.findByPowerReviewerTrue();
+        List<ReviewResponseDto> responses = new ArrayList<>();
+        for (UserEntity user : powerUsers) {
+            List<ReviewEntity> reviews = reviewRepository.findByUserIdOrderByCreateDateDesc(user.getUserId());
+            ReviewResponseDto dto = ReviewResponseDto.builder()
+                    .review_id(reviews.get(0).getReviewId())
+                    .movie_id(reviews.get(0).getMovie().getMovieId())
+                    .user_id(user.getUserId())
+                    .movie_title(reviews.get(0).getMovie().getTitle())
+                    .poster_path(reviews.get(0).getMovie().getPosterPath())
+                    .nickname(user.getNickname())
+                    .profile_url(user.getProfile_url())
+                    .content(reviews.get(0).getContent())
+                    .heart_count(reviews.get(0).getReviewHeartCount())
+                    .build();
+
+            responses.add(dto);
+        }
+        return ResponseEntity.ok(responses);
+    }
     public ResponseUserReviewGraph getUserGraph(int userId) throws Exception {
 
         UserEntity user = userRepository.findByUserId(userId);

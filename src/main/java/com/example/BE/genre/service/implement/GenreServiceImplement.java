@@ -40,4 +40,10 @@ public class GenreServiceImplement implements GenreService {
         }
         return ResponseEntity.ok(responses);
     }
+
+    @Override
+    public GenreEntity getGenreById(int genreId) {
+        return genreRepository.findByGenreId(genreId)
+                .orElseThrow(() -> new RuntimeException("해당 장르를 찾을 수 없습니다: " + genreId));
+    }
 }

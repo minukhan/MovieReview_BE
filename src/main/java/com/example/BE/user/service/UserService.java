@@ -14,9 +14,8 @@ import java.util.List;
 public interface UserService {
     UserEntity findById(String id);
     UserEntity findByUserId(int user_id);
-    public List<SimpleReviewResponseDTO> getUserLatestReviews(int userId);
-
+    void updateUser(UserEntity user);
+    public List<SimpleReviewResponseDTO>getUserLatestReviews(int userId);
     EditedUserResponseDto editUser(int userId, EditedUserRequestDto editedUserDto) throws IOException;
-
     ResponseUserInfo getUser(String id);
 }
