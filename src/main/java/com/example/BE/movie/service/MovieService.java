@@ -5,10 +5,13 @@ package com.example.BE.movie.service;
 import com.example.BE.genre.GenreRepository;
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
+import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
 import com.example.BE.movie.dto.response.MovieResponseDto;
+import com.example.BE.movie.dto.response.MovieSummaryDto;
 import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.moviegenre.MovieGenreEntity;
 import com.example.BE.moviegenre.MovieGenreRepository;
+import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -28,6 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 public interface MovieService {
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList();
@@ -35,7 +39,14 @@ public interface MovieService {
     public ResponseEntity<List<MovieResponseDto>> getPopularList(int user_id);
     public BigDecimal getAverageRating(int movieId);
     public ResponseEntity<List<MovieResponseDto>> getFavoriteList(int user_id);
+    public ResponseEntity<List<MovieRecommendResponseDto>> getRecommendList(int user_id);
+
+    public List<MovieSummaryDto> searchMoviesByTitle(String title);
+    //    private final MovieGenreRepository movieGenreRepository;
+    public Map<Integer, Long> getRoundedRatingDistribution(int movieId);
+    public ResponseEntity<List<ReviewResponseDto>> getReviewList();
 //    private final MovieGenreRepository movieGenreRepository;
+
 //    private final GenreRepository genreRepository;
 //    @Value("${tmdb.key}")
 //    private String apiKey;

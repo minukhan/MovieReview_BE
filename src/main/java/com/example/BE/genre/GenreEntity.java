@@ -10,7 +10,6 @@ import lombok.*;
 @Builder
 @Table(name = "genre")
 public class GenreEntity {
-
     @Id
     @Column(name = "genre_id")
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
