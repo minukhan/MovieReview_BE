@@ -14,7 +14,6 @@ import com.example.BE.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import com.example.BE.genre.GenreService;
 import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.ReviewService;
 import com.example.BE.review.dto.ReviewRequestDto;
