@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Table(name = "survey")
-public class ServeyEntity{
+public class SurveyEntity {
 
     @Id
     @Column(name = "survey_id")

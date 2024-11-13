@@ -26,6 +26,12 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
     List<Object[]> findRatingDistributionByMovieId(@Param("movieId") int movieId);
     List<ReviewEntity> findByUserUserIdOrderByCreateDateDesc(int userId);
 
+    @Query("SELECT COUNT(r) FROM ReviewEntity r " +
+            "WHERE r.user.userId = :userId AND SIZE(r.hearts) >= 5")
+    int countReviewsByUserWithAtLeastFiveHearts(@Param("userId") int userId);
+
+    @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId ORDER BY r.createDate DESC")
+    List<ReviewEntity> findByUserIdOrderByCreateDateDesc(@Param("userId") int userId);
 
     @Query(
             "SELECT new com.example.BE.review.dto.ResponseUserReviewGraph(" +

@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 @Table(name = "user")
 public class UserEntity {
     @Id
@@ -39,6 +40,9 @@ public class UserEntity {
     @Column(nullable = false)
     private String profile_url;
 
+    @Column(nullable = false)
+    private boolean powerReviewer;
+
     //일반 회원가입을 위한 생성자
     public UserEntity(SignUpRequestDto dto, String profile_url){
         this.id = dto.getId();
@@ -49,6 +53,7 @@ public class UserEntity {
         this.role = "ROLE_USER";
         this.survey = false;
         this.profile_url = profile_url;
+        this.powerReviewer = false;
     }
 
 //카카오 로그인을 위한 생성자
@@ -61,5 +66,6 @@ public class UserEntity {
         this.role = "ROLE_USER";
         this.survey = false;
         this.profile_url = profile_url;
+        this.powerReviewer = false;
     }
 }

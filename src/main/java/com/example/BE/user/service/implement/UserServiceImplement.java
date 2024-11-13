@@ -39,6 +39,11 @@ public class UserServiceImplement implements UserService {
         return userRepository.findByUserId(user_id);
     }
 
+    @Override
+    public void updateUser(UserEntity user){
+        userRepository.save(user);
+        return;
+  }
     public List<SimpleReviewResponseDTO> getUserLatestReviews(int userId) {
         List<ReviewEntity> reviews = reviewRepository.findByUserUserIdOrderByCreateDateDesc(userId);
 
