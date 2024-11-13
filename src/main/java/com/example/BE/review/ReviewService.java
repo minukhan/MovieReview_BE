@@ -5,14 +5,11 @@ import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
 import com.example.BE.review.dto.ReviewRequestDto;
 import com.example.BE.review.dto.response.ReviewResponseDto;
+import com.example.BE.review.dto.*;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -97,5 +94,71 @@ public class ReviewService {
             responses.add(dto);
         }
         return ResponseEntity.ok(responses);
+
+    public ResponseUserReviewGraph getUserGraph(int userId) throws Exception {
+
+        UserEntity user = userRepository.findByUserId(userId);
+
+        if(user == null) {
+            throw new Exception("존재하지 않는 사용자입니다.");
+        }
+
+        ResponseUserReviewGraph graph = reviewRepository.getRatingCounts(userId);
+
+        return graph;
+    }
+
+    public List<ResponseUserReviewList> getUserReviewList(int userId) throws Exception {
+        UserEntity user = userRepository.findByUserId(userId);
+
+        if(user == null) {
+            throw new Exception("존재하지 않는 사용자입니다.");
+        }
+
+        List<ResponseUserReviewList> result = reviewRepository.findUserReviewsByUserId(userId);
+
+        return result;
+    }
+
+    public ResponseReviewDetail getReviewDetail(int reviewId) throws Exception {
+        ReviewEntity review = reviewRepository.findByReviewId(reviewId);
+
+        if(review == null) {
+            throw new Exception("존재하지 않는 리뷰입니다.");
+        }
+
+        ResponseReviewDetail result = new ResponseReviewDetail(review);
+        return result;
+    }
+
+    public ResponseReviewDetail editReview(ResponseReviewDetail editedReview) throws Exception {
+        ReviewEntity before = reviewRepository.findByReviewId(editedReview.getReviewId());
+
+        if(before == null) {
+            throw new Exception("존재하지 않는 리뷰입니다.");
+        }
+
+        before.setRating(editedReview.getRating());
+        before.setDescription(editedReview.getDescription());
+        before.setContent(editedReview.getContent());
+        before.setCreateDate(editedReview.getCreateDate());
+
+        ReviewEntity after = reviewRepository.save(before);
+
+        ResponseReviewDetail result = new ResponseReviewDetail(after);
+
+        return result;
+    }
+
+    public List<ResponseReviewPoster> getPosterList(int userId) {
+        List<ReviewEntity> list = reviewRepository.findPosterByUserId(userId);
+        int size = list.size();
+        List<ResponseReviewPoster> result = new ArrayList<>();
+
+        for(int i = 0; i < size; i++){
+            result.add(new ResponseReviewPoster(list.get(i)));
+        }
+
+        return result;
     }
 }
