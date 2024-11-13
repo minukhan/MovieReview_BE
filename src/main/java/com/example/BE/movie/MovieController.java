@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RestController
@@ -268,5 +269,11 @@ public class MovieController {
     public ResponseEntity<List<ReviewResponseDto>> review(HttpServletRequest request) {
         return movieService.getReviewList();
 
+    }
+
+    @GetMapping("/{movieId}/rating-distribution")
+    public ResponseEntity<Map<Integer, Long>> getRatingDistribution(@PathVariable int movieId) {
+        Map<Integer, Long> ratingDistribution = movieService.getRoundedRatingDistribution(movieId);
+        return ResponseEntity.ok(ratingDistribution);
     }
 }
