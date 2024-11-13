@@ -1,6 +1,6 @@
 package com.example.BE.survey;
 
-import com.example.BE.movie.MovieEntity;
+import com.example.BE.genre.GenreEntity;
 import com.example.BE.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +23,6 @@ public class ServeyEntity{
     private UserEntity user;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)
-    private MovieEntity movie;
+    @JoinColumn(name = "genre_id", nullable = false)
+    private GenreEntity genre;
 }

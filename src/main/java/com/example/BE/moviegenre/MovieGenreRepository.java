@@ -1,8 +1,19 @@
 package com.example.BE.moviegenre;
 
+import com.example.BE.movie.MovieEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
-public interface MovieGenreRepository extends JpaRepository<MovieGenreEntity, Long> {
+public interface MovieGenreRepository extends JpaRepository<MovieGenreEntity, Integer> {
+    @Query("SELECT mg.movie FROM MovieGenreEntity mg " +
+            "JOIN mg.genre g " +
+            "WHERE g.genreId = :genreId " +
+            "ORDER BY mg.movie.movieId ASC")
+    List<MovieEntity> findMoviesByGenre(@Param("genreId") int genreId);
 }
