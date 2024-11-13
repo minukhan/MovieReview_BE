@@ -7,6 +7,7 @@ import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
 import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
 import com.example.BE.movie.dto.response.MovieResponseDto;
+import com.example.BE.movie.dto.response.MovieSummaryDto;
 import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.moviegenre.MovieGenreEntity;
 import com.example.BE.moviegenre.MovieGenreRepository;
@@ -37,7 +38,9 @@ public interface MovieService {
     public BigDecimal getAverageRating(int movieId);
     public ResponseEntity<List<MovieResponseDto>> getFavoriteList(int user_id);
     public ResponseEntity<List<MovieRecommendResponseDto>> getRecommendList(int user_id);
-//    private final MovieGenreRepository movieGenreRepository;
+    public List<MovieSummaryDto> searchMoviesByTitle(String title);
+
+    //    private final MovieGenreRepository movieGenreRepository;
 //    private final GenreRepository genreRepository;
 //    @Value("${tmdb.key}")
 //    private String apiKey;

@@ -1,5 +1,6 @@
 package com.example.BE.movie;
 
+import com.example.BE.movie.dto.response.MovieSummaryDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,6 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
             "HAVING COUNT(f) > 0 " +
             "ORDER BY COUNT(f) DESC")
     List<MovieEntity> findMoviesOrderByFavoriteCount();
+
+    List<MovieEntity> findByTitleContainingIgnoreCase(String title);
 }
