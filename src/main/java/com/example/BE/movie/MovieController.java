@@ -262,6 +262,7 @@ public class MovieController {
     @GetMapping("/search")
     public List<MovieSummaryDto> searchMovies(@RequestParam String title) {
         return movieService.searchMoviesByTitle(title);
+    }
 
     @GetMapping("/review")
     public ResponseEntity<List<ReviewResponseDto>> review(HttpServletRequest request) {
