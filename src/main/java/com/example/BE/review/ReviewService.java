@@ -9,6 +9,7 @@ import com.example.BE.review.dto.*;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -74,11 +75,11 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-    public ResponseEntity<List<ReviewResponseDto>> getPowerReviewList(){
+    public ResponseEntity<List<ReviewResponseDto>> getPowerReviewList() {
         List<UserEntity> powerUsers = userRepository.findByPowerReviewerTrue();
         List<ReviewResponseDto> responses = new ArrayList<>();
-        for(UserEntity user: powerUsers) {
-            List<ReviewEntity> reviews = reviewRepository. findByUserIdOrderByCreateDateDesc(user.getUserId());
+        for (UserEntity user : powerUsers) {
+            List<ReviewEntity> reviews = reviewRepository.findByUserIdOrderByCreateDateDesc(user.getUserId());
             ReviewResponseDto dto = ReviewResponseDto.builder()
                     .review_id(reviews.get(0).getReviewId())
                     .movie_id(reviews.get(0).getMovie().getMovieId())
@@ -94,7 +95,7 @@ public class ReviewService {
             responses.add(dto);
         }
         return ResponseEntity.ok(responses);
-
+    }
     public ResponseUserReviewGraph getUserGraph(int userId) throws Exception {
 
         UserEntity user = userRepository.findByUserId(userId);
