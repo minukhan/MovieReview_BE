@@ -6,6 +6,7 @@ package com.example.BE.movie;
 import com.example.BE.auth.provider.JwtProvider;
 import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
 import com.example.BE.movie.dto.response.MovieResponseDto;
+import com.example.BE.movie.dto.response.MovieSummaryDto;
 import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.review.dto.response.ReviewResponseDto;
@@ -126,14 +127,14 @@ public class MovieController {
         return movieService.getPopularList(user_id);
     }
 
-    @GetMapping("/api/movies/{movieId}/average-rating")
+    @GetMapping("/{movieId}/average-rating")
     public ResponseEntity<BigDecimal> getAverageRating(@PathVariable int movieId) {
         BigDecimal averageRating = movieService.getAverageRating(movieId);
         return ResponseEntity.ok(averageRating);
     }
 
 
-    @PostMapping("/api/movies/{movieId}/reviews")
+    @PostMapping("/{movieId}/reviews")
     public ResponseEntity<ReviewEntity> createReview(@PathVariable int movieId,
                                                      @RequestBody ReviewRequestDto reviewRequestDto,
                                                      @RequestParam int userId) {
@@ -146,7 +147,7 @@ public class MovieController {
         }
     }
 
-    @PutMapping("/api/reviews/{reviewId}")
+    @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<ReviewEntity> updateReview(
             @PathVariable int reviewId,
             @RequestBody ReviewRequestDto reviewUpdateRequestDto) {
@@ -161,7 +162,7 @@ public class MovieController {
         }
     }
 
-    @DeleteMapping("/api/reviews/{reviewId}")
+    @DeleteMapping("/reviews/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable int reviewId) {
         try {
             // 리뷰 삭제
@@ -256,8 +257,15 @@ public class MovieController {
         return movieService.getRecommendList(user_id);
     }
 
+
+    @GetMapping("/search")
+    public List<MovieSummaryDto> searchMovies(@RequestParam String title) {
+        return movieService.searchMoviesByTitle(title);
+    }
+
     @GetMapping("/review")
     public ResponseEntity<List<ReviewResponseDto>> review(HttpServletRequest request) {
         return movieService.getReviewList();
+
     }
 }
