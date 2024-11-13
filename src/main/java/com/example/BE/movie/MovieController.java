@@ -275,4 +275,9 @@ public class MovieController {
         Map<Integer, Long> ratingDistribution = movieService.getRoundedRatingDistribution(movieId);
         return ResponseEntity.ok(ratingDistribution);
     }
+
+    @GetMapping("/powerReview")
+    public ResponseEntity<List<ReviewResponseDto>> powerReview(HttpServletRequest request) {
+        return reviewService.getPowerReviewList();
+    }
 }

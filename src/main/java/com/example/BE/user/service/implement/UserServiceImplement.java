@@ -19,4 +19,10 @@ public class UserServiceImplement implements UserService {
     public UserEntity findByUserId(int user_id) {
         return userRepository.findByUserId(user_id);
     }
+
+    @Override
+    public void updateUser(UserEntity user){
+        userRepository.save(user);
+        return;
+    }
 }
