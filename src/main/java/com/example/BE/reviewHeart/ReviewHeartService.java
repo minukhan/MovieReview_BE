@@ -6,6 +6,8 @@ import com.example.BE.review.ReviewRepository;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,10 +18,15 @@ public class ReviewHeartService {
     private final UserRepository userRepository;
     private final ReviewHeartRepository reviewHeartRepository;
 
-    public ReviewHeartEntity addLike(int userId, int reviewId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public ReviewHeartEntity addLike(int reviewId) {
+        // Spring Security에서 인증된 사용자 정보 가져오기
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();  // 인증된 사용자의 username (id) 가져오기
 
+        // username을 통해 UserEntity 조회
+        UserEntity user = userRepository.findById(id);
+
+        // reviewId로 ReviewEntity 조회
         ReviewEntity review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
 
@@ -37,10 +44,12 @@ public class ReviewHeartService {
         return reviewHeartRepository.save(reviewHeart);
     }
 
-    public void deleteLike(int userId, int reviewId){
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public void deleteLike(int reviewId){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();  // 인증된 사용자의 username (id) 가져오기
 
+        // username을 통해 UserEntity 조회
+        UserEntity user = userRepository.findById(id);
         ReviewEntity review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
 

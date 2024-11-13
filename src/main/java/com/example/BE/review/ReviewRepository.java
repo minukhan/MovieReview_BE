@@ -1,7 +1,5 @@
 package com.example.BE.review;
 
-import com.example.BE.review.dto.ResponseReviewDetail;
-import com.example.BE.review.dto.ResponseReviewPoster;
 import com.example.BE.review.dto.ResponseUserReviewGraph;
 import com.example.BE.review.dto.ResponseUserReviewList;
 import org.springframework.data.jpa.repository.JpaRepository;

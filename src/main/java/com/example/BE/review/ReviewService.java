@@ -7,6 +7,8 @@ import com.example.BE.review.dto.*;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,15 +23,16 @@ public class ReviewService {
     private final MovieRepository movieRepository;
     private final UserRepository userRepository;
 
-    public ReviewEntity createReview(int movieId, ReviewRequestDto reviewRequestDto, int userId) {
+    public ReviewEntity createReview(int movieId, ReviewRequestDto reviewRequestDto) {
         // 영화 존재 여부 확인
         MovieEntity movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new IllegalArgumentException("영화를 찾을 수 없습니다."));
 
-        // 사용자 존재 여부 확인
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();  // 인증된 사용자의 username (id) 가져오기
 
+        // username을 통해 UserEntity 조회
+        UserEntity user = userRepository.findById(id);
         // ReviewEntity 객체 생성
         ReviewEntity review = ReviewEntity.builder()
                 .rating(reviewRequestDto.getRating())  // 별점
@@ -43,6 +46,7 @@ public class ReviewService {
         // 리뷰 저장
         return reviewRepository.save(review);
     }
+
     public ReviewEntity updateReview(int reviewId, ReviewRequestDto reviewUpdateRequestDto) {
         // 리뷰 존재 여부 확인
         ReviewEntity review = reviewRepository.findById(reviewId)
