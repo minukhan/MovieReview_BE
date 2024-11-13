@@ -31,6 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 public interface MovieService {
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList();
@@ -41,9 +42,8 @@ public interface MovieService {
     public ResponseEntity<List<MovieRecommendResponseDto>> getRecommendList(int user_id);
 
     public List<MovieSummaryDto> searchMoviesByTitle(String title);
-
     //    private final MovieGenreRepository movieGenreRepository;
-
+    public Map<Integer, Long> getRoundedRatingDistribution(int movieId);
     public ResponseEntity<List<ReviewResponseDto>> getReviewList();
 //    private final MovieGenreRepository movieGenreRepository;
 

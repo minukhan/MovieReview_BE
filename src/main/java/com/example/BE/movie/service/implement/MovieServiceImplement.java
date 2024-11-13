@@ -27,7 +27,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -200,6 +202,30 @@ public class MovieServiceImplement implements MovieService {
             responses.add(dto);
         }
         return ResponseEntity.ok(responses);
+    }
+
+    public Map<Integer, Long> getRoundedRatingDistribution(int movieId) {
+        List<Object[]> results = reviewRepository.findRatingDistributionByMovieId(movieId);
+        Map<Integer, Long> ratingDistribution = new HashMap<>();
+
+        // 0~5 별점 초기화
+        for (int i = 0; i <= 5; i++) {
+            ratingDistribution.put(i, 0L);
+        }
+
+        // 반올림하여 별점 분포 집계
+        for (Object[] result : results) {
+            BigDecimal ratingValue = (BigDecimal) result[0];
+            int roundedRating = ratingValue.setScale(0, RoundingMode.HALF_UP).intValue(); // 소수 반올림
+            long count = (long) result[1];
+
+            // 0~5 범위 내의 별점에 대해 값 집계
+            if (roundedRating >= 0 && roundedRating <= 5) {
+                ratingDistribution.put(roundedRating, ratingDistribution.get(roundedRating) + count);
+            }
+        }
+
+        return ratingDistribution;
     }
 
 }
