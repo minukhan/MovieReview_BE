@@ -7,19 +7,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Getter
-public class CheckCertificationResponseDto extends ResponseDto{
-    private CheckCertificationResponseDto(){
+public class CheckCertificationResponseDto extends ResponseDto {
+    private boolean isAvailable; // 인증 성공 여부
+
+    // 기본 생성자
+    private CheckCertificationResponseDto(boolean isAvailable) {
         super();
+        this.isAvailable = isAvailable;
     }
 
-    public static ResponseEntity<CheckCertificationResponseDto> success(){
-        CheckCertificationResponseDto responseBody = new CheckCertificationResponseDto();
+    // 인증 성공 시 응답
+    public static ResponseEntity<CheckCertificationResponseDto> success() {
+        CheckCertificationResponseDto responseBody = new CheckCertificationResponseDto(true); // 인증 성공
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
-    public static ResponseEntity<ResponseDto> certificationFail(){
-        ResponseDto responseBody = new ResponseDto(ResponseCode.CERTIFICATION_FAIL, ResponseMessage.CERTIFICATION_FAIL);
+    // 인증 실패 시 응답
+    public static ResponseEntity<CheckCertificationResponseDto> certificationFail() {
+        CheckCertificationResponseDto responseBody = new CheckCertificationResponseDto(false); // 인증 실패
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
-
 }
