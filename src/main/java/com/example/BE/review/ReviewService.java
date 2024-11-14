@@ -3,12 +3,15 @@ package com.example.BE.review;
 
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
+import com.example.BE.movie.dto.response.MovieSummaryDto;
 import com.example.BE.review.dto.ReviewRequestDto;
 import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.example.BE.review.dto.*;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -204,5 +207,10 @@ public class ReviewService {
                         .likeCount(review.getReviewHeartCount()) // 좋아요 수 추가
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public String getPreference(String userId) {
+        Pageable top10 = PageRequest.of(0, 10);
+        List<MovieSummaryDto> movies = reviewRepository.findTop10(userId, top10);
     }
 }

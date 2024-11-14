@@ -1,9 +1,11 @@
 package com.example.BE.review;
 
+import com.example.BE.movie.dto.response.MovieSummaryDto;
 import com.example.BE.review.dto.ResponseReviewDetail;
 import com.example.BE.review.dto.ResponseReviewPoster;
 import com.example.BE.review.dto.ResponseUserReviewGraph;
 import com.example.BE.review.dto.ResponseUserReviewList;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -64,4 +66,6 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ReviewEntity> findPosterByUserId(@Param("userId") int userId);
+
+    List<MovieSummaryDto> findTop10(String userId, Pageable top10);
 }
