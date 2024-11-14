@@ -1,27 +1,58 @@
-//package com.example.BE.actor;
-//
-//import com.example.BE.movie.MovieRepository;
-//import com.example.BE.movieactor.MovieActorEntity;
-//import com.example.BE.movieactor.MovieActorRepository;
-//import com.google.gson.JsonArray;
-//import com.google.gson.JsonObject;
-//import com.google.gson.JsonParser;
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.log4j.Log4j2;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.stereotype.Service;
-//
-//import java.io.BufferedReader;
-//import java.io.InputStreamReader;
-//import java.net.MalformedURLException;
-//import java.net.URL;
-//import java.text.SimpleDateFormat;
-//
-//@Log4j2
-//@Service
-//@RequiredArgsConstructor
-//public class ActorService {
+package com.example.BE.actor;
+
+import com.example.BE.actor.dto.RecommendedActor;
+import com.example.BE.movie.MovieEntity;
+import com.example.BE.movie.MovieRepository;
+import com.example.BE.movieactor.MovieActorEntity;
+import com.example.BE.movieactor.MovieActorRepository;
+import com.example.BE.user.UserEntity;
+import com.example.BE.user.UserRepository;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+@Log4j2
+@Service
+@RequiredArgsConstructor
+public class ActorService {
+
+    private final ActorRepository actorRepository;
+    private final MovieActorRepository movieActorRepository;
+    private final UserRepository userRepository;
+
+    public List<RecommendedActor> recommendActor(int userId) throws Exception {
+
+        UserEntity user = userRepository.findByUserId(userId);
+
+        if (user == null){
+            throw new Exception("존재하지 않는 사용자입니다.");
+        }
+
+        Pageable topThree = PageRequest.of(0, 3);
+        List<RecommendedActor> recommendedActors = actorRepository.findRecommendedActor(userId, topThree);
+
+        for(RecommendedActor actor : recommendedActors) {
+            List<MovieEntity> movieList = movieActorRepository.findMovieByActor(actor.getActorId());
+            actor.setMovies(movieList);
+        }
+
+        return recommendedActors;
+    }
 //
 //
 //    @Value("${tmdb.key}")
@@ -84,4 +115,4 @@
 //        }
 //
 //    }
-//}
+}
