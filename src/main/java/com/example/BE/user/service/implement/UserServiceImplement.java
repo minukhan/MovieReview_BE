@@ -106,6 +106,7 @@ public class UserServiceImplement implements UserService {
                 .nickname(userEntity.getNickname())
                 .profile_url(userEntity.getProfile_url())
                 .email(userEntity.getEmail())
+                .powerReviewer(userEntity.isPowerReviewer())
                 .build();
 
         return user;

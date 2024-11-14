@@ -45,9 +45,17 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
     ResponseUserReviewGraph getRatingCounts(@Param("userId") int userId);
 
     @Query("SELECT new com.example.BE.review.dto.ResponseUserReviewList(" +
-            "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate) " +
+            "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate," +
+            "(SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user), " +
+            "CASE WHEN (SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user AND h.review = r) > 0 THEN true ELSE false END) " +
             "FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ResponseUserReviewList> findUserReviewsByUserId(@Param("userId") int userId);
+
+//    @Query("SELECT new com.example.BE.review.dto.ResponseUserReviewList(" +
+//            "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate," +
+//            "(SELECT count(h.reviewHeart_id) FROM ReviewHeartEntity h WHERE h.user = r.user)) " +
+//            "FROM ReviewEntity r WHERE r.user.userId = :userId")
+//    List<ResponseUserReviewList> findUserReviewsByUserId(@Param("userId") int userId);
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.reviewId = :reviewId")
     ReviewEntity findByReviewId(@Param("reviewId") int reviewId);

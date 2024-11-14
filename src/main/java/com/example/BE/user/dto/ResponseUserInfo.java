@@ -16,6 +16,7 @@ public class ResponseUserInfo {
     private String nickname;
     private String email;
     private String profile_url;
+    private boolean powerReviewer;
 
     public ResponseUserInfo(UserEntity user) {
         this.userId = user.getUserId();
@@ -23,5 +24,6 @@ public class ResponseUserInfo {
         this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.profile_url = user.getProfile_url();
+        this.powerReviewer = user.isPowerReviewer();
     }
 }
