@@ -39,7 +39,6 @@ public class MovieController {
     private final UserService userService;
     private final ReviewService reviewService;
 
-
     @GetMapping("/trailer")
     public ResponseEntity<List<TeaserResponseDto>> teaser() {
         return movieService.getTrailerList();
@@ -136,43 +135,41 @@ public class MovieController {
 
 
     @PostMapping("/{movieId}/reviews")
-    public ResponseEntity<ReviewEntity> createReview(@PathVariable int movieId,
-                                                     @RequestBody ReviewRequestDto reviewRequestDto,
-                                                     @RequestParam int userId) {
+    public ResponseEntity<String> createReview(@PathVariable int movieId,
+                                               @RequestBody ReviewRequestDto reviewRequestDto) {
         try {
             // 리뷰 생성
-            ReviewEntity savedReview = reviewService.createReview(movieId, reviewRequestDto, userId);
-            return new ResponseEntity<>(savedReview, HttpStatus.CREATED);
+            reviewService.createReview(movieId, reviewRequestDto);
+            return new ResponseEntity<>("리뷰 저장 완료", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("리뷰 저장 실패", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/reviews/{reviewId}")
-    public ResponseEntity<ReviewEntity> updateReview(
+    public ResponseEntity<String> updateReview(
             @PathVariable int reviewId,
             @RequestBody ReviewRequestDto reviewUpdateRequestDto) {
+
         try {
             // 리뷰 수정
-            ReviewEntity updatedReview = reviewService.updateReview(reviewId, reviewUpdateRequestDto);
-            return new ResponseEntity<>(updatedReview, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            reviewService.updateReview(reviewId, reviewUpdateRequestDto);
+            return new ResponseEntity<>("리뷰 수정 완료", HttpStatus.CREATED);
+        
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("리뷰 수정 실패", HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/reviews/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@PathVariable int reviewId) {
+    public ResponseEntity<String> deleteReview(@PathVariable int reviewId) {
         try {
             // 리뷰 삭제
             reviewService.deleteReview(reviewId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 리뷰가 없을 때
+            return new ResponseEntity<>("리뷰 삭제 완료", HttpStatus.CREATED);
+
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 그 외의 예외
+            return new ResponseEntity<>("리뷰 삭제 실패", HttpStatus.BAD_REQUEST);
         }
     }
 

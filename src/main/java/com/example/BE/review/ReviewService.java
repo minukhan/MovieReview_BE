@@ -10,11 +10,14 @@ import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,15 +27,16 @@ public class ReviewService {
     private final MovieRepository movieRepository;
     private final UserRepository userRepository;
 
-    public ReviewEntity createReview(int movieId, ReviewRequestDto reviewRequestDto, int userId) {
+    public ReviewEntity createReview(int movieId, ReviewRequestDto reviewRequestDto) {
         // 영화 존재 여부 확인
         MovieEntity movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new IllegalArgumentException("영화를 찾을 수 없습니다."));
 
-        // 사용자 존재 여부 확인
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();  // 인증된 사용자의 username (id) 가져오기
 
+        // username을 통해 UserEntity 조회
+        UserEntity user = userRepository.findById(id);
         // ReviewEntity 객체 생성
         ReviewEntity review = ReviewEntity.builder()
                 .rating(reviewRequestDto.getRating())  // 별점
@@ -53,6 +57,7 @@ public class ReviewService {
         // 리뷰 저장
         return reviewRepository.save(review);
     }
+
     public ReviewEntity updateReview(int reviewId, ReviewRequestDto reviewUpdateRequestDto) {
         // 리뷰 존재 여부 확인
         ReviewEntity review = reviewRepository.findById(reviewId)
@@ -161,5 +166,43 @@ public class ReviewService {
         }
 
         return result;
+    }
+
+    public List<MovieReviewResponseDto> getLatestReviewsByMovieId(int movieId) {
+        List<ReviewEntity> reviews = reviewRepository.findLatestReviewsByMovieId(movieId);
+
+        // ReviewEntity를 ReviewResponseDto로 변환
+        return reviews.stream()
+                .map(review -> MovieReviewResponseDto.builder()
+                        .movieTitle(review.getMovie().getTitle()) // 영화 제목 가져오기
+                        .posterPath(review.getMovie().getPosterPath()) // 영화 포스터 경로 추가
+                        .nickname(review.getUser().getNickname())
+                        .profileUrl(review.getUser().getProfile_url())
+                        .rating(review.getRating())
+                        .description(review.getDescription())
+                        .content(review.getContent())
+                        .createDate(review.getCreateDate())
+                        .likeCount(review.getReviewHeartCount())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public List<MovieReviewResponseDto> getFavoriteReviewsByMovieId(int movieId) {
+        List<ReviewEntity> reviews = reviewRepository.findFavoriteReviewsByMovieId(movieId);
+        // ReviewEntity를 ReviewResponseDto로 변환
+        return reviews.stream()
+                .map(review -> MovieReviewResponseDto.builder()
+//                        .reviewId(review.getReviewId())
+                        .movieTitle(review.getMovie().getTitle())
+                        .posterPath(review.getMovie().getPosterPath())
+                        .nickname(review.getUser().getNickname())
+                        .profileUrl(review.getUser().getProfile_url())
+                        .rating(review.getRating())
+                        .description(review.getDescription())
+                        .content(review.getContent())
+                        .createDate(review.getCreateDate())
+                        .likeCount(review.getReviewHeartCount()) // 좋아요 수 추가
+                        .build())
+                .collect(Collectors.toList());
     }
 }

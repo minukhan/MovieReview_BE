@@ -13,4 +13,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     UserEntity findByUserId(int userId);
     // powerReviewer가 true인 UserEntity 리스트를 반환
     List<UserEntity> findByPowerReviewerTrue();
+
 }
