@@ -39,5 +39,9 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
 
     List<MovieEntity> findByTitleContainingIgnoreCase(String title);
 
+    @Query("SELECT m FROM MovieEntity m JOIN MovieGenreEntity mg ON m.movieId = mg.movie.movieId " +
+            "WHERE mg.genre.genreId = :genreId AND m.movieId <> :movieId ORDER BY FUNCTION('RAND')")
+    List<MovieEntity> findRandom5MoviesByGenreId(@Param("genreId") int genreId, @Param("movieId") int movieId);
+
 
 }
