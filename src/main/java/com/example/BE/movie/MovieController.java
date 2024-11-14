@@ -18,6 +18,8 @@ import com.example.BE.review.dto.ReviewRequestDto;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -273,6 +275,14 @@ public class MovieController {
     @GetMapping("/powerReview")
     public ResponseEntity<List<ReviewResponseDto>> powerReview(HttpServletRequest request) {
         return reviewService.getPowerReviewList();
+    }
+
+    @GetMapping("/userbase")
+    public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(HttpServletRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        UserEntity user = userService.findById(userName);
+        return movieService.getUserBase(user);
     }
 
     @GetMapping("/genre")

@@ -9,6 +9,7 @@ import com.example.BE.movie.dto.response.*;
 import com.example.BE.moviegenre.MovieGenreEntity;
 import com.example.BE.moviegenre.MovieGenreRepository;
 import com.example.BE.review.dto.response.ReviewResponseDto;
+import com.example.BE.user.UserEntity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -42,6 +43,7 @@ public interface MovieService {
     //    private final MovieGenreRepository movieGenreRepository;
     public Map<Integer, Long> getRoundedRatingDistribution(int movieId);
     public ResponseEntity<List<ReviewResponseDto>> getReviewList();
+    public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(UserEntity user);
     public List<MovieGenreSearchDto> getMoviesByGenreName(String genreName);
 //    private final MovieGenreRepository movieGenreRepository;
 
