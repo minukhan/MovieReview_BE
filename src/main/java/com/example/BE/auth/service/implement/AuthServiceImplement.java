@@ -116,7 +116,7 @@ public class AuthServiceImplement implements AuthService {
 
             // 인증 데이터가 없을 경우 실패 응답 반환
             if (optionalCertification.isEmpty()) {
-                return CheckCertificationResponseDto.certificationFail();
+                return SignUpResponseDto.certificationFail();
             }
 
             // Optional에서 실제 엔티티 추출

@@ -25,7 +25,7 @@ public class SignOutResponseDto extends ResponseDto {
 
     // 로그아웃 실패 시 응답
     public static ResponseEntity<SignOutResponseDto> fail() {
-        SignOutResponseDto responseBody = new SignOutResponseDto(false, ResponseMessage.LOGOUT_FAIL); // 로그아웃 실패
+        SignOutResponseDto responseBody = new SignOutResponseDto(false, ResponseMessage.SIGN_OUT_FAIL); // 로그아웃 실패
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 }
