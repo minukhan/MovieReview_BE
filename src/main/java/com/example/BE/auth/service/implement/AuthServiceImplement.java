@@ -162,8 +162,7 @@ public class AuthServiceImplement implements AuthService {
 
             // 발급된 토큰을 쿠키에 저장
             Cookie cookie = new Cookie("accessToken", token);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(true); // HTTPS 환경에서만 전송
+            cookie.setHttpOnly(true);// HTTPS 환경에서만 전송
             cookie.setPath("/");
             cookie.setMaxAge(7 * 24 * 60 * 60); // 7일간 유효
 

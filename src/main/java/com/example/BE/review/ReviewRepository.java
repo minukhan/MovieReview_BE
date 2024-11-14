@@ -34,6 +34,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
     @Query("SELECT r.rating, COUNT(r) FROM ReviewEntity r WHERE r.movie.movieId = :movieId GROUP BY r.rating")
     List<Object[]> findRatingDistributionByMovieId(@Param("movieId") int movieId);
+
     List<ReviewEntity> findByUserUserIdOrderByCreateDateDesc(int userId);
 
     @Query("SELECT COUNT(r) FROM ReviewEntity r " +
@@ -61,6 +62,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
             "FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ResponseUserReviewList> findUserReviewsByUserId(@Param("userId") int userId);
 
+
     @Query("SELECT r FROM ReviewEntity r WHERE r.reviewId = :reviewId")
     ReviewEntity findByReviewId(@Param("reviewId") int reviewId);
 
@@ -68,4 +70,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
     List<ReviewEntity> findPosterByUserId(@Param("userId") int userId);
 
     List<MovieSummaryDto> findTop10(String userId, Pageable top10);
+
+    @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId AND r.rating >= 4")
+    List<ReviewEntity> findByUserAndRatingGreaterThanEqual(@Param("userId") int userId);
 }
