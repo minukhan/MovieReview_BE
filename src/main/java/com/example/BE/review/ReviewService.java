@@ -209,10 +209,24 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-//    public String getPreference(String userId) {
-//        Pageable top10 = PageRequest.of(0, 10);
-//        List<MovieSummaryDto> movies = reviewRepository.findTop10(userId, top10);
-//
-//        return null;
-//    }
+    public String getPreference(String userId) {
+        Pageable top10 = PageRequest.of(0, 10);
+        List<MovieEntity> movies = reviewRepository.findTop10(userId, top10);
+
+        if(movies.isEmpty()) {
+            return null;
+        }
+
+        String result = "내가 선호하는 영화들과 관련된 키워드 8개를 보여주려고 하는데, " +
+                "내가 선호하는 영화 리스트를 줄테니까 그거보고 키워드 8개를 만들어줄래?" +
+                " 선호하는 영화는";
+
+        for(MovieEntity movie : movies) {
+            result += movie.getTitle() + ", ";
+        }
+
+        result += " 이렇게야. 응답은 json 형태로 줄래? 키값은 keyword1, keyword2 이런식으로 보내줘";
+
+        return result;
+    }
 }

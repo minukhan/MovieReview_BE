@@ -160,19 +160,21 @@ public class AuthServiceImplement implements AuthService {
             // JWT 토큰 생성
             token = jwtProvider.create(id);
 
+            response.addHeader("Authorization", "Bearer " + token);
+
             // 발급된 토큰을 쿠키에 저장
-            Cookie cookie = new Cookie("accessToken", token);
-            cookie.setHttpOnly(true);// HTTPS 환경에서만 전송
-            cookie.setPath("/");
-            cookie.setMaxAge(7 * 24 * 60 * 60); // 7일간 유효
+//            Cookie cookie = new Cookie("accessToken", token);
+//            cookie.setHttpOnly(true);// HTTPS 환경에서만 전송
+//            cookie.setPath("/");
+//            cookie.setMaxAge(7 * 24 * 60 * 60); // 7일간 유효
 
 //            response.addCookie(cookie);
 
             // SameSite 속성 추가 - 헤더 방식 사용
-            response.addHeader("Set-Cookie", cookie.getName() + "=" + cookie.getValue()
-                    + "; Path=" + cookie.getPath()
-                    + "; Max-Age=" + cookie.getMaxAge()
-                    + "; HttpOnly; SameSite=None");
+//            response.addHeader("Set-Cookie", cookie.getName() + "=" + cookie.getValue()
+//                    + "; Path=" + cookie.getPath()
+//                    + "; Max-Age=" + cookie.getMaxAge()
+//                    + "; HttpOnly; SameSite=None");
 
         } catch (Exception exception) {
             exception.printStackTrace();
