@@ -67,5 +67,5 @@ public class UserController {
         return ResponseEntity.ok(reviews);
     }
 
-
+//    @PostMapping("/kakaoAlert")
 }
