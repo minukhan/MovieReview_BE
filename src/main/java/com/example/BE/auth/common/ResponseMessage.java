@@ -8,5 +8,6 @@ public interface ResponseMessage {
     String CERTIFICATION_FAIL = "Certification failed.";
     String MAIL_FAIL = "Mail send failed.";
     String DATABASE_ERROR = "Database error.";
+    String SIGN_OUT_FAIL = "Sign Out failed.";
     String LOGOUT_FAIL = "Logout failed.";
 }
