@@ -5,6 +5,8 @@ import com.example.BE.auth.provider.JwtProvider;
 import com.example.BE.genre.GenreEntity;
 import com.example.BE.genre.dto.response.SurveyResponseDto;
 import com.example.BE.genre.service.GenreService;
+import com.example.BE.recommend.RecommendEntity;
+import com.example.BE.recommend.service.RecommendService;
 import com.example.BE.survey.dto.request.SurveyRequestDto;
 import com.example.BE.survey.service.SurveyService;
 import com.example.BE.user.UserEntity;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,6 +27,7 @@ import java.util.List;
 public class SurveyController {
     private final GenreService genreService;
     private final SurveyService surveyService;
+    private final RecommendService recommendService;
     private final JwtProvider jwtProvider;
     private final UserService userService;
 
@@ -73,14 +77,23 @@ public class SurveyController {
             user = null;
         }
 
+        List<GenreEntity> genreEntities = new ArrayList<>();
+
         for(int genreId : genres){
             GenreEntity genre = genreService.getGenreById(genreId);
+            genreEntities.add(genre);
             SurveyEntity survey = SurveyEntity.builder()
                     .user(user)
                     .genre(genre)
                     .build();
             surveyService.submit_survey(survey);
         }
+
+        RecommendEntity recommend = RecommendEntity.builder()
+                .user(user)
+                .genres(genreEntities)
+                .build();
+        recommendService.submit_recommend(recommend);
 
         user.setSurvey(true);
         userService.updateUser(user);

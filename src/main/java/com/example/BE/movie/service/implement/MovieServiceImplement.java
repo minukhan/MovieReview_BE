@@ -2,6 +2,7 @@ package com.example.BE.movie.service.implement;
 
 import com.example.BE.favorite.FavoriteEntity;
 import com.example.BE.favorite.FavoriteRepository;
+import com.example.BE.genre.GenreEntity;
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
 import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
@@ -11,6 +12,9 @@ import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.movie_vote.MovieVoteEntity;
 import com.example.BE.movie_vote.MovieVoteRepository;
+import com.example.BE.moviegenre.MovieGenreRepository;
+import com.example.BE.recommend.RecommendEntity;
+import com.example.BE.recommend.RecommendRepository;
 import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.ReviewRepository;
 import com.example.BE.review.dto.response.ReviewResponseDto;
@@ -28,10 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +42,9 @@ public class MovieServiceImplement implements MovieService {
     private final MovieVoteRepository movieVoteRepository;
     private final ReviewRepository reviewRepository;
     private final FavoriteRepository favoriteRepository;
+    private final RecommendRepository recommendRepository;
+    private final MovieGenreRepository movieGenreRepository;
+
     @Override
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList() {
         List<MovieEntity> movies = movieRepository.findTop5ByOrderByVoteAverageDesc();
@@ -203,6 +207,57 @@ public class MovieServiceImplement implements MovieService {
                     .build();
             responses.add(dto);
         }
+        return ResponseEntity.ok(responses);
+    }
+
+    @Override
+    public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(UserEntity user) {
+        RecommendEntity recommend = recommendRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("No recommendation found for this user"));
+        List<GenreEntity> genres = recommend.getGenres();
+        List<MovieRecommendResponseDto> responses = new ArrayList<>();
+
+        Set<Integer> processedMovieIds = new HashSet<>(); // 중복을 방지하기 위한 Set
+
+        for (GenreEntity genre : genres) {
+            // 해당 장르에 속한 모든 영화 조회
+            List<MovieEntity> movies = movieGenreRepository.findMoviesByGenre(genre.getGenreId());
+
+            // 조회된 영화 중 최대 4개만 처리
+            int movieCount = 0;
+            for (MovieEntity movie : movies) {
+                // 이미 처리한 영화인지 확인
+                if (processedMovieIds.contains(movie.getMovieId())) {
+                    continue; // 중복된 영화는 건너뜀
+                }
+
+                // 중복되지 않은 영화라면 Set에 추가
+                processedMovieIds.add(movie.getMovieId());
+
+                // 특정 사용자와 영화에 대한 평점 조회
+                MovieVoteEntity movieVote = movieVoteRepository.findByUserIdAndMovieId(user.getUserId(), movie.getMovieId());
+                double userVote = (movieVote != null) ? movieVote.getVote() : 0;
+
+                // 추천 DTO 생성
+                MovieRecommendResponseDto dto = MovieRecommendResponseDto.builder()
+                        .movie_id(movie.getMovieId())
+                        .vote_average(movie.getVoteAverage())
+                        .poster_path(movie.getPosterPath())
+                        .user_vote(userVote)
+                        .movie_count(movie.getFavoriteCount())
+                        .build();
+
+                // DTO를 추천 목록에 추가
+                responses.add(dto);
+
+                // 처리한 영화 수가 4개가 되면 더 이상 추가하지 않음
+                movieCount++;
+                if (movieCount >= 4) {
+                    break; // 4개가 되면 더 이상 추가하지 않음
+                }
+            }
+        }
+
         return ResponseEntity.ok(responses);
     }
 
