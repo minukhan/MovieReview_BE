@@ -1,7 +1,13 @@
 package com.example.BE.review;
 
+import com.example.BE.movie.MovieEntity;
+import com.example.BE.movie.dto.response.MovieSummaryDto;
+import com.example.BE.review.dto.ResponseReviewDetail;
+import com.example.BE.review.dto.ResponseReviewPoster;
 import com.example.BE.review.dto.ResponseUserReviewGraph;
 import com.example.BE.review.dto.ResponseUserReviewList;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -52,7 +58,9 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
     ResponseUserReviewGraph getRatingCounts(@Param("userId") int userId);
 
     @Query("SELECT new com.example.BE.review.dto.ResponseUserReviewList(" +
-            "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate) " +
+            "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate," +
+            "(SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user), " +
+            "CASE WHEN (SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user AND h.review = r) > 0 THEN true ELSE false END) " +
             "FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ResponseUserReviewList> findUserReviewsByUserId(@Param("userId") int userId);
 
@@ -62,4 +70,12 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ReviewEntity> findPosterByUserId(@Param("userId") int userId);
+
+    @Query("SELECT r.movie " +
+            "FROM ReviewEntity r WHERE r.user.userId = :userId " +
+            "ORDER BY r.rating DESC ")
+    List<MovieEntity> findTop10(@Value("userId") String userId, Pageable top10);
+
+    @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId AND r.rating >= 4")
+    List<ReviewEntity> findByUserAndRatingGreaterThanEqual(@Param("userId") int userId);
 }
