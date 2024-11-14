@@ -69,7 +69,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
     @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ReviewEntity> findPosterByUserId(@Param("userId") int userId);
 
-    List<MovieSummaryDto> findTop10(String userId, Pageable top10);
+//    List<MovieSummaryDto> findTop10(String userId, Pageable top10);
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId AND r.rating >= 4")
     List<ReviewEntity> findByUserAndRatingGreaterThanEqual(@Param("userId") int userId);

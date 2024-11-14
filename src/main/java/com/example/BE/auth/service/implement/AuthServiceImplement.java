@@ -168,6 +168,12 @@ public class AuthServiceImplement implements AuthService {
 
             response.addCookie(cookie);
 
+            // SameSite 속성 추가 - 헤더 방식 사용
+            response.addHeader("Set-Cookie", cookie.getName() + "=" + cookie.getValue()
+                    + "; Path=" + cookie.getPath()
+                    + "; Max-Age=" + cookie.getMaxAge()
+                    + "; HttpOnly; Secure; SameSite=None");
+
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();

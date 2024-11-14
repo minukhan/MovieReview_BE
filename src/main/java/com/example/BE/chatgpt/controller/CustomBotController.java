@@ -30,12 +30,12 @@ public class CustomBotController {
 //        return chatGPTResponse.getChoices().get(0).getMessage().getContent();
 //    }
 
-    @GetMapping("/{userId}/chat")
-    public String chat(@PathVariable("userId") String userId) {
-        String prompt = reviewService.getPreference(userId);
-        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
-        ChatGPTResponse chatGPTResponse =  template.postForObject(apiURL, request, ChatGPTResponse.class);
-        return chatGPTResponse.getChoices().get(0).getMessage().getContent();
-    }
+//    @GetMapping("/{userId}/chat")
+//    public String chat(@PathVariable("userId") String userId) {
+//        String prompt = reviewService.getPreference(userId);
+//        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
+//        ChatGPTResponse chatGPTResponse =  template.postForObject(apiURL, request, ChatGPTResponse.class);
+//        return chatGPTResponse.getChoices().get(0).getMessage().getContent();
+//    }
 
 }

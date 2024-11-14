@@ -209,8 +209,10 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    public String getPreference(String userId) {
-        Pageable top10 = PageRequest.of(0, 10);
-        List<MovieSummaryDto> movies = reviewRepository.findTop10(userId, top10);
-    }
+//    public String getPreference(String userId) {
+//        Pageable top10 = PageRequest.of(0, 10);
+//        List<MovieSummaryDto> movies = reviewRepository.findTop10(userId, top10);
+//
+//        return null;
+//    }
 }
