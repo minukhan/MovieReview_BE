@@ -1,5 +1,6 @@
 package com.example.BE.movie;
 
+import com.example.BE.movie.dto.response.MovieGenreSearchDto;
 import com.example.BE.movie.dto.response.MovieSummaryDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,8 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
+
+
 
 
     // 특정 장르 ID에 해당하는 영화 목록 조회
@@ -39,9 +42,11 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
 
     List<MovieEntity> findByTitleContainingIgnoreCase(String title);
 
-    @Query("SELECT m FROM MovieEntity m JOIN MovieGenreEntity mg ON m.movieId = mg.movie.movieId " +
-            "WHERE mg.genre.genreId = :genreId AND m.movieId <> :movieId ORDER BY FUNCTION('RAND')")
-    List<MovieEntity> findRandom5MoviesByGenreId(@Param("genreId") int genreId, @Param("movieId") int movieId);
-
+    @Query("SELECT m " +
+            "FROM MovieGenreEntity mg " +
+            "JOIN mg.movie m " +
+            "WHERE mg.genre.genreId = :genreId " +
+            "ORDER BY FUNCTION('RAND')")
+    List<MovieEntity> findRandomMoviesByGenre(@Param("genreId") int genreId, Pageable top5);
 
 }
