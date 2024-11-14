@@ -5,10 +5,7 @@ package com.example.BE.movie.service;
 import com.example.BE.genre.GenreRepository;
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
-import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
-import com.example.BE.movie.dto.response.MovieResponseDto;
-import com.example.BE.movie.dto.response.MovieSummaryDto;
-import com.example.BE.movie.dto.response.TeaserResponseDto;
+import com.example.BE.movie.dto.response.*;
 import com.example.BE.moviegenre.MovieGenreEntity;
 import com.example.BE.moviegenre.MovieGenreRepository;
 import com.example.BE.review.dto.response.ReviewResponseDto;
@@ -45,6 +42,7 @@ public interface MovieService {
     //    private final MovieGenreRepository movieGenreRepository;
     public Map<Integer, Long> getRoundedRatingDistribution(int movieId);
     public ResponseEntity<List<ReviewResponseDto>> getReviewList();
+    public List<MovieGenreSearchDto> getMoviesByGenreName(String genreName);
 //    private final MovieGenreRepository movieGenreRepository;
 
 //    private final GenreRepository genreRepository;

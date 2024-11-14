@@ -4,10 +4,7 @@ package com.example.BE.movie;
 //import com.example.BE.crew.CrewService;
 //import com.example.BE.genre.GenreService;
 import com.example.BE.auth.provider.JwtProvider;
-import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
-import com.example.BE.movie.dto.response.MovieResponseDto;
-import com.example.BE.movie.dto.response.MovieSummaryDto;
-import com.example.BE.movie.dto.response.TeaserResponseDto;
+import com.example.BE.movie.dto.response.*;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.example.BE.user.UserEntity;
@@ -277,4 +274,11 @@ public class MovieController {
     public ResponseEntity<List<ReviewResponseDto>> powerReview(HttpServletRequest request) {
         return reviewService.getPowerReviewList();
     }
+
+    @GetMapping("/genre")
+    public ResponseEntity<List<MovieGenreSearchDto>> getMoviesByGenreName(@RequestParam String genreName) {
+        List<MovieGenreSearchDto> movies = movieService.getMoviesByGenreName(genreName);
+        return ResponseEntity.ok(movies);
+    }
+
 }

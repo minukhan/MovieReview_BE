@@ -13,6 +13,10 @@ import java.util.List;
 public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
 
 
+    // 특정 장르 ID에 해당하는 영화 목록 조회
+    @Query("SELECT m FROM MovieEntity m JOIN MovieGenreEntity mg ON m.movieId = mg.movie.movieId WHERE mg.genre.genreId = :genreId")
+    List<MovieEntity> findMoviesByGenreId(@Param("genreId") int genreId);
+
 
     List<MovieEntity> findTop5ByOrderByVoteAverageDesc();
     // releaseDate 기준 내림차순 정렬하여 최신 영화 리스트 가져오기
@@ -34,4 +38,6 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
     List<MovieEntity> findMoviesOrderByFavoriteCount();
 
     List<MovieEntity> findByTitleContainingIgnoreCase(String title);
+
+
 }

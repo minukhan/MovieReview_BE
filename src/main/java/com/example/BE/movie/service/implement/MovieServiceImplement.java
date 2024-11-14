@@ -2,12 +2,11 @@ package com.example.BE.movie.service.implement;
 
 import com.example.BE.favorite.FavoriteEntity;
 import com.example.BE.favorite.FavoriteRepository;
+import com.example.BE.genre.GenreEntity;
+import com.example.BE.genre.GenreRepository;
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
-import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
-import com.example.BE.movie.dto.response.MovieResponseDto;
-import com.example.BE.movie.dto.response.MovieSummaryDto;
-import com.example.BE.movie.dto.response.TeaserResponseDto;
+import com.example.BE.movie.dto.response.*;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.movie_vote.MovieVoteEntity;
 import com.example.BE.movie_vote.MovieVoteRepository;
@@ -41,6 +40,7 @@ public class MovieServiceImplement implements MovieService {
     private final MovieVoteRepository movieVoteRepository;
     private final ReviewRepository reviewRepository;
     private final FavoriteRepository favoriteRepository;
+    private final GenreRepository genreRepository;
     @Override
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList() {
         List<MovieEntity> movies = movieRepository.findTop5ByOrderByVoteAverageDesc();
@@ -230,4 +230,18 @@ public class MovieServiceImplement implements MovieService {
         return ratingDistribution;
     }
 
+    public List<MovieGenreSearchDto> getMoviesByGenreName(String genreName) {
+        // 장르 이름으로 GenreEntity 조회
+        GenreEntity genre = genreRepository.findByName(genreName)
+                .orElseThrow(() -> new RuntimeException("Genre not found: " + genreName));
+
+        // Genre ID를 사용하여 영화 목록 조회
+        return movieRepository.findMoviesByGenreId(genre.getGenreId()).stream()
+                .map(movie -> MovieGenreSearchDto.builder()
+                        .movieId(movie.getMovieId())
+                        .title(movie.getTitle())
+                        .posterPath(movie.getPosterPath())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }
