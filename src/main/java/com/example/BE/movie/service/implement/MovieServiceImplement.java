@@ -46,7 +46,6 @@ public class MovieServiceImplement implements MovieService {
     private final MovieGenreRepository movieGenreRepository;
     private final GenreRepository genreRepository;
 
-    private final GenreRepository genreRepository;
     @Override
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList() {
         List<MovieEntity> movies = movieRepository.findTop5ByOrderByVoteAverageDesc();
