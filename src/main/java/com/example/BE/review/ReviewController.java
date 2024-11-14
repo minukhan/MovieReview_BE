@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/cinewall/review")
-public class ReviewController {
+public class  ReviewController {
 
     private final ReviewService reviewService;
 

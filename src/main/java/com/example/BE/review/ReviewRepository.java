@@ -62,4 +62,6 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ReviewEntity> findPosterByUserId(@Param("userId") int userId);
+
+    List<ReviewEntity> findByUser_UserIdAndRatingGreaterThanEqual(Long userId);
 }
