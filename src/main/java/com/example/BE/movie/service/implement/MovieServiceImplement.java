@@ -3,6 +3,7 @@ package com.example.BE.movie.service.implement;
 import com.example.BE.favorite.FavoriteEntity;
 import com.example.BE.favorite.FavoriteRepository;
 import com.example.BE.genre.GenreEntity;
+import com.example.BE.genre.GenreRepository;
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
 import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
@@ -12,6 +13,7 @@ import com.example.BE.movie.dto.response.TeaserResponseDto;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.movie_vote.MovieVoteEntity;
 import com.example.BE.movie_vote.MovieVoteRepository;
+import com.example.BE.moviegenre.MovieGenreEntity;
 import com.example.BE.moviegenre.MovieGenreRepository;
 import com.example.BE.recommend.RecommendEntity;
 import com.example.BE.recommend.RecommendRepository;
@@ -44,6 +46,7 @@ public class MovieServiceImplement implements MovieService {
     private final FavoriteRepository favoriteRepository;
     private final RecommendRepository recommendRepository;
     private final MovieGenreRepository movieGenreRepository;
+    private final GenreRepository genreRepository;
 
     @Override
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList() {
@@ -213,14 +216,46 @@ public class MovieServiceImplement implements MovieService {
     @Override
     public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(UserEntity user) {
         List<ReviewEntity> reviews = reviewRepository.findByUserAndRatingGreaterThanEqual(user.getUserId());
+        List<MovieEntity> review_movies = new ArrayList<>();
+
+        //리뷰중에 평점 4점 이상인거만 add
+        for(ReviewEntity review : reviews){
+            if(review.getRating().compareTo(new BigDecimal("4.0")) > 0) {
+                MovieEntity movie = review.getMovie();
+                review_movies.add(movie);
+            }
+        }
+
+        //리뷰 4개 이상의 장르 추가
+        List<GenreEntity> total_genres = new ArrayList<>();
+        for(MovieEntity movie : review_movies){
+            List<GenreEntity> genreEntities = movieGenreRepository.findGenresByMovie(movie.getMovieId());
+            for(GenreEntity genre : genreEntities){
+                total_genres.add(genre);
+            }
+        }
 
         RecommendEntity recommend = recommendRepository.findByUser(user)
                 .orElseThrow(() -> new RuntimeException("No recommendation found for this user"));
-        List<GenreEntity> genres = recommend.getGenres();
+        List<GenreEntity> recommend_genres = recommend.getGenres();
+
+        int i = 0;
+        for (GenreEntity genre : total_genres) {
+            if (i >= recommend_genres.size() || i >= 5) break; // recommend_genres 크기 체크 추가
+            if (recommend_genres.get(i).getGenreId() != genre.getGenreId()) {
+                recommend_genres.set(i, genre); // List의 특정 인덱스 값 변경
+            }
+            i++;
+        }
+
+        recommend.setGenres(recommend_genres);
+        recommendRepository.save(recommend);
+
         List<MovieRecommendResponseDto> responses = new ArrayList<>();
 
         Set<Integer> processedMovieIds = new HashSet<>(); // 중복을 방지하기 위한 Set
 
+        List<GenreEntity> genres = recommend.getGenres();
         for (GenreEntity genre : genres) {
             // 해당 장르에 속한 모든 영화 조회
             List<MovieEntity> movies = movieGenreRepository.findMoviesByGenre(genre.getGenreId());
