@@ -2,7 +2,6 @@ package com.example.BE.auth.service;
 
 import com.example.BE.auth.dto.request.*;
 import com.example.BE.auth.dto.response.*;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 
