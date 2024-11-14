@@ -46,7 +46,6 @@ public class MovieServiceImplement implements MovieService {
     private final MovieGenreRepository movieGenreRepository;
     private final GenreRepository genreRepository;
 
-    private final GenreRepository genreRepository;
     @Override
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList() {
         List<MovieEntity> movies = movieRepository.findTop5ByOrderByVoteAverageDesc();
@@ -335,4 +334,35 @@ public class MovieServiceImplement implements MovieService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    public List<MovieGenreSearchDto> getMoviesByGenres(int movieId) {
+        // 1. 영화 ID로 해당 영화의 장르 목록을 가져옴
+        List<GenreEntity> genres = movieGenreRepository.findGenresByMovieId(movieId);
+        System.out.println("Number of genres for movie ID " + movieId + ": " + genres.size());
+        // 2. 각 장르에 맞는 영화를 랜덤하게 가져와 하나의 리스트로 합침
+        List<MovieEntity> movies = new ArrayList<>();
+
+        for (GenreEntity genre : genres) {
+            // 장르별로 영화를 가져와 리스트에 추가
+            Pageable top5 = PageRequest.of(0,5);
+            List<MovieEntity> genreMovies = movieRepository.findRandomMoviesByGenre(genre.getGenreId(), top5);
+
+            // movies 리스트에 추가하면서 중복 제거
+            for (MovieEntity movie : genreMovies) {
+                if (!movies.contains(movie)) {
+                    movies.add(movie);
+                }
+            }
+        }
+
+        // 3. MovieEntity 리스트를 MovieGenreSearchDto 리스트로 변환
+        List<MovieGenreSearchDto> movieDtos = movies.stream()
+                .map(movie -> new MovieGenreSearchDto(movie.getMovieId(), movie.getTitle(), movie.getPosterPath()))
+                .collect(Collectors.toList());
+
+        return movieDtos;
+    }
+
+
+
 }

@@ -17,6 +17,7 @@ import java.util.List;
 @Builder
 @Table(name = "recommend")
 public class RecommendEntity {
+
     @Id
     @Column(name="recommend_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

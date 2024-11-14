@@ -45,6 +45,7 @@ public interface MovieService {
     public ResponseEntity<List<ReviewResponseDto>> getReviewList();
     public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(UserEntity user);
     public List<MovieGenreSearchDto> getMoviesByGenreName(String genreName);
+    public List<MovieGenreSearchDto> getMoviesByGenres(int movieId);
 //    private final MovieGenreRepository movieGenreRepository;
 
 //    private final GenreRepository genreRepository;
