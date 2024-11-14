@@ -1,5 +1,4 @@
 package com.example.BE.movie;
-;
 //import com.example.BE.actor.ActorService;
 //import com.example.BE.crew.CrewService;
 //import com.example.BE.genre.GenreService;
