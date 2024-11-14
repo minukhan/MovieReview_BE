@@ -212,13 +212,13 @@ public class MovieServiceImplement implements MovieService {
 
     @Override
     public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(UserEntity user) {
-        List<ReviewEntity> reviews =
-
-
-
-        RecommendEntity recommend = recommendRepository.findByUser(user)
-                .orElseThrow(() -> new RuntimeException("No recommendation found for this user"));
-        List<GenreEntity> genres = recommend.getGenres();
+//        List<ReviewEntity> reviews =
+//
+//
+//
+//        RecommendEntity recommend = recommendRepository.findByUser(user)
+//                .orElseThrow(() -> new RuntimeException("No recommendation found for this user"));
+//        List<GenreEntity> genres = recommend.getGenres();
         List<MovieRecommendResponseDto> responses = new ArrayList<>();
 
         Set<Integer> processedMovieIds = new HashSet<>(); // 중복을 방지하기 위한 Set
