@@ -166,13 +166,13 @@ public class AuthServiceImplement implements AuthService {
             cookie.setPath("/");
             cookie.setMaxAge(7 * 24 * 60 * 60); // 7일간 유효
 
-            response.addCookie(cookie);
+//            response.addCookie(cookie);
 
             // SameSite 속성 추가 - 헤더 방식 사용
             response.addHeader("Set-Cookie", cookie.getName() + "=" + cookie.getValue()
                     + "; Path=" + cookie.getPath()
                     + "; Max-Age=" + cookie.getMaxAge()
-                    + "; HttpOnly; Secure; SameSite=None");
+                    + "; HttpOnly; SameSite=None");
 
         } catch (Exception exception) {
             exception.printStackTrace();
