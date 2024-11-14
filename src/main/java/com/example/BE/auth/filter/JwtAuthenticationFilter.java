@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             String accessToken = jwtProvider.getTokenFromCookies(request);
+//            System.out.println("accessToken: " + accessToken);
 
             if(accessToken != null && jwtProvider.validateToken(accessToken)) {
                 Authentication authentication = jwtProvider.getAuthentication(accessToken);

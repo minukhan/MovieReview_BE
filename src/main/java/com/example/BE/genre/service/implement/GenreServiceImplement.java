@@ -1,6 +1,5 @@
 package com.example.BE.genre.service.implement;
 
-import com.example.BE.follower.dto.response.FollowingResponseDto;
 import com.example.BE.genre.GenreEntity;
 import com.example.BE.genre.GenreRepository;
 import com.example.BE.genre.dto.response.SurveyResponseDto;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
