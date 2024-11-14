@@ -7,17 +7,25 @@ import org.springframework.http.ResponseEntity;
 
 @Getter
 public class SignOutResponseDto extends ResponseDto {
-
+    private boolean isAvailable; // 로그아웃 성공 여부
     private String message;
 
-    public SignOutResponseDto(String message) {
+    // 기본 생성자
+    private SignOutResponseDto(boolean isAvailable, String message) {
         super();
+        this.isAvailable = isAvailable;
         this.message = message;
     }
 
-    // 로그아웃 성공 응답
+    // 로그아웃 성공 시 응답
     public static ResponseEntity<SignOutResponseDto> success() {
-        SignOutResponseDto responseBody = new SignOutResponseDto(ResponseMessage.SUCCESS);
+        SignOutResponseDto responseBody = new SignOutResponseDto(true, ResponseMessage.SUCCESS); // 로그아웃 성공
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+    }
+
+    // 로그아웃 실패 시 응답
+    public static ResponseEntity<SignOutResponseDto> fail() {
+        SignOutResponseDto responseBody = new SignOutResponseDto(false, ResponseMessage.LOGOUT_FAIL); // 로그아웃 실패
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 }

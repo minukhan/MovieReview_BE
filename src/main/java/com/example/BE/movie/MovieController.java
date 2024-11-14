@@ -4,10 +4,7 @@ package com.example.BE.movie;
 //import com.example.BE.crew.CrewService;
 //import com.example.BE.genre.GenreService;
 import com.example.BE.auth.provider.JwtProvider;
-import com.example.BE.movie.dto.response.MovieRecommendResponseDto;
-import com.example.BE.movie.dto.response.MovieResponseDto;
-import com.example.BE.movie.dto.response.MovieSummaryDto;
-import com.example.BE.movie.dto.response.TeaserResponseDto;
+import com.example.BE.movie.dto.response.*;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.example.BE.user.UserEntity;
@@ -21,6 +18,8 @@ import com.example.BE.review.dto.ReviewRequestDto;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -277,4 +276,19 @@ public class MovieController {
     public ResponseEntity<List<ReviewResponseDto>> powerReview(HttpServletRequest request) {
         return reviewService.getPowerReviewList();
     }
+
+    @GetMapping("/userbase")
+    public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(HttpServletRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        UserEntity user = userService.findById(userName);
+        return movieService.getUserBase(user);
+    }
+
+    @GetMapping("/genre")
+    public ResponseEntity<List<MovieGenreSearchDto>> getMoviesByGenreName(@RequestParam String genreName) {
+        List<MovieGenreSearchDto> movies = movieService.getMoviesByGenreName(genreName);
+        return ResponseEntity.ok(movies);
+    }
+
 }

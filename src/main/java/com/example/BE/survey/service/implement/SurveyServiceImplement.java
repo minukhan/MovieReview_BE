@@ -1,6 +1,8 @@
 package com.example.BE.survey.service.implement;
 
 import com.amazonaws.Response;
+import com.example.BE.recommend.RecommendEntity;
+import com.example.BE.recommend.RecommendRepository;
 import com.example.BE.survey.SurveyEntity;
 import com.example.BE.survey.SurveyRepository;
 import com.example.BE.survey.service.SurveyService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SurveyServiceImplement implements SurveyService {
     private final SurveyRepository surveyRepository;
+    private final RecommendRepository recommendRepository;
 
     public void submit_survey(SurveyEntity surveyEntity){
         surveyRepository.save(surveyEntity);
