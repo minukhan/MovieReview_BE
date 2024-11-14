@@ -4,12 +4,16 @@ import com.example.BE.movie.dto.response.MovieSummaryDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
+
+
+
     List<MovieEntity> findTop5ByOrderByVoteAverageDesc();
     // releaseDate 기준 내림차순 정렬하여 최신 영화 리스트 가져오기
 
