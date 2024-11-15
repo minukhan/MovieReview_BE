@@ -78,6 +78,7 @@ public class MovieServiceImplement implements MovieService {
                     .vote_average(movie.getVoteAverage())
                     .poster_path(movie.getPosterPath())
                     .user_vote(userVote)
+                    .movie_title(movie.getTitle())
                     .build();
             responses.add(dto);
         }
@@ -107,6 +108,7 @@ public class MovieServiceImplement implements MovieService {
                     .vote_average(movie.getVoteAverage())
                     .poster_path(movie.getPosterPath())
                     .user_vote(userVote)
+                    .movie_title(movie.getTitle())
                     .build();
             responses.add(dto);
         }
@@ -140,6 +142,7 @@ public class MovieServiceImplement implements MovieService {
                     .vote_average(favorite.getMovie().getVoteAverage())
                     .poster_path(favorite.getMovie().getPosterPath())
                     .user_vote(userVote)
+                    .movie_title(favorite.getMovie().getTitle())
                     .build();
             responses.add(dto);
         }
@@ -169,6 +172,7 @@ public class MovieServiceImplement implements MovieService {
                     .poster_path(movie.getPosterPath())
                     .user_vote(userVote)
                     .movie_count(movie.getFavoriteCount())
+                    .movie_title(movie.getTitle())
                     .build();
             responses.add(dto);
         }
@@ -280,6 +284,7 @@ public class MovieServiceImplement implements MovieService {
                         .poster_path(movie.getPosterPath())
                         .user_vote(userVote)
                         .movie_count(movie.getFavoriteCount())
+                        .movie_title(movie.getTitle())
                         .build();
 
                 // DTO를 추천 목록에 추가
