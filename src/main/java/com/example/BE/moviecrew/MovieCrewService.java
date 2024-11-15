@@ -1,6 +1,5 @@
 package com.example.BE.moviecrew;
 
-import com.example.BE.actor.dto.RecommendedActor;
 import com.example.BE.crew.dto.RecommendedCrew;
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.user.UserEntity;

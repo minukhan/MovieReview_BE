@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.ReviewService;
-import com.example.BE.review.dto.ReviewRequestDto;
+import com.example.BE.review.dto.request.ReviewRequestDto;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,9 +1,7 @@
-package com.example.BE.review.dto;
+package com.example.BE.review.dto.response;
 
-import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.dto.response.MovieSummaryDto;
 import com.example.BE.review.ReviewEntity;
-import com.example.BE.user.UserEntity;
 import com.example.BE.user.dto.ResponseUserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
