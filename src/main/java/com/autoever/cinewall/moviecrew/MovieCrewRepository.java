@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface MovieCrewRepository extends JpaRepository<MovieCrewEntity, Long> {
-    @Query("SELECT new com.example.BE.crew.dto.RecommendedCrew( " +
+    @Query("SELECT new  com.autoever.cinewall.crew.dto.RecommendedCrew( " +
             "c.id, c.name, c.profilePath, AVG((r.rating / 5) * 100) AS avgScore " +
             ") " +
             "FROM ReviewEntity r " +

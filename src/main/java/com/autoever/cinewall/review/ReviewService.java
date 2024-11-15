@@ -5,7 +5,6 @@ import com.autoever.cinewall.movie.MovieEntity;
 import com.autoever.cinewall.movie.MovieRepository;
 import com.autoever.cinewall.review.dto.response.*;
 import com.autoever.cinewall.review.dto.request.ReviewRequestDto;
-import com.example.BE.review.dto.response.*;
 import com.autoever.cinewall.reviewHeart.ReviewHeartRepository;
 import com.autoever.cinewall.user.UserEntity;
 import com.autoever.cinewall.user.UserRepository;
@@ -108,6 +107,7 @@ public class ReviewService {
                     .content(reviews.get(0).getContent())
                     .rating(reviews.get(0).getRating())
                     .heartCount(reviews.get(0).getReviewHeartCount())
+                    .createDate(reviews.get(0).getCreateDate())
                     .heart(isHeart)
                     .build();
 

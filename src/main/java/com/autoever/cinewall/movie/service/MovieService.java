@@ -1,7 +1,6 @@
 package com.autoever.cinewall.movie.service;
 
 import com.autoever.cinewall.movie.dto.response.*;
-import com.example.BE.movie.dto.response.*;
 import com.autoever.cinewall.review.dto.response.ReviewResponseDto;
 import com.autoever.cinewall.user.UserEntity;
 import org.springframework.http.ResponseEntity;

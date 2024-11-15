@@ -7,7 +7,6 @@ import com.autoever.cinewall.genre.GenreRepository;
 import com.autoever.cinewall.movie.MovieEntity;
 import com.autoever.cinewall.movie.MovieRepository;
 import com.autoever.cinewall.movie.dto.response.*;
-import com.example.BE.movie.dto.response.*;
 import com.autoever.cinewall.movie.service.MovieService;
 import com.autoever.cinewall.moviegenre.MovieGenreRepository;
 import com.autoever.cinewall.recommend.RecommendEntity;

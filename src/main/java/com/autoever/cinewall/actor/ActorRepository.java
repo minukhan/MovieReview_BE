@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ActorRepository extends JpaRepository<ActorEntity, Long> {
 
-    @Query("SELECT new com.example.BE.actor.dto.RecommendedActor( " +
+    @Query("SELECT new com.autoever.cinewall.actor.dto.RecommendedActor( " +
             "a.id, a.name, a.profilePath, AVG((r.rating / 5) * 100) AS avgScore " +
             ") " +
             "FROM ReviewEntity r " +

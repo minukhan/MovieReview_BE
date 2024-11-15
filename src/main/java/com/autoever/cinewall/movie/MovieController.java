@@ -2,7 +2,6 @@ package com.autoever.cinewall.movie;
 
 import com.autoever.cinewall.auth.provider.JwtProvider;
 import com.autoever.cinewall.movie.dto.response.*;
-import com.example.BE.movie.dto.response.*;
 import com.autoever.cinewall.movie.service.MovieService;
 import com.autoever.cinewall.review.dto.response.ReviewResponseDto;
 import com.autoever.cinewall.user.UserEntity;
