@@ -56,7 +56,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
     @Query("SELECT new com.autoever.cinewall.review.dto.response.ResponseUserReviewList(" +
             "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate," +
-            "(SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user), " +
+            "(SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.review = r), " +
             "CASE WHEN (SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user AND h.review = r) > 0 THEN true ELSE false END) " +
             "FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ResponseUserReviewList> findUserReviewsByUserId(@Param("userId") int userId);
@@ -79,7 +79,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
     @Query("SELECT new com.autoever.cinewall.review.dto.response.ResponseUserReviewList(" +
             "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate," +
-            "(SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user), " +
+            "(SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.review = r), " +
             "CASE WHEN (SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user AND h.review = r) > 0 THEN true ELSE false END) " +
             "FROM ReviewEntity r WHERE r.reviewId = :reviewId")
     ResponseUserReviewList findReviewDetail(@Param("reviewId") int reviewId);
