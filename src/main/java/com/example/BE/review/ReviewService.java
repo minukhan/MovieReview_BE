@@ -70,6 +70,7 @@ public class ReviewService {
         review.setRating(reviewUpdateRequestDto.getRating());
         review.setDescription(reviewUpdateRequestDto.getDescription());
         review.setContent(reviewUpdateRequestDto.getContent());
+        review.setCreateDate(LocalDateTime.now());
 
         // 변경된 리뷰 저장
         return reviewRepository.save(review);
