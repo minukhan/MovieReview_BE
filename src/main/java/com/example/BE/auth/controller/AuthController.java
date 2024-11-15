@@ -52,10 +52,8 @@ public class AuthController {
             @ModelAttribute @Valid SignUpRequestDto requestBody
     ){
         try {
-            // 이미지 업로드
-            String imageUrl = imageUploadService.upload(image);  // 이미지를 S3에 업로드하고 URL 반환
+            String imageUrl = imageUploadService.upload(image);
 
-            // 실제 회원 가입 처리 (예: 서비스 호출)
             ResponseEntity<? super SignUpResponseDto> response = authService.signUp(requestBody, imageUrl);
 
             return response;
@@ -79,6 +77,6 @@ public class AuthController {
     public ResponseEntity<? super ResponseDto> logout(HttpServletRequest request, HttpServletResponse response) {
         // 세션 무효화
         request.getSession().invalidate();
-        return authService.logout(response);  // 로그아웃 처리
+        return authService.logout(response);
     }
 }

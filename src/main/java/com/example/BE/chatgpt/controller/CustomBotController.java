@@ -26,13 +26,6 @@ public class CustomBotController {
     @Autowired
     private ReviewService reviewService;
 
-//    @GetMapping("/chat")
-//    public String chat(@RequestParam(name = "prompt")String prompt){
-//        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
-//        ChatGPTResponse chatGPTResponse =  template.postForObject(apiURL, request, ChatGPTResponse.class);
-//        return chatGPTResponse.getChoices().get(0).getMessage().getContent();
-//    }
-
     @GetMapping("/{userId}/chat")
     public ResponseEntity chat(@PathVariable("userId") String userId) {
         String prompt = reviewService.getPreference(userId);

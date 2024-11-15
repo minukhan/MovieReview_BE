@@ -1,10 +1,8 @@
 package com.example.BE.follower.service;
 
-import com.example.BE.follower.FollowerEntity;
 import com.example.BE.follower.dto.response.FollowerResponseDto;
 import com.example.BE.follower.dto.response.FollowingResponseDto;
 import com.example.BE.user.UserEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

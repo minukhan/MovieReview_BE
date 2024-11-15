@@ -2,7 +2,6 @@ package com.example.BE.crew.dto;
 
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.dto.response.MovieSummaryDto;
-import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.util.ArrayList;

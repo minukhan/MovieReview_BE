@@ -1,8 +1,5 @@
 package com.example.BE.auth.provider;
-import java.time.Instant;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import com.example.BE.user.UserEntity;
@@ -68,7 +65,6 @@ public class JwtProvider {
 
     public String validate(String jwt){
         String subject = null;
-//        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 
         try{
             subject =  Jwts.parserBuilder()
@@ -89,11 +85,6 @@ public class JwtProvider {
     public boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken);
-
-            System.out.println("############### Token Validation ##################");
-            System.out.println(claims.getBody().getExpiration());
-            System.out.println(new Date());
-
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
