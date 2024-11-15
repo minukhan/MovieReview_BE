@@ -18,7 +18,7 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final UserService userService;
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+    //@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping(value = "/subscribe", produces = "text/event-stream;charset=UTF-8")
     public SseEmitter subscribe(HttpServletRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
