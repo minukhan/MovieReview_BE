@@ -57,11 +57,11 @@ public class  ReviewController {
                                      @RequestBody ResponseReviewDetail editedReview) {
         editedReview.setReviewId(reviewId);
 
-        System.out.println(editedReview);
-
         ResponseReviewDetail result = null;
         try {
             result = reviewService.editReview(editedReview);
+        } catch(IllegalArgumentException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -84,7 +84,12 @@ public class  ReviewController {
 
     @GetMapping("/poster-list/{userId}")
     public ResponseEntity getPosterList(@PathVariable("userId") int userId) {
-        List<ResponseReviewPoster> result = reviewService.getPosterList(userId);
+        List<ResponseReviewPoster> result = null;
+        try {
+            result = reviewService.getPosterList(userId);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         return ResponseEntity.ok(result);
     }
