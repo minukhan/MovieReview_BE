@@ -154,8 +154,8 @@ public class MovieController {
     }
 
     @GetMapping("/{movieId}/rating-distribution")
-    public ResponseEntity<Map<Integer, Long>> getRatingDistribution(@PathVariable int movieId) {
-        Map<Integer, Long> ratingDistribution = movieService.getRoundedRatingDistribution(movieId);
+    public ResponseEntity<List<RatingCountDTO>> getRatingDistribution(@PathVariable int movieId) {
+        List<RatingCountDTO> ratingDistribution = movieService.getRoundedRatingDistribution(movieId);
         return ResponseEntity.ok(ratingDistribution);
     }
 

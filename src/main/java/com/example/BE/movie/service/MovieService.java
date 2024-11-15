@@ -16,7 +16,7 @@ public interface MovieService {
     public ResponseEntity<List<MovieResponseDto>> getFavoriteList(int user_id);
     public ResponseEntity<List<MovieRecommendResponseDto>> getRecommendList(int user_id);
     public List<MovieSummaryDto> searchMoviesByTitle(String title);
-    public Map<Integer, Long> getRoundedRatingDistribution(int movieId);
+    public List<RatingCountDTO> getRoundedRatingDistribution(int movieId);
     public ResponseEntity<List<ReviewResponseDto>> getReviewList();
     public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(UserEntity user);
     public List<MovieGenreSearchDto> getMoviesByGenreName(String genreName);
