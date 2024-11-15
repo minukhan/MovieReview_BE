@@ -13,6 +13,7 @@ import com.autoever.cinewall.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,20 +61,31 @@ public class UserServiceImplement implements UserService {
 
     @Override
     @Transactional
-    public EditedUserResponseDto editUser(String id, EditedUserRequestDto editedUserDto) throws IOException {
+    public EditedUserResponseDto editUser(String id, String nickname, MultipartFile profileImg) throws IOException {
 
-        String profileImg = imageService.upload(editedUserDto.getProfileImg());
         UserEntity userEntity = userRepository.findById(id);
+        UserEntity editedUser = null;
 
         if(userEntity == null) {
             throw new IllegalArgumentException("User not found");
         }
+        if(profileImg != null){
+            String profile = imageService.upload(profileImg);
+            editedUser = userEntity.toBuilder()
+                    .userId(userEntity.getUserId())
+                    .nickname(nickname)
+                    .profile_url(profile)
+                    .build();
+        } else{
+            editedUser = userEntity.toBuilder()
+                    .userId(userEntity.getUserId())
+                    .nickname(nickname)
+                    .build();
+        }
 
-        userEntity.setNickname(editedUserDto.getNickname());
-        userEntity.setProfile_url(profileImg);
 //        userEntity.orElseThrow(() -> new RuntimeException("User not found")).setProfile_url(editedUserDto.getProfile_url());
 
-        UserEntity response = userRepository.save(userEntity);
+        UserEntity response = userRepository.save(editedUser);
 
         EditedUserResponseDto responseDto = EditedUserResponseDto.builder()
                 .userId(response.getUserId())

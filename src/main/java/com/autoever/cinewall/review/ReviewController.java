@@ -19,7 +19,7 @@ public class  ReviewController {
 
     @GetMapping("/user-graph/{userId}")
     public ResponseEntity getUserReviewGraph(@PathVariable("userId") int userId) {
-        ResponseUserReviewGraph result = null;
+        List<ResponseGraph> result = null;
         try {
             result = reviewService.getUserGraph(userId);
             return ResponseEntity.ok(result);
@@ -51,7 +51,7 @@ public class  ReviewController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/edit/{reviewId}")
+    @PatchMapping("/edit/{reviewId}")
     public ResponseEntity editReview(@PathVariable("reviewId") int reviewId,
                                      @RequestBody ResponseReviewDetail editedReview) {
         editedReview.setReviewId(reviewId);

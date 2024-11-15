@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,9 +66,13 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
 
         // 리뷰 정보 업데이트
-        review.setRating(reviewUpdateRequestDto.getRating());
-        review.setContent(reviewUpdateRequestDto.getContent());
-        review.setCreateDate(LocalDateTime.now());
+        review.toBuilder()
+                .rating(reviewUpdateRequestDto.getRating())
+                .content(reviewUpdateRequestDto.getContent())
+                .createDate(LocalDateTime.now())
+                .build();
+
+        System.out.println(review);
 
         // 변경된 리뷰 저장
         return reviewRepository.save(review);
@@ -115,7 +120,7 @@ public class ReviewService {
         }
         return ResponseEntity.ok(responses);
     }
-    public ResponseUserReviewGraph getUserGraph(int userId) throws Exception {
+    public List<ResponseGraph> getUserGraph(int userId) throws Exception {
 
         UserEntity user = userRepository.findByUserId(userId);
 
@@ -125,7 +130,15 @@ public class ReviewService {
 
         ResponseUserReviewGraph graph = reviewRepository.getRatingCounts(userId);
 
-        return graph;
+        List<ResponseGraph> result = new ArrayList<>();
+
+        result.add(new ResponseGraph("1점", graph.getOneStar()));
+        result.add(new ResponseGraph("2점", graph.getTwoStar()));
+        result.add(new ResponseGraph("3점", graph.getThreeStar()));
+        result.add(new ResponseGraph("4점", graph.getFourStar()));
+        result.add(new ResponseGraph("5점", graph.getFiveStar()));
+
+        return result;
     }
 
     public List<ResponseUserReviewList> getUserReviewList(int userId) throws Exception {
@@ -168,12 +181,14 @@ public class ReviewService {
             throw new IllegalArgumentException("사용자가 작성한 리뷰가 아닙니다.");
         }
 
-        before.setRating(editedReview.getRating());
-        before.setDescription(editedReview.getDescription());
-        before.setContent(editedReview.getContent());
-        before.setCreateDate(LocalDateTime.now());
+        ReviewEntity review = before.toBuilder()
+                .rating(editedReview.getRating())
+                .description(editedReview.getDescription())
+                .content(editedReview.getContent())
+                .createDate(LocalDateTime.now())
+                .build();
 
-        ReviewEntity after = reviewRepository.save(before);
+        ReviewEntity after = reviewRepository.save(review);
 
         ResponseReviewDetail result = new ResponseReviewDetail(after);
 
@@ -273,7 +288,7 @@ public class ReviewService {
 
         String result = "내가 선호하는 영화들과 관련된 키워드 8개를 보여주려고 하는데, " +
                 "내가 선호하는 영화 리스트를 줄테니까 그거보고 키워드 8개를 만들어줄래?" +
-                "키워드는 장르 말고 보낸 영화들과 관련된 형용사나 단어로 해줘" +
+                "키워드는 장르 말고 보낸 영화들과 관련된 형용사 4개, 단어 4개로 해줘" +
                 " 선호하는 영화는";
 
         for(MovieEntity movie : movies) {
