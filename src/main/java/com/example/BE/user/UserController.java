@@ -27,11 +27,14 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    @PostMapping("/edit/{userId}")
-    public ResponseEntity editUser(@PathVariable("userId") int userId, @ModelAttribute EditedUserRequestDto requestDto) {
+    @PostMapping("/edit")
+    public ResponseEntity editUser(@ModelAttribute EditedUserRequestDto requestDto) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
 
         try{
-            EditedUserResponseDto responseDto = userService.editUser(userId, requestDto);
+            EditedUserResponseDto responseDto = userService.editUser(id, requestDto);
             return ResponseEntity.ok(responseDto);
         } catch(IllegalArgumentException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

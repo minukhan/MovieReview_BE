@@ -62,19 +62,13 @@ public class UserServiceImplement implements UserService {
 
     @Override
     @Transactional
-    public EditedUserResponseDto editUser(int userId, EditedUserRequestDto editedUserDto) throws IOException {
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userName = auth.getName();
+    public EditedUserResponseDto editUser(String id, EditedUserRequestDto editedUserDto) throws IOException {
 
         String profileImg = imageService.upload(editedUserDto.getProfileImg());
-        UserEntity userEntity = userRepository.findByUserId(userId);
+        UserEntity userEntity = userRepository.findById(id);
 
         if(userEntity == null) {
             throw new IllegalArgumentException("User not found");
-        }
-        if(!userEntity.getId().equals(userName)) {
-            throw new UnsupportedOperationException("다른 회원의 프로필을 수정할 수 없습니다.");
         }
 
         userEntity.setNickname(editedUserDto.getNickname());

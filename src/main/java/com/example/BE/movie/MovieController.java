@@ -6,8 +6,10 @@ import com.example.BE.movie.service.MovieService;
 import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.service.UserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.ReviewService;
 import com.example.BE.review.dto.request.ReviewRequestDto;
 import lombok.extern.log4j.Log4j2;
@@ -180,5 +182,7 @@ public class MovieController {
     public List<MovieGenreSearchDto> getMoviesByGenres(@PathVariable int movieId) {
         return movieService.getMoviesByGenres(movieId);
     }
+
+
 
 }

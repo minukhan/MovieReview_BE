@@ -15,6 +15,6 @@ public interface UserService {
     UserEntity findByUserId(int user_id);
     void updateUser(UserEntity user);
     public List<SimpleReviewResponseDTO>getUserLatestReviews(int userId);
-    EditedUserResponseDto editUser(int userId, EditedUserRequestDto editedUserDto) throws IOException;
+    EditedUserResponseDto editUser(String userId, EditedUserRequestDto editedUserDto) throws IOException;
     ResponseUserInfo getUser(String id);
 }
