@@ -153,14 +153,12 @@ public class ReviewService {
         return result;
     }
 
-    public ResponseReviewDetail getReviewDetail(int reviewId) throws Exception {
-        ReviewEntity review = reviewRepository.findByReviewId(reviewId);
+    public ResponseUserReviewList getReviewDetail(int reviewId) throws Exception {
+        ResponseUserReviewList result = reviewRepository.findReviewDetail(reviewId);
 
-        if(review == null) {
+        if(result == null) {
             throw new Exception("존재하지 않는 리뷰입니다.");
         }
-
-        ResponseReviewDetail result = new ResponseReviewDetail(review);
 
         return result;
     }
