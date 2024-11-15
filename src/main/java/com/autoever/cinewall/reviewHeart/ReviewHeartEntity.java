@@ -18,11 +18,11 @@ public class ReviewHeartEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reviewHeart_id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", nullable = false)
     private ReviewEntity review;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 }

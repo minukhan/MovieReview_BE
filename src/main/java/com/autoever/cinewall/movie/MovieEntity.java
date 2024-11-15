@@ -45,7 +45,7 @@ public class MovieEntity {
     @Column(nullable = false)
     private String trailerPath;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FavoriteEntity> favorites = new ArrayList<>();
 
     public int getFavoriteCount() {
