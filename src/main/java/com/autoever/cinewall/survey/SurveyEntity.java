@@ -18,11 +18,11 @@ public class SurveyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int surveyId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "genre_id", nullable = false)
     private GenreEntity genre;
 

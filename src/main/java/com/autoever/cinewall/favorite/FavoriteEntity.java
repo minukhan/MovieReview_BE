@@ -18,11 +18,11 @@ public class FavoriteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int favoriteId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
     private MovieEntity movie;
 

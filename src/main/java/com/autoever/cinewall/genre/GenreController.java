@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cinewall/genre")
 public class GenreController {
 
+    // TODO : DB에 데이터를 다시 불러올때 사용하기 위한 코드입니다.
     // application.properties에 tmdb.key 값 설정한 뒤 가져옴
 //    @Value("${tmdb.key}")
 //    private String apiKey;
