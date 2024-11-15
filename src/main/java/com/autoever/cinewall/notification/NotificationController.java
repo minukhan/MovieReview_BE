@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -17,6 +18,7 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final UserService userService;
 
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping(value = "/subscribe", produces = "text/event-stream;charset=UTF-8")
     public SseEmitter subscribe(HttpServletRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
