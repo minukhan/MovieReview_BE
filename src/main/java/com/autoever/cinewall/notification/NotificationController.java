@@ -5,6 +5,7 @@ import com.autoever.cinewall.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,8 +22,8 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final UserService userService;
 
-    //@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @GetMapping(value = "/subscribe", produces = "text/event-stream;charset=UTF-8")
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(HttpServletRequest request) {
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
         response.setHeader("Content-Type", "text/event-stream;charset=UTF-8");
