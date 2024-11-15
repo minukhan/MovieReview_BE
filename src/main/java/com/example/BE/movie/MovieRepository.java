@@ -1,7 +1,5 @@
 package com.example.BE.movie;
 
-import com.example.BE.movie.dto.response.MovieGenreSearchDto;
-import com.example.BE.movie.dto.response.MovieSummaryDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,10 +10,6 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
-
-
-
-
     // 특정 장르 ID에 해당하는 영화 목록 조회
     @Query("SELECT m FROM MovieEntity m JOIN MovieGenreEntity mg ON m.movieId = mg.movie.movieId WHERE mg.genre.genreId = :genreId")
     List<MovieEntity> findMoviesByGenreId(@Param("genreId") int genreId);

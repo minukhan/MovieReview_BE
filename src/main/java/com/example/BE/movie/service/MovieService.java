@@ -1,33 +1,10 @@
 package com.example.BE.movie.service;
 
-//import com.example.BE.actor.ActorService;
-//import com.example.BE.crew.CrewService;
-import com.example.BE.genre.GenreRepository;
-import com.example.BE.movie.MovieEntity;
-import com.example.BE.movie.MovieRepository;
 import com.example.BE.movie.dto.response.*;
-import com.example.BE.moviegenre.MovieGenreEntity;
-import com.example.BE.moviegenre.MovieGenreRepository;
 import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.example.BE.user.UserEntity;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
@@ -38,15 +15,12 @@ public interface MovieService {
     public BigDecimal getAverageRating(int movieId);
     public ResponseEntity<List<MovieResponseDto>> getFavoriteList(int user_id);
     public ResponseEntity<List<MovieRecommendResponseDto>> getRecommendList(int user_id);
-
     public List<MovieSummaryDto> searchMoviesByTitle(String title);
-    //    private final MovieGenreRepository movieGenreRepository;
     public Map<Integer, Long> getRoundedRatingDistribution(int movieId);
     public ResponseEntity<List<ReviewResponseDto>> getReviewList();
     public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(UserEntity user);
     public List<MovieGenreSearchDto> getMoviesByGenreName(String genreName);
     public List<MovieGenreSearchDto> getMoviesByGenres(int movieId);
-//    private final MovieGenreRepository movieGenreRepository;
 
 //    private final GenreRepository genreRepository;
 //    @Value("${tmdb.key}")

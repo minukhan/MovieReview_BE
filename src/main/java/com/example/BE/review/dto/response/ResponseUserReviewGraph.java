@@ -1,6 +1,5 @@
-package com.example.BE.review.dto;
+package com.example.BE.review.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
