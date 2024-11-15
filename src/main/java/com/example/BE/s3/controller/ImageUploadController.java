@@ -3,7 +3,6 @@ package com.example.BE.s3.controller;
 import ch.qos.logback.core.model.Model;
 import com.example.BE.s3.service.ImageUploadService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

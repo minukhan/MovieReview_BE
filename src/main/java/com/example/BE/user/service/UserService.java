@@ -1,6 +1,5 @@
 package com.example.BE.user.service;
 
-import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.dto.response.SimpleReviewResponseDTO;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.dto.EditedUserRequestDto;
