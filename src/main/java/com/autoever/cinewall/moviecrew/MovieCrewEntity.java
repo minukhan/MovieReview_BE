@@ -18,11 +18,11 @@ public class MovieCrewEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int movieCrewId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", nullable = false)
     private MovieEntity movie;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crew_id", nullable = false)
     private CrewEntity crew;
 
