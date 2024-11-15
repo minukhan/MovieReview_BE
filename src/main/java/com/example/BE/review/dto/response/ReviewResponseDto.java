@@ -9,14 +9,16 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 public class ReviewResponseDto {
-    private int review_id;
-    private int movie_id;
-    private int user_id;
-    private String movie_title;
-    private String poster_path;
+    private int reviewId;
+    private int movieId;
+    private int userId;
+    private String title;
+    private String posterPath;
     private String nickname;
-    private String profile_url;
+    private String profileUrl;
     private String content;
     private BigDecimal rating;
-    private int heart_count;
+    private int heartCount;
+    private boolean heart;
+    private java.time.LocalDateTime createDate;
 }

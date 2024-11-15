@@ -3,9 +3,10 @@ package com.example.BE.review;
 
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
-import com.example.BE.review.dto.MovieReviewResponseDto;
+import com.example.BE.review.dto.response.MovieReviewResponseDto;
 import com.example.BE.review.dto.request.ReviewRequestDto;
 import com.example.BE.review.dto.response.*;
+import com.example.BE.reviewHeart.ReviewHeartRepository;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +28,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MovieRepository movieRepository;
     private final UserRepository userRepository;
+    private final ReviewHeartRepository reviewHeartRepository;
 
     public ReviewEntity createReview(int movieId, ReviewRequestDto reviewRequestDto) {
         // 영화 존재 여부 확인
@@ -95,16 +96,19 @@ public class ReviewService {
         List<ReviewResponseDto> responses = new ArrayList<>();
         for (UserEntity user : powerUsers) {
             List<ReviewEntity> reviews = reviewRepository.findByUserIdOrderByCreateDateDesc(user.getUserId());
+            boolean isHeart = reviewHeartRepository.existsByUserAndReview(user, reviews.get(0));
             ReviewResponseDto dto = ReviewResponseDto.builder()
-                    .review_id(reviews.get(0).getReviewId())
-                    .movie_id(reviews.get(0).getMovie().getMovieId())
-                    .user_id(user.getUserId())
-                    .movie_title(reviews.get(0).getMovie().getTitle())
-                    .poster_path(reviews.get(0).getMovie().getPosterPath())
+                    .reviewId(reviews.get(0).getReviewId())
+                    .movieId(reviews.get(0).getMovie().getMovieId())
+                    .userId(user.getUserId())
+                    .title(reviews.get(0).getMovie().getTitle())
+                    .posterPath(reviews.get(0).getMovie().getPosterPath())
                     .nickname(user.getNickname())
-                    .profile_url(user.getProfile_url())
+                    .profileUrl(user.getProfile_url())
                     .content(reviews.get(0).getContent())
-                    .heart_count(reviews.get(0).getReviewHeartCount())
+                    .rating(reviews.get(0).getRating())
+                    .heartCount(reviews.get(0).getReviewHeartCount())
+                    .heart(isHeart)
                     .build();
 
             responses.add(dto);
@@ -200,40 +204,61 @@ public class ReviewService {
     public List<MovieReviewResponseDto> getLatestReviewsByMovieId(int movieId) {
         List<ReviewEntity> reviews = reviewRepository.findLatestReviewsByMovieId(movieId);
 
-        // ReviewEntity를 ReviewResponseDto로 변환
-        return reviews.stream()
-                .map(review -> MovieReviewResponseDto.builder()
-                        .reviewId(review.getReviewId())
-                        .movieTitle(review.getMovie().getTitle()) // 영화 제목 가져오기
-                        .posterPath(review.getMovie().getPosterPath()) // 영화 포스터 경로 추가
-                        .nickname(review.getUser().getNickname())
-                        .profileUrl(review.getUser().getProfile_url())
-                        .rating(review.getRating())
-                        .description(review.getDescription())
-                        .content(review.getContent())
-                        .createDate(review.getCreateDate())
-                        .likeCount(review.getReviewHeartCount())
-                        .build())
-                .collect(Collectors.toList());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        List<MovieReviewResponseDto> responses = new ArrayList<>();
+        for(ReviewEntity review : reviews){
+            boolean isHeart = reviewHeartRepository.existsByUserAndReview(user, review);
+
+            MovieReviewResponseDto dto = MovieReviewResponseDto.builder()
+                    .reviewId(review.getReviewId())
+                    .title(review.getMovie().getTitle()) // 영화 제목 가져오기
+                    .posterPath(review.getMovie().getPosterPath()) // 영화 포스터 경로 추가
+                    .nickname(review.getUser().getNickname())
+                    .profileUrl(review.getUser().getProfile_url())
+                    .rating(review.getRating())
+                    .description(review.getDescription())
+                    .content(review.getContent())
+                    .createDate(review.getCreateDate())
+                    .heartCount(review.getReviewHeartCount())
+                    .heart(isHeart)
+                    .build();
+        }
+
+        return responses;
     }
 
     public List<MovieReviewResponseDto> getFavoriteReviewsByMovieId(int movieId) {
         List<ReviewEntity> reviews = reviewRepository.findFavoriteReviewsByMovieId(movieId);
-        // ReviewEntity를 ReviewResponseDto로 변환
-        return reviews.stream()
-                .map(review -> MovieReviewResponseDto.builder()
-                        .reviewId(review.getReviewId())
-                        .movieTitle(review.getMovie().getTitle())
-                        .posterPath(review.getMovie().getPosterPath())
-                        .nickname(review.getUser().getNickname())
-                        .profileUrl(review.getUser().getProfile_url())
-                        .rating(review.getRating())
-                        .description(review.getDescription())
-                        .content(review.getContent())
-                        .createDate(review.getCreateDate())
-                        .likeCount(review.getReviewHeartCount()) // 좋아요 수 추가
-                        .build())
-                .collect(Collectors.toList());
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        List<MovieReviewResponseDto> responses = new ArrayList<>();
+        for(ReviewEntity review : reviews){
+            boolean isHeart = reviewHeartRepository.existsByUserAndReview(user, review);
+
+            MovieReviewResponseDto dto = MovieReviewResponseDto.builder()
+                    .reviewId(review.getReviewId())
+                    .title(review.getMovie().getTitle()) // 영화 제목 가져오기
+                    .posterPath(review.getMovie().getPosterPath()) // 영화 포스터 경로 추가
+                    .nickname(review.getUser().getNickname())
+                    .profileUrl(review.getUser().getProfile_url())
+                    .rating(review.getRating())
+                    .description(review.getDescription())
+                    .content(review.getContent())
+                    .createDate(review.getCreateDate())
+                    .heartCount(review.getReviewHeartCount())
+                    .heart(isHeart)
+                    .build();
+        }
+
+        return responses;
     }
 
     public String getPreference(String userId) {
