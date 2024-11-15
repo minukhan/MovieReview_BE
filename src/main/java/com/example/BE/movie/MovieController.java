@@ -52,13 +52,13 @@ public class MovieController {
         if(cookies != null){
             for(Cookie cookie: cookies){
                 if("accessToken".equals(cookie.getName())){
-                    System.out.println(cookie.getValue());
                     jwtProvider.getUserRole(cookie.getValue());
                 }
             }
 //
             // 1. Cookie에서 token 추출
             String token = jwtProvider.getTokenFromCookies(request);
+
 //
             if (token == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -66,7 +66,6 @@ public class MovieController {
 
             // 2. JwtProvider를 사용해 userId 추출
             String id = jwtProvider.validate(token);
-            System.out.println(id);
             if (id == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }

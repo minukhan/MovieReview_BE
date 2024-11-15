@@ -219,6 +219,7 @@ public class ReviewService {
 
         String result = "내가 선호하는 영화들과 관련된 키워드 8개를 보여주려고 하는데, " +
                 "내가 선호하는 영화 리스트를 줄테니까 그거보고 키워드 8개를 만들어줄래?" +
+                "키워드는 장르 말고 보낸 영화들과 관련된 형용사나 단어로 해줘" +
                 " 선호하는 영화는";
 
         for(MovieEntity movie : movies) {
