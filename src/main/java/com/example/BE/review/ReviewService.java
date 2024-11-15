@@ -196,7 +196,7 @@ public class ReviewService {
         // ReviewEntity를 ReviewResponseDto로 변환
         return reviews.stream()
                 .map(review -> MovieReviewResponseDto.builder()
-//                        .reviewId(review.getReviewId())
+                        .reviewId(review.getReviewId())
                         .movieTitle(review.getMovie().getTitle())
                         .posterPath(review.getMovie().getPosterPath())
                         .nickname(review.getUser().getNickname())
