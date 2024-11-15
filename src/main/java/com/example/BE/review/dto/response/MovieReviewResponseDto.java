@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class MovieReviewResponseDto {
-//    private int reviewId;
+    private int reviewId;
     private String movieTitle;
     private BigDecimal rating;
     private String posterPath;

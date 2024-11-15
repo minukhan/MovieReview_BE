@@ -1,11 +1,8 @@
 package com.example.BE.review;
 
 import com.example.BE.movie.MovieEntity;
-import com.example.BE.movie.dto.response.MovieSummaryDto;
-import com.example.BE.review.dto.ResponseReviewDetail;
-import com.example.BE.review.dto.ResponseReviewPoster;
-import com.example.BE.review.dto.ResponseUserReviewGraph;
-import com.example.BE.review.dto.ResponseUserReviewList;
+import com.example.BE.review.dto.response.ResponseUserReviewGraph;
+import com.example.BE.review.dto.response.ResponseUserReviewList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,7 +44,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
     List<ReviewEntity> findByUserIdOrderByCreateDateDesc(@Param("userId") int userId);
 
     @Query(
-            "SELECT new com.example.BE.review.dto.ResponseUserReviewGraph(" +
+            "SELECT new com.example.BE.review.dto.response.ResponseUserReviewGraph(" +
                     "CAST(SUM(CASE WHEN r.rating >= 0 AND r.rating <= 1 THEN 1 ELSE 0 END) AS int), " +
                     "CAST(SUM(CASE WHEN r.rating > 1 AND r.rating <= 2 THEN 1 ELSE 0 END) AS int), " +
                     "CAST(SUM(CASE WHEN r.rating > 2 AND r.rating <= 3 THEN 1 ELSE 0 END) AS int), " +
@@ -57,7 +54,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
     )
     ResponseUserReviewGraph getRatingCounts(@Param("userId") int userId);
 
-    @Query("SELECT new com.example.BE.review.dto.ResponseUserReviewList(" +
+    @Query("SELECT new com.example.BE.review.dto.response.ResponseUserReviewList(" +
             "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate," +
             "(SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user), " +
             "CASE WHEN (SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user AND h.review = r) > 0 THEN true ELSE false END) " +
