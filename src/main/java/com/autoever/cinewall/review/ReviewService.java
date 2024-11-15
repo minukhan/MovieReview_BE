@@ -226,6 +226,7 @@ public class ReviewService {
                     .heartCount(review.getReviewHeartCount())
                     .heart(isHeart)
                     .build();
+            responses.add(dto);
         }
 
         return responses;
@@ -256,6 +257,7 @@ public class ReviewService {
                     .heartCount(review.getReviewHeartCount())
                     .heart(isHeart)
                     .build();
+            responses.add(dto);
         }
 
         return responses;
