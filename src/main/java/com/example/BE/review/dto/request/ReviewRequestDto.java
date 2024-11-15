@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 public class ReviewRequestDto {
 
     private BigDecimal rating;      // 별점
-    private String description;     // 한줄평
     private String content;
 
 }
