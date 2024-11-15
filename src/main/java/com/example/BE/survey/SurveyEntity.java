@@ -25,4 +25,5 @@ public class SurveyEntity {
     @ManyToOne
     @JoinColumn(name = "genre_id", nullable = false)
     private GenreEntity genre;
+
 }

@@ -9,7 +9,6 @@ import com.example.BE.movie.MovieRepository;
 import com.example.BE.movie.dto.response.*;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.movie_vote.MovieVoteEntity;
-import com.example.BE.movie_vote.MovieVoteRepository;
 import com.example.BE.moviegenre.MovieGenreRepository;
 import com.example.BE.recommend.RecommendEntity;
 import com.example.BE.recommend.RecommendRepository;
@@ -32,7 +31,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MovieServiceImplement implements MovieService {
     private final MovieRepository movieRepository;
-    private final MovieVoteRepository movieVoteRepository;
     private final ReviewRepository reviewRepository;
     private final FavoriteRepository favoriteRepository;
     private final RecommendRepository recommendRepository;
@@ -66,18 +64,19 @@ public class MovieServiceImplement implements MovieService {
             // 각 movie 객체에서 원하는 데이터를 처리
             int movie_id = movie.getMovieId();
 
-            MovieVoteEntity movieVote = null;
-            double userVote = 0;
+            ReviewEntity reviewEntity = null;
+            BigDecimal userRating = BigDecimal.valueOf(0);
+
             if(user_id != -1) {
-                 movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, movie_id);
-                userVote = (movieVote != null) ? movieVote.getVote() : 0;
+                 reviewEntity = reviewRepository.findByUserIdAndMovieId(user_id, movie_id);
+                 userRating = (reviewEntity != null) ? reviewEntity.getRating() : BigDecimal.valueOf(0);
             }
 
             MovieResponseDto dto = MovieResponseDto.builder()
                     .movie_id(movie_id)
                     .vote_average(movie.getVoteAverage())
                     .poster_path(movie.getPosterPath())
-                    .user_vote(userVote)
+                    .user_rating(userRating)
                     .movie_title(movie.getTitle())
                     .build();
             responses.add(dto);
@@ -96,18 +95,18 @@ public class MovieServiceImplement implements MovieService {
             // 각 movie 객체에서 원하는 데이터를 처리
             int movie_id = movie.getMovieId();
 
-            MovieVoteEntity movieVote = null;
-            double userVote = 0;
+            ReviewEntity reviewEntity = null;
+            BigDecimal userRating = BigDecimal.valueOf(0);
             if(user_id != -1) {
-                movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, movie_id);
-                userVote = (movieVote != null) ? movieVote.getVote() : 0;
+                reviewEntity = reviewRepository.findByUserIdAndMovieId(user_id, movie_id);
+                userRating = (reviewEntity != null) ? reviewEntity.getRating() : BigDecimal.valueOf(0);
             }
 
             MovieResponseDto dto = MovieResponseDto.builder()
                     .movie_id(movie_id)
                     .vote_average(movie.getVoteAverage())
                     .poster_path(movie.getPosterPath())
-                    .user_vote(userVote)
+                    .user_rating(userRating)
                     .movie_title(movie.getTitle())
                     .build();
             responses.add(dto);
@@ -133,15 +132,18 @@ public class MovieServiceImplement implements MovieService {
         List<FavoriteEntity> favorites = favoriteRepository.findAllByUser_UserId(user_id);
         List<MovieResponseDto> responses = new ArrayList<>();
         for (FavoriteEntity favorite : favorites) {
-            MovieVoteEntity movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, favorite.getMovie().getMovieId());
-            // movieVote가 null일 경우 user_vote를 0으로 설정
-            double userVote = (movieVote != null) ? movieVote.getVote() : 0;
+            ReviewEntity reviewEntity = null;
+            BigDecimal userRating = BigDecimal.valueOf(0);
+            if(user_id != -1) {
+                reviewEntity = reviewRepository.findByUserIdAndMovieId(user_id, favorite.getMovie().getMovieId());
+                userRating = (reviewEntity != null) ? reviewEntity.getRating() : BigDecimal.valueOf(0);
+            }
 
             MovieResponseDto dto = MovieResponseDto.builder()
                     .movie_id(favorite.getMovie().getMovieId())
                     .vote_average(favorite.getMovie().getVoteAverage())
                     .poster_path(favorite.getMovie().getPosterPath())
-                    .user_vote(userVote)
+                    .user_rating(userRating)
                     .movie_title(favorite.getMovie().getTitle())
                     .build();
             responses.add(dto);
@@ -161,16 +163,18 @@ public class MovieServiceImplement implements MovieService {
         for (MovieEntity movie : top20Movies) {
             // 각 movie 객체에서 원하는 데이터를 처리
             int movie_id = movie.getMovieId();
-            System.out.println(movie_id);
-            MovieVoteEntity movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, movie_id);
-            // movieVote가 null일 경우 user_vote를 0으로 설정
-            double userVote = (movieVote != null) ? movieVote.getVote() : 0;
+             ReviewEntity reviewEntity = null;
+            BigDecimal userRating = BigDecimal.valueOf(0);
+            if(user_id != -1) {
+                reviewEntity = reviewRepository.findByUserIdAndMovieId(user_id, movie_id);
+                userRating = (reviewEntity != null) ? reviewEntity.getRating() : BigDecimal.valueOf(0);
+            }
 
             MovieRecommendResponseDto dto = MovieRecommendResponseDto.builder()
                     .movie_id(movie_id)
                     .vote_average(movie.getVoteAverage())
                     .poster_path(movie.getPosterPath())
-                    .user_vote(userVote)
+                    .user_rating(userRating)
                     .movie_count(movie.getFavoriteCount())
                     .movie_title(movie.getTitle())
                     .build();
@@ -273,16 +277,20 @@ public class MovieServiceImplement implements MovieService {
                 // 중복되지 않은 영화라면 Set에 추가
                 processedMovieIds.add(movie.getMovieId());
 
-                // 특정 사용자와 영화에 대한 평점 조회
-                MovieVoteEntity movieVote = movieVoteRepository.findByUserIdAndMovieId(user.getUserId(), movie.getMovieId());
-                double userVote = (movieVote != null) ? movieVote.getVote() : 0;
+                int movie_id = movie.getMovieId();
+                ReviewEntity reviewEntity = null;
+                BigDecimal userRating = BigDecimal.valueOf(0);
+                if(user.getUserId() != -1) {
+                    reviewEntity = reviewRepository.findByUserIdAndMovieId(user.getUserId(), movie_id);
+                    userRating = (reviewEntity != null) ? reviewEntity.getRating() : BigDecimal.valueOf(0);
+                }
 
                 // 추천 DTO 생성
                 MovieRecommendResponseDto dto = MovieRecommendResponseDto.builder()
                         .movie_id(movie.getMovieId())
                         .vote_average(movie.getVoteAverage())
                         .poster_path(movie.getPosterPath())
-                        .user_vote(userVote)
+                        .user_rating(userRating)
                         .movie_count(movie.getFavoriteCount())
                         .movie_title(movie.getTitle())
                         .build();
