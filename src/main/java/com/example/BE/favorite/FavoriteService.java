@@ -1,6 +1,5 @@
 package com.example.BE.favorite;
 
-
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
 import com.example.BE.user.UserEntity;

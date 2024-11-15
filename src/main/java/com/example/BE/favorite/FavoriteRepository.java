@@ -1,7 +1,6 @@
 package com.example.BE.favorite;
 
 import com.example.BE.movie.MovieEntity;
-import com.example.BE.movie_vote.MovieVoteEntity;
 import com.example.BE.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

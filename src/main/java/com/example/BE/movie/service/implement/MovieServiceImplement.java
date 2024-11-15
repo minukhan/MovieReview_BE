@@ -72,10 +72,13 @@ public class MovieServiceImplement implements MovieService {
         for (MovieEntity movie : top20Movies) {
             // 각 movie 객체에서 원하는 데이터를 처리
             int movie_id = movie.getMovieId();
-            System.out.println(movie_id);
-            MovieVoteEntity movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, movie_id);
-            // movieVote가 null일 경우 user_vote를 0으로 설정
-            double userVote = (movieVote != null) ? movieVote.getVote() : 0;
+
+            MovieVoteEntity movieVote = null;
+            double userVote = 0;
+            if(user_id != -1) {
+                 movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, movie_id);
+                userVote = (movieVote != null) ? movieVote.getVote() : 0;
+            }
 
             MovieResponseDto dto = MovieResponseDto.builder()
                     .movie_id(movie_id)

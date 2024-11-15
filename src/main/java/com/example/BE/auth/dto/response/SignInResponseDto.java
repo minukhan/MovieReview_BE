@@ -1,13 +1,5 @@
 package com.example.BE.auth.dto.response;
 
-import com.example.BE.auth.common.ResponseCode;
-import com.example.BE.auth.common.ResponseMessage;
-import lombok.Getter;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-
-import com.example.BE.auth.common.ResponseCode;
 import com.example.BE.auth.common.ResponseMessage;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

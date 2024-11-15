@@ -2,9 +2,6 @@ package com.example.BE.actor.dto;
 
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.dto.response.MovieSummaryDto;
-import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
