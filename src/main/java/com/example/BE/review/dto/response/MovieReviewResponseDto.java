@@ -1,4 +1,4 @@
-package com.example.BE.review.dto;
+package com.example.BE.review.dto.response;
 
 import lombok.*;
 

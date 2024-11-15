@@ -5,6 +5,7 @@ import com.example.BE.user.UserEntity;
 import com.example.BE.user.dto.EditedUserRequestDto;
 import com.example.BE.user.dto.EditedUserResponseDto;
 import com.example.BE.user.dto.ResponseUserInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -15,6 +16,6 @@ public interface UserService {
     UserEntity findByUserId(int user_id);
     void updateUser(UserEntity user);
     public List<SimpleReviewResponseDTO>getUserLatestReviews(int userId);
-    EditedUserResponseDto editUser(String userId, EditedUserRequestDto editedUserDto) throws IOException;
+    EditedUserResponseDto editUser(String userId, String nickname, MultipartFile profileImg) throws IOException;
     ResponseUserInfo getUser(String id);
 }
