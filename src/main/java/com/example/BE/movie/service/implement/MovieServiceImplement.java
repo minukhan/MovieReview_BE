@@ -8,13 +8,13 @@ import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
 import com.example.BE.movie.dto.response.*;
 import com.example.BE.movie.service.MovieService;
-import com.example.BE.movie_vote.MovieVoteEntity;
 import com.example.BE.moviegenre.MovieGenreRepository;
 import com.example.BE.recommend.RecommendEntity;
 import com.example.BE.recommend.RecommendRepository;
 import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.ReviewRepository;
 import com.example.BE.review.dto.response.ReviewResponseDto;
+import com.example.BE.reviewHeart.ReviewHeartRepository;
 import com.example.BE.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +36,7 @@ public class MovieServiceImplement implements MovieService {
     private final RecommendRepository recommendRepository;
     private final MovieGenreRepository movieGenreRepository;
     private final GenreRepository genreRepository;
+    private final ReviewHeartRepository reviewHeartRepository;
 
     @Override
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList() {
@@ -203,16 +204,17 @@ public class MovieServiceImplement implements MovieService {
             MovieEntity movie = review.getMovie();
             UserEntity user = review.getUser();
             ReviewResponseDto dto = ReviewResponseDto.builder()
-                    .review_id(review.getReviewId())
-                    .movie_id(movie.getMovieId())
-                    .user_id(user.getUserId())
-                    .movie_title(movie.getTitle())
-                    .poster_path(movie.getPosterPath())
+                    .reviewId(review.getReviewId())
+                    .movieId(movie.getMovieId())
+                    .userId(user.getUserId())
+                    .title(movie.getTitle())
+                    .posterPath(movie.getPosterPath())
                     .nickname(user.getNickname())
-                    .profile_url(user.getProfile_url())
+                    .profileUrl(user.getProfile_url())
                     .content(review.getContent())
                     .rating(review.getRating())
-                    .heart_count(review.getReviewHeartCount())
+                    .heartCount(review.getReviewHeartCount())
+                    .heart(reviewHeartRepository.existsByUserAndReview(user, review))
                     .build();
             responses.add(dto);
         }

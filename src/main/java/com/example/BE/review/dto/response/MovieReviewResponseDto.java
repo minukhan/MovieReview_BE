@@ -1,4 +1,4 @@
-package com.example.BE.review.dto;
+package com.example.BE.review.dto.response;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MovieReviewResponseDto {
     private int reviewId;
-    private String movieTitle;
+    private String title;
     private BigDecimal rating;
     private String posterPath;
     private String description;
@@ -18,5 +18,6 @@ public class MovieReviewResponseDto {
     private String profileUrl;
     private String content;
     private LocalDateTime createDate;
-    private int likeCount;
+    private int heartCount;
+    private boolean heart;
 }
