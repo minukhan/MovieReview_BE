@@ -42,7 +42,6 @@ public class ReviewService {
         // ReviewEntity 객체 생성
         ReviewEntity review = ReviewEntity.builder()
                 .rating(reviewRequestDto.getRating())  // 별점
-                .description(reviewRequestDto.getDescription())  // 한줄평
                 .content(reviewRequestDto.getContent())  // 상세내용
                 .movie(movie)  // 영화
                 .user(user)  // 사용자
@@ -67,7 +66,6 @@ public class ReviewService {
 
         // 리뷰 정보 업데이트
         review.setRating(reviewUpdateRequestDto.getRating());
-        review.setDescription(reviewUpdateRequestDto.getDescription());
         review.setContent(reviewUpdateRequestDto.getContent());
         review.setCreateDate(LocalDateTime.now());
 

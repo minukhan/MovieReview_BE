@@ -9,6 +9,7 @@ import lombok.Getter;
 @Builder
 public class MovieRecommendResponseDto {
     int movie_id;
+    String movie_title;
     String poster_path;
     double vote_average;
     double user_vote;
