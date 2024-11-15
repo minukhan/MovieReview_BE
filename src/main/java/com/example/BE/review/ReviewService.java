@@ -175,6 +175,7 @@ public class ReviewService {
         // ReviewEntity를 ReviewResponseDto로 변환
         return reviews.stream()
                 .map(review -> MovieReviewResponseDto.builder()
+                        .reviewId(review.getReviewId())
                         .movieTitle(review.getMovie().getTitle()) // 영화 제목 가져오기
                         .posterPath(review.getMovie().getPosterPath()) // 영화 포스터 경로 추가
                         .nickname(review.getUser().getNickname())
@@ -193,7 +194,7 @@ public class ReviewService {
         // ReviewEntity를 ReviewResponseDto로 변환
         return reviews.stream()
                 .map(review -> MovieReviewResponseDto.builder()
-//                        .reviewId(review.getReviewId())
+                        .reviewId(review.getReviewId())
                         .movieTitle(review.getMovie().getTitle())
                         .posterPath(review.getMovie().getPosterPath())
                         .nickname(review.getUser().getNickname())
