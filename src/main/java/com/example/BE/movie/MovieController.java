@@ -1,18 +1,13 @@
 package com.example.BE.movie;
-;
-//import com.example.BE.actor.ActorService;
-//import com.example.BE.crew.CrewService;
-//import com.example.BE.genre.GenreService;
+
 import com.example.BE.auth.provider.JwtProvider;
 import com.example.BE.movie.dto.response.*;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.service.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.ReviewService;
 import com.example.BE.review.dto.ReviewRequestDto;
 import lombok.extern.log4j.Log4j2;
@@ -44,7 +39,7 @@ public class MovieController {
     }
 
     @GetMapping("/latest")
-    public ResponseEntity<List<MovieResponseDto>> teaserLatest(HttpServletRequest request) {
+    public ResponseEntity<List<MovieResponseDto>> Latest(HttpServletRequest request) {
         UserEntity user = null;
         int user_id = -1;
 
@@ -121,38 +116,10 @@ public class MovieController {
     public ResponseEntity<List<MovieResponseDto>> favorite(HttpServletRequest request) {
         UserEntity user = null;
         int user_id = 0;
-        Cookie[] cookies = request.getCookies();
 
-        if(cookies != null){
-            for(Cookie cookie: cookies){
-                if("accessToken".equals(cookie.getName())){
-                    System.out.println(cookie.getValue());
-                    jwtProvider.getUserRole(cookie.getValue());
-                }
-            }
-
-            // 1. Cookie에서 token 추출
-            String token = jwtProvider.getTokenFromCookies(request);
-
-            if (token == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-
-            // 2. JwtProvider를 사용해 userId 추출
-            String id = jwtProvider.validate(token);
-            System.out.println(id);
-            if (id == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-
-            // 3. userId로 DB에서 사용자 정보 조회
-            user = userService.findById(id);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        }else{
-            user = null;
-        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        user = userService.findById(userName);
 
         if(user != null) user_id = user.getUserId();
         return movieService.getFavoriteList(user_id);
@@ -162,40 +129,13 @@ public class MovieController {
     public ResponseEntity<List<MovieRecommendResponseDto>> recommend(HttpServletRequest request) {
         UserEntity user = null;
         int user_id = 0;
-        Cookie[] cookies = request.getCookies();
 
-        if(cookies != null){
-            for(Cookie cookie: cookies){
-                if("accessToken".equals(cookie.getName())){
-                    System.out.println(cookie.getValue());
-                    jwtProvider.getUserRole(cookie.getValue());
-                }
-            }
-
-            // 1. Cookie에서 token 추출
-            String token = jwtProvider.getTokenFromCookies(request);
-
-            if (token == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-
-            // 2. JwtProvider를 사용해 userId 추출
-            String id = jwtProvider.validate(token);
-            System.out.println(id);
-            if (id == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-
-            // 3. userId로 DB에서 사용자 정보 조회
-            user = userService.findById(id);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        }else{
-            user = null;
-        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        user = userService.findById(userName);
 
         if(user != null) user_id = user.getUserId();
+
         return movieService.getRecommendList(user_id);
     }
 
@@ -240,7 +180,5 @@ public class MovieController {
     public List<MovieGenreSearchDto> getMoviesByGenres(@PathVariable int movieId) {
         return movieService.getMoviesByGenres(movieId);
     }
-
-
 
 }

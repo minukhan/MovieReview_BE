@@ -1,11 +1,12 @@
 package com.example.BE.review.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@Getter
+import java.math.BigDecimal;
+
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ReviewResponseDto {
     private int review_id;
@@ -16,5 +17,6 @@ public class ReviewResponseDto {
     private String nickname;
     private String profile_url;
     private String content;
+    private BigDecimal rating;
     private int heart_count;
 }
