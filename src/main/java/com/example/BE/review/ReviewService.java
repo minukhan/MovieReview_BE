@@ -75,10 +75,19 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public void deleteReview(int reviewId){
+    public void deleteReview(int reviewId) throws Exception {
 
         ReviewEntity review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        if(review.getUser().getId() != user.getId()) {
+            throw new Exception("사용자가 작성한 리뷰가 아닙니다.");
+        }
 
         reviewRepository.delete(review);
     }
@@ -137,6 +146,7 @@ public class ReviewService {
         }
 
         ResponseReviewDetail result = new ResponseReviewDetail(review);
+
         return result;
     }
 
@@ -147,10 +157,19 @@ public class ReviewService {
             throw new Exception("존재하지 않는 리뷰입니다.");
         }
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        if(before.getUser().getId() != user.getId()) {
+            throw new IllegalArgumentException("사용자가 작성한 리뷰가 아닙니다.");
+        }
+
         before.setRating(editedReview.getRating());
         before.setDescription(editedReview.getDescription());
         before.setContent(editedReview.getContent());
-        before.setCreateDate(editedReview.getCreateDate());
+        before.setCreateDate(LocalDateTime.now());
 
         ReviewEntity after = reviewRepository.save(before);
 
@@ -159,7 +178,16 @@ public class ReviewService {
         return result;
     }
 
-    public List<ResponseReviewPoster> getPosterList(int userId) {
+    public List<ResponseReviewPoster> getPosterList(int userId) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        if(user == null) {
+            throw new Exception("존재하지 않는 사용자입니다.");
+        }
+
         List<ReviewEntity> list = reviewRepository.findPosterByUserId(userId);
         int size = list.size();
         List<ResponseReviewPoster> result = new ArrayList<>();
