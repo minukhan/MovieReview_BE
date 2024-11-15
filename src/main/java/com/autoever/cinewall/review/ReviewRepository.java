@@ -61,17 +61,13 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
             "FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ResponseUserReviewList> findUserReviewsByUserId(@Param("userId") int userId);
 
-
-    @Query("SELECT r FROM ReviewEntity r WHERE r.reviewId = :reviewId")
-    ReviewEntity findByReviewId(@Param("reviewId") int reviewId);
-
     @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId")
     List<ReviewEntity> findPosterByUserId(@Param("userId") int userId);
 
     @Query("SELECT r.movie " +
             "FROM ReviewEntity r WHERE r.user.userId = :userId " +
             "ORDER BY r.rating DESC ")
-    List<MovieEntity> findTop10(@Value("userId") String userId, Pageable top10);
+    List<MovieEntity> findTop10(@Param("userId") String userId, Pageable top10);
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId AND r.rating >= 4")
     List<ReviewEntity> findByUserAndRatingGreaterThanEqual(@Param("userId") int userId);
@@ -80,4 +76,14 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
             "FROM ReviewEntity r " +
             "WHERE r.user.userId = :userId AND r.movie.movieId = :movieId")
     ReviewEntity findByUserIdAndMovieId(@Param("userId") int userId, @Param("movieId") int movieId);
+
+    @Query("SELECT new com.autoever.cinewall.review.dto.response.ResponseUserReviewList(" +
+            "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate," +
+            "(SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user), " +
+            "CASE WHEN (SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user AND h.review = r) > 0 THEN true ELSE false END) " +
+            "FROM ReviewEntity r WHERE r.reviewId = :reviewId")
+    ResponseUserReviewList findReviewDetail(@Param("reviewId") int reviewId);
+
+    @Query("SELECT r FROM ReviewEntity r WHERE r.reviewId = :reviewId")
+    ReviewEntity findByReviewId(@Param("reviewId") int reviewId);
 }

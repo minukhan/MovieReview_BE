@@ -41,7 +41,7 @@ public class  ReviewController {
 
     @GetMapping("/detail/{reviewId}")
     public ResponseEntity getReviewDetail(@PathVariable("reviewId") int reviewId) {
-        ResponseReviewDetail result = null;
+        ResponseUserReviewList result = null;
         try {
             result = reviewService.getReviewDetail(reviewId);
         } catch (Exception e) {
