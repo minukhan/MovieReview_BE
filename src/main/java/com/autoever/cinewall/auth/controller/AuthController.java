@@ -2,8 +2,6 @@ package com.autoever.cinewall.auth.controller;
 
 import com.autoever.cinewall.auth.dto.request.*;
 import com.autoever.cinewall.auth.dto.response.*;
-import com.example.BE.auth.dto.request.*;
-import com.example.BE.auth.dto.response.*;
 import com.autoever.cinewall.auth.service.AuthService;
 import com.autoever.cinewall.s3.service.ImageUploadService;
 import jakarta.servlet.http.HttpServletRequest;

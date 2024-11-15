@@ -1,7 +1,6 @@
 package com.autoever.cinewall.review;
 
 import com.autoever.cinewall.review.dto.response.*;
-import com.example.BE.review.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

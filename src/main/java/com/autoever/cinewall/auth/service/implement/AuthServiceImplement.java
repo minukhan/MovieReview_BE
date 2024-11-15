@@ -5,8 +5,6 @@ import com.autoever.cinewall.auth.dto.response.*;
 import com.autoever.cinewall.auth.common.CertificationNumber;
 import com.autoever.cinewall.auth.common.ResponseCode;
 import com.autoever.cinewall.auth.common.ResponseMessage;
-import com.example.BE.auth.dto.request.*;
-import com.example.BE.auth.dto.response.*;
 import com.autoever.cinewall.auth.provider.EmailProvider;
 import com.autoever.cinewall.auth.provider.JwtProvider;
 import com.autoever.cinewall.auth.service.AuthService;

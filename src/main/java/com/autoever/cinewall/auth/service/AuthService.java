@@ -2,8 +2,6 @@ package com.autoever.cinewall.auth.service;
 
 import com.autoever.cinewall.auth.dto.request.*;
 import com.autoever.cinewall.auth.dto.response.*;
-import com.example.BE.auth.dto.request.*;
-import com.example.BE.auth.dto.response.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 
