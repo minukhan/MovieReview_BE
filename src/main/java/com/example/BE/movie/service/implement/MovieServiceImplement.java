@@ -301,7 +301,7 @@ public class MovieServiceImplement implements MovieService {
         return ResponseEntity.ok(responses);
     }
 
-    public Map<Integer, Long> getRoundedRatingDistribution(int movieId) {
+    public List<RatingCountDTO> getRoundedRatingDistribution(int movieId) {
         List<Object[]> results = reviewRepository.findRatingDistributionByMovieId(movieId);
         Map<Integer, Long> ratingDistribution = new HashMap<>();
 
@@ -322,7 +322,15 @@ public class MovieServiceImplement implements MovieService {
             }
         }
 
-        return ratingDistribution;
+        // Map을 List<RatingCount> 형식으로 변환
+        List<RatingCountDTO> ratingCounts = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            String score = i + "점";
+            long count = ratingDistribution.getOrDefault(i, 0L);
+            ratingCounts.add(new RatingCountDTO(score, count));
+        }
+
+        return ratingCounts;
     }
 
     public List<MovieGenreSearchDto> getMoviesByGenreName(String genreName) {
