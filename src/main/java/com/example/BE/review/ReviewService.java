@@ -3,10 +3,9 @@ package com.example.BE.review;
 
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
-import com.example.BE.movie.dto.response.MovieSummaryDto;
-import com.example.BE.review.dto.ReviewRequestDto;
-import com.example.BE.review.dto.response.ReviewResponseDto;
-import com.example.BE.review.dto.*;
+import com.example.BE.review.dto.MovieReviewResponseDto;
+import com.example.BE.review.dto.request.ReviewRequestDto;
+import com.example.BE.review.dto.response.*;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.UserRepository;
 import lombok.RequiredArgsConstructor;

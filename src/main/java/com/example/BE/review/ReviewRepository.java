@@ -1,11 +1,8 @@
 package com.example.BE.review;
 
 import com.example.BE.movie.MovieEntity;
-import com.example.BE.movie.dto.response.MovieSummaryDto;
-import com.example.BE.review.dto.ResponseReviewDetail;
-import com.example.BE.review.dto.ResponseReviewPoster;
-import com.example.BE.review.dto.ResponseUserReviewGraph;
-import com.example.BE.review.dto.ResponseUserReviewList;
+import com.example.BE.review.dto.response.ResponseUserReviewGraph;
+import com.example.BE.review.dto.response.ResponseUserReviewList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
