@@ -17,7 +17,6 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -49,7 +48,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/cinewall/auth/**", "/oauth2/**", "/cinewall/movie/**", "/cinewall/recommend/**", "/api/movies/*/average-rating", "/api/movies/*/reviews", "/api/reviews/*", "/cinewall/users/*/reviews/latest", "/bot/**").permitAll() // 인증 없이 접근 가능
+                        .requestMatchers("/", "/cinewall/auth/**", "/oauth2/**", "/cinewall/movie/**", "/cinewall/recommend/**", "/api/movies/*/average-rating", "/api/movies/*/reviews", "/api/reviews/*", "/cinewall/users/*/reviews/latest", "/bot/**" ,"/subscribe").permitAll() // 인증 없이 접근 가능
                         .requestMatchers("/cinewall/user/**", "/cinewall/follow/**", "/cinewall/survey","/cinewall/review/**").hasRole("USER")
 
                         .requestMatchers("/cinewall/admin/**").hasRole("ADMIN")
@@ -94,7 +93,6 @@ class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint{
                          AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        //{"code": "NP", "message": "No Permission. "}
         response.getWriter().write("{\"code\": \"NP\", \"message\": \"No Permission. \"}");
     }
 

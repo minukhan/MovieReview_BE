@@ -4,14 +4,12 @@ import com.example.BE.favorite.FavoriteEntity;
 import com.example.BE.favorite.FavoriteRepository;
 import com.example.BE.genre.GenreEntity;
 import com.example.BE.genre.GenreRepository;
-import com.example.BE.genre.GenreEntity;
 import com.example.BE.movie.MovieEntity;
 import com.example.BE.movie.MovieRepository;
 import com.example.BE.movie.dto.response.*;
 import com.example.BE.movie.service.MovieService;
 import com.example.BE.movie_vote.MovieVoteEntity;
 import com.example.BE.movie_vote.MovieVoteRepository;
-import com.example.BE.moviegenre.MovieGenreEntity;
 import com.example.BE.moviegenre.MovieGenreRepository;
 import com.example.BE.recommend.RecommendEntity;
 import com.example.BE.recommend.RecommendRepository;
@@ -19,15 +17,10 @@ import com.example.BE.review.ReviewEntity;
 import com.example.BE.review.ReviewRepository;
 import com.example.BE.review.dto.response.ReviewResponseDto;
 import com.example.BE.user.UserEntity;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -72,10 +65,13 @@ public class MovieServiceImplement implements MovieService {
         for (MovieEntity movie : top20Movies) {
             // 각 movie 객체에서 원하는 데이터를 처리
             int movie_id = movie.getMovieId();
-            System.out.println(movie_id);
-            MovieVoteEntity movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, movie_id);
-            // movieVote가 null일 경우 user_vote를 0으로 설정
-            double userVote = (movieVote != null) ? movieVote.getVote() : 0;
+
+            MovieVoteEntity movieVote = null;
+            double userVote = 0;
+            if(user_id != -1) {
+                 movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, movie_id);
+                userVote = (movieVote != null) ? movieVote.getVote() : 0;
+            }
 
             MovieResponseDto dto = MovieResponseDto.builder()
                     .movie_id(movie_id)
@@ -98,10 +94,13 @@ public class MovieServiceImplement implements MovieService {
         for (MovieEntity movie : top20Movies) {
             // 각 movie 객체에서 원하는 데이터를 처리
             int movie_id = movie.getMovieId();
-            System.out.println(movie_id);
-            MovieVoteEntity movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, movie_id);
-            // movieVote가 null일 경우 user_vote를 0으로 설정
-            double userVote = (movieVote != null) ? movieVote.getVote() : 0;
+
+            MovieVoteEntity movieVote = null;
+            double userVote = 0;
+            if(user_id != -1) {
+                movieVote = movieVoteRepository.findByUserIdAndMovieId(user_id, movie_id);
+                userVote = (movieVote != null) ? movieVote.getVote() : 0;
+            }
 
             MovieResponseDto dto = MovieResponseDto.builder()
                     .movie_id(movie_id)
@@ -204,6 +203,7 @@ public class MovieServiceImplement implements MovieService {
                     .nickname(user.getNickname())
                     .profile_url(user.getProfile_url())
                     .content(review.getContent())
+                    .rating(review.getRating())
                     .heart_count(review.getReviewHeartCount())
                     .build();
             responses.add(dto);

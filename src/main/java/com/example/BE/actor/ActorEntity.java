@@ -12,13 +12,11 @@ import lombok.*;
 public class ActorEntity {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    // @Column(nullable = false)
     @Column
     private String profilePath;
 }

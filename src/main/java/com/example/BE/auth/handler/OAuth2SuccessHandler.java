@@ -1,12 +1,10 @@
 package com.example.BE.auth.handler;
 
-
 import com.example.BE.auth.entity.CustomOAuth2UserEntity;
 import com.example.BE.auth.provider.JwtProvider;
 import com.example.BE.user.UserEntity;
 import com.example.BE.user.service.UserService;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -3,20 +3,23 @@ package com.example.BE.follower.service.implement;
 import com.example.BE.follower.FollowerEntity;
 import com.example.BE.follower.FollowerRepository;
 import com.example.BE.follower.dto.response.FollowerResponseDto;
+import com.example.BE.follower.dto.response.FollowerSseResponse;
 import com.example.BE.follower.dto.response.FollowingResponseDto;
 import com.example.BE.follower.service.FollowerService;
+import com.example.BE.notification.NotificationService;
 import com.example.BE.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class FollowerServiceImplement implements FollowerService {
     private final FollowerRepository followerRepository;
+    private final NotificationService notificationService;
 
     @Override
     public ResponseEntity<? super List<FollowingResponseDto>> getFollowingList(int user_id) {
@@ -35,6 +38,15 @@ public class FollowerServiceImplement implements FollowerService {
                 .fromUser(from_user)
                 .build();
         followerRepository.save(followerEntity);
+
+        Optional<FollowerEntity> follower = followerRepository.getFollowerByFromUserIdAndToUserId(from_user.getUserId(), to_user.getUserId());
+        FollowerSseResponse followerSseResponse = FollowerSseResponse.builder()
+                .follower_id(followerEntity.getFollowerId())
+                .from_user_id(from_user.getUserId())
+                .from_user_nickname(from_user.getNickname())
+                .from_user_profile_url(from_user.getProfile_url())
+                .build();
+        notificationService.customNotify(from_user.getUserId(), followerSseResponse, "회원님께서 팔로우 추가 신청을 받으셨습니다!", "follow");
         return ResponseEntity.ok(200);
     }
 
