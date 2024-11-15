@@ -214,6 +214,7 @@ public class MovieServiceImplement implements MovieService {
                     .content(review.getContent())
                     .rating(review.getRating())
                     .heartCount(review.getReviewHeartCount())
+                    .createDate(review.getCreateDate())
                     .heart(reviewHeartRepository.existsByUserAndReview(user, review))
                     .build();
             responses.add(dto);
