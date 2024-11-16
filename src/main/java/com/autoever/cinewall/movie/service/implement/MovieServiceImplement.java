@@ -398,6 +398,10 @@ public class MovieServiceImplement implements MovieService {
 
         UserEntity user = userRepository.findById(id);
 
+        if(user == null){
+            return false;
+        }
+
         boolean result = movieRepository.isMovieFavorite(user.getUserId(), movieId);
 
         return result;
