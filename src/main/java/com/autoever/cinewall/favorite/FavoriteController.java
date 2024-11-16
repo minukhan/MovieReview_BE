@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.autoever.cinewall.movie.service.MovieService;
+
 @RestController
 @RequestMapping("/cinewall/movie")
 @RequiredArgsConstructor
