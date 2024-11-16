@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -35,16 +36,19 @@ public class NotificationService {
     private void sendToClient(int userId, Object data, String comment) {
         SseEmitter emitter = emitterRepository.get(userId);
         if (emitter != null) {
-            try {
-                emitter.send(SseEmitter.event()
-                        .id(String.valueOf(userId))
-                        .name("sse")
-                        .data(data)
-                        .comment(comment));
-            } catch (IOException e) {
-                emitterRepository.deleteById(userId);
-                emitter.completeWithError(e);
-            }
+            CompletableFuture.runAsync(()->{
+                try {
+                    emitter.send(SseEmitter.event()
+                            .id(String.valueOf(userId))
+                            .name("sse")
+                            .data(data)
+                            .comment(comment));
+                } catch (IOException e) {
+                    emitterRepository.deleteById(userId);
+                    emitter.completeWithError(e);
+                }
+
+            });
         }
     }
 
