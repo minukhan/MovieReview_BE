@@ -28,10 +28,11 @@ public class NotificationController {
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
         response.setHeader("Content-Type", "text/event-stream;charset=UTF-8");
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userName = auth.getName();
-        UserEntity user = userService.findById(userName);
-        return notificationService.subscribe(user.getUserId());
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //String userName = auth.getName();
+        //UserEntity user = userService.findById(userName);
+        //return notificationService.subscribe(user.getUserId());
+        return notificationService.subscribe(3);
     }
 
 }
