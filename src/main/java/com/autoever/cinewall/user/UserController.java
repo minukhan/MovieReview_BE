@@ -2,6 +2,7 @@ package com.autoever.cinewall.user;
 
 import com.autoever.cinewall.user.dto.EditedUserRequestDto;
 import com.autoever.cinewall.user.dto.EditedUserResponseDto;
+import com.autoever.cinewall.user.dto.OtherUserDto;
 import com.autoever.cinewall.user.dto.ResponseUserInfo;
 import com.autoever.cinewall.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -66,4 +67,10 @@ public class UserController {
         return ResponseEntity.ok(reviews);
     }
 
+    @GetMapping("/{userId}/mypage")
+    public ResponseEntity<OtherUserDto> getUserPage(@PathVariable int userId) {
+        OtherUserDto result = userService.getUserPage(userId);
+
+        return ResponseEntity.ok(result);
+    }
 }

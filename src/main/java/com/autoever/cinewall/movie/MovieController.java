@@ -180,6 +180,11 @@ public class MovieController {
         return movieService.getMoviesByGenres(movieId);
     }
 
+    @GetMapping("/{movieId}/favorite")
+    public ResponseEntity isMovieFavorite(@PathVariable int movieId) {
+        boolean result = movieService.isMovieFavorite(movieId);
 
+        return ResponseEntity.ok(result);
+    }
 
 }
