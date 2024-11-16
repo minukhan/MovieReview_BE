@@ -11,6 +11,13 @@ import org.springframework.web.bind.annotation.*;
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
+    private final MovieService movieService;
+
+    @GetMapping("/{movieId}/favorite")
+    public ResponseEntity isMovieFavorite(@PathVariable int movieId) {
+        boolean result = movieService.isMovieFavorite(movieId);
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping("/{movieId}/favorite")
     public ResponseEntity<String> addFavorite(@PathVariable int movieId) {
