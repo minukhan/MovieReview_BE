@@ -15,7 +15,7 @@ public class FavoriteController {
     private final FavoriteService favoriteService;
     private final MovieService movieService;
 
-    @GetMapping("/{movieId}/favorite")
+    @GetMapping("/{movieId}/isFavorite")
     public ResponseEntity isMovieFavorite(@PathVariable int movieId) {
         boolean result = movieService.isMovieFavorite(movieId);
         return ResponseEntity.ok(result);
