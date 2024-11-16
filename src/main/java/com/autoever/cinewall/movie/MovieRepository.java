@@ -43,4 +43,8 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
             "ORDER BY FUNCTION('RAND')")
     List<MovieEntity> findRandomMoviesByGenre(@Param("genreId") int genreId, Pageable top5);
 
+    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END " +
+            "FROM FavoriteEntity f " +
+            "WHERE f.movie.movieId = :movieId AND f.user.userId = :userId")
+    boolean isMovieFavorite(@Param("userId") int userId, @Param("movieId") int movieId);
 }

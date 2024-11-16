@@ -21,6 +21,8 @@ public interface MovieService {
     public List<MovieGenreSearchDto> getMoviesByGenreName(String genreName);
     public List<MovieGenreSearchDto> getMoviesByGenres(int movieId);
 
+    boolean isMovieFavorite(int movieId);
+
 //    private final GenreRepository genreRepository;
 //    @Value("${tmdb.key}")
 //    private String apiKey;

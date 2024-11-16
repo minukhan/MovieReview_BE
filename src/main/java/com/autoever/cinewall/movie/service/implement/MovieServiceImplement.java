@@ -16,10 +16,13 @@ import com.autoever.cinewall.review.ReviewRepository;
 import com.autoever.cinewall.review.dto.response.ReviewResponseDto;
 import com.autoever.cinewall.reviewHeart.ReviewHeartRepository;
 import com.autoever.cinewall.user.UserEntity;
+import com.autoever.cinewall.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -37,6 +40,7 @@ public class MovieServiceImplement implements MovieService {
     private final MovieGenreRepository movieGenreRepository;
     private final GenreRepository genreRepository;
     private final ReviewHeartRepository reviewHeartRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<List<TeaserResponseDto>> getTrailerList() {
@@ -386,6 +390,18 @@ public class MovieServiceImplement implements MovieService {
         return movieDtos;
     }
 
+    @Override
+    public boolean isMovieFavorite(int movieId) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        boolean result = movieRepository.isMovieFavorite(user.getUserId(), movieId);
+
+        return result;
+    }
 
 
 }

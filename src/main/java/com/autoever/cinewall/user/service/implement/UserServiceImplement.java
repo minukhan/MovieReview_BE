@@ -8,10 +8,13 @@ import com.autoever.cinewall.user.UserEntity;
 import com.autoever.cinewall.user.UserRepository;
 import com.autoever.cinewall.user.dto.EditedUserRequestDto;
 import com.autoever.cinewall.user.dto.EditedUserResponseDto;
+import com.autoever.cinewall.user.dto.OtherUserDto;
 import com.autoever.cinewall.user.dto.ResponseUserInfo;
 import com.autoever.cinewall.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -114,5 +117,18 @@ public class UserServiceImplement implements UserService {
                 .build();
 
         return user;
+    }
+
+    @Override
+    public OtherUserDto getUserPage(int userId) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        OtherUserDto result = userRepository.findOtherUser(user.getUserId(), userId);
+
+        return result;
     }
 }
