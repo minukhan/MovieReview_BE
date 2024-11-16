@@ -1,15 +1,15 @@
 package com.autoever.cinewall.movie.dto.response;
 
 public class RatingCountDTO {
-    private String score;
+    private int score;
     private long count;
 
-    public RatingCountDTO(String score, long count) {
+    public RatingCountDTO(int score, long count) {
         this.score = score;
         this.count = count;
     }
 
-    public String getScore() {
+    public int getScore() {
         return score;
     }
 
@@ -17,7 +17,7 @@ public class RatingCountDTO {
         return count;
     }
 
-    public void setScore(String score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
