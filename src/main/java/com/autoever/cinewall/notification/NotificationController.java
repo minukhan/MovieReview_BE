@@ -22,18 +22,16 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final UserService userService;
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(HttpServletRequest request) {
-        //HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-        //response.setHeader("Content-Type", "text/event-stream;charset=UTF-8");
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+        response.setHeader("Content-Type", "text/event-stream;charset=UTF-8");
 
-        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //String userName = auth.getName();
-        //UserEntity user = userService.findById(userName);
-
-        //return notificationService.subscribe(user.getUserId());
-        return notificationService.subscribe(3);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        UserEntity user = userService.findById(userName);
+        return notificationService.subscribe(user.getUserId());
     }
 
 }
