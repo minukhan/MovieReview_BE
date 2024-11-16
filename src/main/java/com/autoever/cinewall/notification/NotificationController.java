@@ -40,7 +40,7 @@ public class NotificationController {
         SseEmitter emitter = notificationService.subscribe(user.getUserId());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, "text/event-stream;charset=UTF-8");
+        headers.set(HttpHeaders.CONTENT_TYPE, "text/event-stream");
         headers.set(HttpHeaders.CACHE_CONTROL, "no-cache");
         headers.set(HttpHeaders.CONNECTION, "keep-alive");
 
