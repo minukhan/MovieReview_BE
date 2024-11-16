@@ -22,7 +22,7 @@ public class NotificationService {
     public SseEmitter subscribe(int userId) {
         SseEmitter emitter = createEmitter(userId);
 
-        sendToClient(userId, "EventStream Created. [userId="+ userId + "]", "sse 접속 성공");
+        sendToClient(userId, "EventStream Created. [userId="+ userId + "]", "sse 접속 성공1");
         return emitter;
     }
 
