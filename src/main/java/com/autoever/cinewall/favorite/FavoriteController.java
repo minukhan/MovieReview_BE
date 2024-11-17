@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/cinewall/movie")
+@RequestMapping("/cinewall/movieFavorite")
 @RequiredArgsConstructor
 public class FavoriteController {
 
