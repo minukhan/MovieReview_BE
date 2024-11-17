@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/cinewall/movieFavorite")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowCredentials = "true")
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
