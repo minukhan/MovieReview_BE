@@ -391,18 +391,19 @@ public class MovieServiceImplement implements MovieService {
     }
 
     @Override
-    public boolean isMovieFavorite(int userId, int movieId) {
-
-        UserEntity user = userRepository.findByUserId(userId);
+    public boolean isMovieFavorite(int movieId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+        UserEntity user = userRepository.findById(id);
 
         if(user == null){
             return false;
         }
 
         boolean result = movieRepository.isMovieFavorite(user.getUserId(), movieId);
-
         return result;
     }
+
 
 
 }
