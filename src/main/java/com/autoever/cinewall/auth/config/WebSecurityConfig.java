@@ -49,7 +49,7 @@ public class WebSecurityConfig {
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/cinewall/auth/**", "/oauth2/**", "/cinewall/movie/**", "/cinewall/recommend/**", "/api/movies/*/average-rating", "/api/movies/*/reviews", "/api/reviews/*", "/cinewall/users/*/reviews/latest", "/bot/**" ,"/subscribe", "/cinewall/genre/**").permitAll() // 인증 없이 접근 가능
-                        .requestMatchers("/cinewall/user/**", "/cinewall/follow/**", "/cinewall/survey","/cinewall/review/**", "/cinewall/movieFavorite/**").hasRole("USER")
+                        .requestMatchers("/cinewall/user/**", "/cinewall/follow/**", "/cinewall/survey","/cinewall/review/**", "/cinewall/movieFavorite/**", "/cinewall/recommend/**").hasRole("USER")
 
                         .requestMatchers("/cinewall/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요

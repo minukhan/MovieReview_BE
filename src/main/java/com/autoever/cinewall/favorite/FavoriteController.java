@@ -19,21 +19,8 @@ public class FavoriteController {
     private final MovieService movieService;
 
     @GetMapping("/{movieId}/isFavorite")
-    public ResponseEntity isMovieFavorite(@PathVariable("movieId") int movieId,
-                                          @RequestBody(required = false) Map<String, Integer> json) {
-
-//        if(json == null) {
-//            return ResponseEntity.ok(false);
-//        } else{
-//            Integer userId = json.get("userId");
-//            boolean result = movieService.isMovieFavorite(userId, movieId);
-//            return ResponseEntity.ok(result);
-//        }
-        Map result = new HashMap();
-        result.put("movieId", movieId);
-        if(json != null) {
-            result.put("userId", json.get("userId"));
-        }
+    public ResponseEntity isMovieFavorite(@PathVariable("movieId") int movieId) {
+        boolean result = movieService.isMovieFavorite(movieId);
         return ResponseEntity.ok(result);
     }
 

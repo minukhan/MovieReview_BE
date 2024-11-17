@@ -23,6 +23,6 @@ public class IdCheckResponseDto extends ResponseDto{
     // 중복된 ID (사용 불가능)
     public static ResponseEntity<IdCheckResponseDto> duplicateId() {
         IdCheckResponseDto responseBody = new IdCheckResponseDto(false); // 사용 불가능
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }

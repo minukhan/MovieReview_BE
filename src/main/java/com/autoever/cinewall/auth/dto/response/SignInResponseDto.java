@@ -26,6 +26,6 @@ public class SignInResponseDto extends ResponseDto {
     // 로그인 실패 시 응답
     public static ResponseEntity<SignInResponseDto> signInFail() {
         SignInResponseDto responseBody = new SignInResponseDto(false, ResponseMessage.SIGN_IN_FAIL); // 실패
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }
