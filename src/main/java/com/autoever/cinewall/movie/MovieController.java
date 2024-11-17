@@ -6,11 +6,14 @@ import com.autoever.cinewall.movie.service.MovieService;
 import com.autoever.cinewall.review.dto.response.ReviewResponseDto;
 import com.autoever.cinewall.user.UserEntity;
 import com.autoever.cinewall.user.service.UserService;
+import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import com.autoever.cinewall.review.ReviewService;
 import com.autoever.cinewall.review.dto.request.ReviewRequestDto;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +22,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +35,8 @@ import java.util.Map;
 @RequestMapping("/cinewall/movie")
 @RequiredArgsConstructor
 public class MovieController {
+    @Value("${tmdb.key}")
+    private String apiKey;
     private final MovieService movieService;
     private final JwtProvider jwtProvider;
     private final UserService userService;
@@ -181,4 +190,52 @@ public class MovieController {
         return movieService.getMoviesByGenres(movieId);
     }
 
+    @GetMapping("/get-movie")
+    public String getMovie(HttpServletResponse response){
+
+        String res = "";
+
+        try {
+
+            for (int i = 1; i <= 20; i++) {
+                String result = "";
+                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey
+                        + "&language=ko-KR&sort_by=release_date.desc&release_date.lte=2024-11-17&with_original_language=en&page=" + i;
+//                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + "553bd45e42f934beb423b51c1de01f4b"
+//                        + "&release_date.gte=2013-01-01&watch_region=KR&language=ko&page=" + i;
+
+                URL url = new URL(apiURL);
+
+                BufferedReader bf;
+
+                bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+
+                result = bf.readLine();
+
+                res += movieService.saveInitialData(result) + " / ";
+            }
+
+            for (int i = 1; i <= 20; i++) {
+                String result = "";
+                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey
+                        + "&language=ko-KR&sort_by=release_date.desc&release_date.lte=2024-11-17&with_original_language=ko&page=" + i;
+//                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + "553bd45e42f934beb423b51c1de01f4b"
+//                        + "&release_date.gte=2013-01-01&watch_region=KR&language=ko&page=" + i;
+
+                URL url = new URL(apiURL);
+
+                BufferedReader bf;
+
+                bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+
+                result = bf.readLine();
+
+                res += movieService.saveInitialData(result);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
 }
