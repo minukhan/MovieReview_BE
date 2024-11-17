@@ -391,18 +391,9 @@ public class MovieServiceImplement implements MovieService {
     }
 
     @Override
-    public boolean isMovieFavorite(int movieId) {
+    public boolean isMovieFavorite(int userId, int movieId) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth == null || auth.getName() == null || auth.getName().isEmpty()) {
-            // 인증 정보가 없는 경우 false 반환
-            return false;
-        }
-
-        String id = auth.getName();
-
-        UserEntity user = userRepository.findById(id);
+        UserEntity user = userRepository.findByUserId(userId);
 
         if(user == null){
             return false;

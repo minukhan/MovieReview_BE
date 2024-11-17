@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.autoever.cinewall.movie.service.MovieService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/cinewall/movie")
 @RequiredArgsConstructor
@@ -16,9 +18,16 @@ public class FavoriteController {
     private final MovieService movieService;
 
     @GetMapping("/{movieId}/isFavorite")
-    public ResponseEntity isMovieFavorite(@PathVariable int movieId) {
-        boolean result = movieService.isMovieFavorite(movieId);
-        return ResponseEntity.ok(result);
+    public ResponseEntity isMovieFavorite(@PathVariable("movieId") int movieId,
+                                          @RequestBody(required = false) Map<String, Integer> json) {
+
+        if(json == null) {
+            return ResponseEntity.ok(false);
+        } else{
+            Integer userId = json.get("userId");
+            boolean result = movieService.isMovieFavorite(userId, movieId);
+            return ResponseEntity.ok(result);
+        }
     }
 
     @PostMapping("/{movieId}/favorite")

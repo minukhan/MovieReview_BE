@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RestController
@@ -178,13 +179,6 @@ public class MovieController {
     @GetMapping("/{movieId}/similar-movies")
     public List<MovieGenreSearchDto> getMoviesByGenres(@PathVariable int movieId) {
         return movieService.getMoviesByGenres(movieId);
-    }
-
-    @GetMapping("/{movieId}/isfavorite")
-    public ResponseEntity isMovieFavorite(@PathVariable int movieId) {
-        boolean result = movieService.isMovieFavorite(movieId);
-
-        return ResponseEntity.ok(result);
     }
 
 }
