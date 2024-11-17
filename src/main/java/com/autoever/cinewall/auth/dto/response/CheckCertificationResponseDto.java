@@ -23,6 +23,6 @@ public class CheckCertificationResponseDto extends ResponseDto {
     // 인증 실패 시 응답
     public static ResponseEntity<CheckCertificationResponseDto> certificationFail() {
         CheckCertificationResponseDto responseBody = new CheckCertificationResponseDto(false); // 인증 실패
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }

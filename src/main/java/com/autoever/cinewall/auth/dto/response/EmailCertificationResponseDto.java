@@ -23,7 +23,7 @@ public class EmailCertificationResponseDto extends ResponseDto {
     // 중복된 ID가 있을 경우 응답
     public static ResponseEntity<EmailCertificationResponseDto> duplicateId() {
         EmailCertificationResponseDto responseBody = new EmailCertificationResponseDto(false); // 중복 ID
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
     // 이메일 발송 실패 시 응답
