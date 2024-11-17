@@ -5,12 +5,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.autoever.cinewall.movie.service.MovieService;
+
 @RestController
 @RequestMapping("/cinewall/movie")
 @RequiredArgsConstructor
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
+    private final MovieService movieService;
+
+    @GetMapping("/{movieId}/isFavorite")
+    public ResponseEntity isMovieFavorite(@PathVariable int movieId) {
+        boolean result = movieService.isMovieFavorite(movieId);
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping("/{movieId}/favorite")
     public ResponseEntity<String> addFavorite(@PathVariable int movieId) {
