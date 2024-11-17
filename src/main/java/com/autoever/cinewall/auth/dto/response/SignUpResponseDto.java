@@ -23,7 +23,7 @@ public class SignUpResponseDto extends ResponseDto {
     // 중복된 ID가 있을 경우 응답
     public static ResponseEntity<SignUpResponseDto> duplicateId() {
         SignUpResponseDto responseBody = new SignUpResponseDto(false); // ID 중복
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
     // 인증 실패 시 응답
