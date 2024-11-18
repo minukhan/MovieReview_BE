@@ -58,7 +58,8 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
             "r.reviewId, r.user, r.movie, r.rating, r.description, r.content, r.createDate," +
             "(SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.review = r), " +
             "CASE WHEN (SELECT COUNT(h) FROM ReviewHeartEntity h WHERE h.user = r.user AND h.review = r) > 0 THEN true ELSE false END) " +
-            "FROM ReviewEntity r WHERE r.user.userId = :userId")
+            "FROM ReviewEntity r WHERE r.user.userId = :userId " +
+            "ORDER BY r.createDate DESC ")
     List<ResponseUserReviewList> findUserReviewsByUserId(@Param("userId") int userId);
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.user.userId = :userId")
