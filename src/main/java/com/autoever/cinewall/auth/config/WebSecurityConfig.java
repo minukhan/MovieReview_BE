@@ -87,7 +87,7 @@ public class WebSecurityConfig {
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addExposedHeader("Authorization");
-
+        corsConfiguration.addExposedHeader("Set-Cookie");
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
