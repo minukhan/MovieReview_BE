@@ -79,10 +79,12 @@ public class WebSecurityConfig {
         corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
         corsConfiguration.addAllowedOriginPattern("https://cinewalll.netlify.app");
         corsConfiguration.addAllowedOriginPattern("http://3.38.104.1:8080");
+        corsConfiguration.addAllowedOriginPattern("http://api.cinewall.shop");
+        corsConfiguration.addAllowedOriginPattern("https://cinewall.shop");
 
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
-        // 쿠키를 포함한 요청 허용 (프론트엔드에서 쿠키를 사용해야 하는 경우)
+        
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
