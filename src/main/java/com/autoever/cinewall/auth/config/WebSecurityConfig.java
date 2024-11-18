@@ -48,13 +48,14 @@ public class WebSecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/cinewall/auth/id-check", "/cinewall/auth/email-certification", "/cinewall/auth/check-certification", "/cinewall/auth/sign-up", "/cinewall/auth/sign-in",
                                 "/cinewall/auth/oauth2/kakao", "/cinewall/movie/trailer", "/cinewall/movie/latest", "/cinewall/movie/popular", "/cinewall/movie/recommend", "/cinewall/movie/review",
                                 "/cinewall/movie/powerReview", "/cinewall/movie/search", "/cinewall/review/*/reviews/latest", "/cinewall/review/*/reviews/favorite", "/cinewall/movie/*/average-rating",
                                 "/cinewall/movie/*/rating-distribution", "/cinewall/movieFavorite/*/isFavorite", "/cinewall/movie/*/similar-movies", "/cinewall/review/user-graph/*", "/cinewall/review/user-list/*",
-                                "/cinewall/review/detail/*", "/cinewall/review/poster-list/*", "/cinewall/actor/*/recommend", "/cinewall/crew/*/recommend", "/bot/*/chat", "/cinewall/user/*/mypage").permitAll() // 인증 없이 접근 가능
+                                "/cinewall/review/detail/*", "/cinewall/review/poster-list/*", "/cinewall/actor/*/recommend", "/cinewall/crew/*/recommend", "/bot/*/chat", "/cinewall/user/*/mypage","/cinewall/movieFavorite/count").permitAll() // 인증 없이 접근 가능
                         .requestMatchers("/cinewall/auth/logout", "/cinewall/follow/**", "/cinewall/movie/favorite", "/cinewall/movie/userbase", "/cinewall/movie/*/reviews", "/cinewall/movie/genre", "/cinewall/recommend/hashtag",
                                 "/cinewall/reviews/*/like", "/cinewall/movie/*/reviews", "/cinewall/movie/reviews/**", "/cinewall/movieFavorite/*/favorite", "/cinewall/user/edit", "/cinewall/review/edit/*",
                                 "/cinewall/review/delete/*", "/cinewall/survey/recommend", "/cinewall/survey/submit", "/cinewall/user/info", "/subscribe").hasRole("USER")
