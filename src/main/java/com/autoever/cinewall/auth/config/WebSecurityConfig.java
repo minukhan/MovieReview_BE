@@ -89,6 +89,8 @@ public class WebSecurityConfig {
         corsConfiguration.addExposedHeader("Authorization");
 
         corsConfiguration.setAllowCredentials(true);
+        // 노출할 헤더 추가 (Authorization 헤더 노출)
+        corsConfiguration.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
