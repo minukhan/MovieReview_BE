@@ -28,10 +28,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String id = oAuth2User.getName();
         String token = jwtProvider.create(id);
 
-        UserEntity user = userService.findById(id);
-        String nickname = user.getNickname();
-        String profile_url = user.getProfile_url();
-
-        response.sendRedirect("http://localhost:3000?id=" + id + "&AccessToken=" + token + "&Nickname=" + nickname + "&ProfileUrl=" + profile_url);
+        response.sendRedirect("http://localhost:3000?id=" + id + "&AccessToken=" + token);
     }
 }
