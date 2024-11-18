@@ -86,7 +86,7 @@ public class WebSecurityConfig {
 
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedHeader("Authorization");
+        corsConfiguration.addExposedHeader("Authorization");
 
         corsConfiguration.setAllowCredentials(true);
 
