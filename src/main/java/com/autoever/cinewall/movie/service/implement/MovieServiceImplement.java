@@ -31,6 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -408,9 +409,12 @@ public class MovieServiceImplement implements MovieService {
     }
 
     @Override
-    public boolean isMovieFavorite(int userId, int movieId) {
+    public boolean isMovieFavorite(int movieId) {
 
-        UserEntity user = userRepository.findByUserId(userId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
 
         if(user == null){
             return false;
