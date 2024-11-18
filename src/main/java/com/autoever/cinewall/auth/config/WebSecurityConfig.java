@@ -63,8 +63,7 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 .oauth2Login(oauth2 -> oauth2
-//                        .authorizationEndpoint(endpoint -> endpoint.baseUri("/cinewall/auth/oauth2"))
-                        .authorizationEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/kakao"))
+                        .authorizationEndpoint(endpoint -> endpoint.baseUri("/cinewall/auth/oauth2"))
                         .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
                         .successHandler(oAuth2SuccessHandler)
                 )
