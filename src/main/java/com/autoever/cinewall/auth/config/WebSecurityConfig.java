@@ -79,6 +79,8 @@ public class WebSecurityConfig {
         corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
         corsConfiguration.addAllowedOriginPattern("https://cinewalll.netlify.app");
         corsConfiguration.addAllowedOriginPattern("http://3.38.104.1:8080");
+        corsConfiguration.addAllowedOriginPattern("http://api.cinewall.shop");
+        corsConfiguration.addAllowedOriginPattern("https://cinewall.shop");
 
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
