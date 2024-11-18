@@ -185,6 +185,7 @@ public class MovieController {
         return ResponseEntity.ok(movies);
     }
 
+
     @GetMapping("/{movieId}/similar-movies")
     public List<MovieGenreSearchDto> getMoviesByGenres(@PathVariable int movieId) {
         return movieService.getMoviesByGenres(movieId);
