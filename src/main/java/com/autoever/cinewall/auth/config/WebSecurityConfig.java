@@ -87,7 +87,7 @@ public class WebSecurityConfig {
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addExposedHeader("Authorization");
-
+        corsConfiguration.addExposedHeader("Set-Cookie");
         corsConfiguration.setAllowCredentials(true);
         // 노출할 헤더 추가 (Authorization 헤더 노출)
         corsConfiguration.addExposedHeader("Authorization");
