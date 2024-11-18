@@ -24,7 +24,7 @@ public interface MovieService {
     public List<MovieGenreSearchDto> getMoviesByGenreName(String genreName);
     public List<MovieGenreSearchDto> getMoviesByGenres(int movieId);
 
-    boolean isMovieFavorite(int userId, int movieId);
+    boolean isMovieFavorite(int movieId);
 
 
     String saveInitialData(String result) throws MalformedURLException, ParseException;
