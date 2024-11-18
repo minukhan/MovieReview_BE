@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class MovieGenreSearchDto {
     private int movieId;
     private String title;
