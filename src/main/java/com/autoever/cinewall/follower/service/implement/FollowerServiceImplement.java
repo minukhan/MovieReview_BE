@@ -46,8 +46,10 @@ public class FollowerServiceImplement implements FollowerService {
                 .from_user_nickname(from_user.getNickname())
                 .from_user_profile_url(from_user.getProfile_url())
                 .build();
-        notificationService.customNotify(from_user.getUserId(), followerSseResponse, "회원님께서 팔로우 추가 신청을 받으셨습니다!", "follow");
+        notificationService.customNotify(to_user.getUserId(), followerSseResponse, "회원님께서 팔로우 추가 신청을 받으셨습니다!", "follow");
         return ResponseEntity.ok(200);
+
+
     }
 
     @Override
