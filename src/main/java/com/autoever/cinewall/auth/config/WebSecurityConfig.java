@@ -48,8 +48,14 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/cinewall/auth/**", "/oauth2/**", "/cinewall/movie/**", "/cinewall/recommend/**", "/api/movies/*/average-rating", "/api/movies/*/reviews", "/api/reviews/*", "/cinewall/users/*/reviews/latest", "/bot/**" ,"/subscribe", "/cinewall/genre/**","/.well-known/pki-validation/**").permitAll() // 인증 없이 접근 가능
-                        .requestMatchers("/cinewall/user/**", "/cinewall/follow/**", "/cinewall/survey","/cinewall/review/**", "/cinewall/movieFavorite/**", "/cinewall/recommend/**").hasRole("USER")
+                        .requestMatchers("/", "/cinewall/auth/id-check", "/cinewall/auth/email-certification", "/cinewall/auth/check-certification", "/cinewall/auth/sign-up", "/cinewall/auth/sign-in",
+                                "/cinewall/auth/oauth2/kakao", "/cinewall/movie/trailer", "/cinewall/movie/latest", "/cinewall/movie/popular", "/cinewall/movie/recommend", "/cinewall/movie/review",
+                                "/cinewall/movie/powerReview", "/cinewall/movie/search", "/cinewall/review/*/reviews/latest", "/cinewall/review/*/reviews/favorite", "/cinewall/movie/*/average-rating",
+                                "/cinewall/movie/*/rating-distribution", "/cinewall/movieFavorite/*/isFavorite", "/cinewall/movie/*/similar-movies", "/cinewall/review/user-graph/*", "/cinewall/review/user-list/*",
+                                "/cinewall/review/detail/*", "/cinewall/review/poster-list/*", "/cinewall/actor/*/recommend", "/cinewall/crew/*/recommend", "/bot/*/chat", "/cinewall/user/*/mypage").permitAll() // 인증 없이 접근 가능
+                        .requestMatchers("/cinewall/auth/logout", "/cinewall/follow/**", "/cinewall/movie/favorite", "/cinewall/movie/userbase", "/cinewall/movie/*/reviews", "/cinewall/movie/genre", "/cinewall/recommend/hashtag",
+                                "/cinewall/reviews/*/like", "/cinewall/movie/*/reviews", "/cinewall/movie/reviews/**", "/cinewall/movieFavorite/*/favorite", "/cinewall/user/edit", "/cinewall/review/edit/*",
+                                "/cinewall/review/delete/*", "/cinewall/survey/recommend", "/cinewall/survey/submit", "/cinewall/user/info", "/subscribe").hasRole("USER")
 
                         .requestMatchers("/cinewall/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
@@ -73,10 +79,12 @@ public class WebSecurityConfig {
         corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
         corsConfiguration.addAllowedOriginPattern("https://cinewalll.netlify.app");
         corsConfiguration.addAllowedOriginPattern("http://3.38.104.1:8080");
+        corsConfiguration.addAllowedOriginPattern("http://api.cinewall.shop");
+        corsConfiguration.addAllowedOriginPattern("https://cinewall.shop");
 
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
-        // 쿠키를 포함한 요청 허용 (프론트엔드에서 쿠키를 사용해야 하는 경우)
+        
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
