@@ -84,7 +84,7 @@ public class WebSecurityConfig {
 
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
-        // 쿠키를 포함한 요청 허용 (프론트엔드에서 쿠키를 사용해야 하는 경우)
+        
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
