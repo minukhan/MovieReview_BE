@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.autoever.cinewall.auth.filter.JwtAuthenticationFilter;
 import com.autoever.cinewall.auth.handler.OAuth2SuccessHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Configurable
 @Configuration
 @EnableWebSecurity
@@ -84,6 +86,7 @@ public class WebSecurityConfig {
 
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedHeader("Authorization");
 
         corsConfiguration.setAllowCredentials(true);
 
