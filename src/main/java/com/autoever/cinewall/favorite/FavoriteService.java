@@ -61,4 +61,13 @@ public class FavoriteService {
         favoriteRepository.delete(favorite);
     }
 
+    public int getFavoriteCountByUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        return favoriteRepository.countByUserId(user.getUserId());
+    }
+
 }
