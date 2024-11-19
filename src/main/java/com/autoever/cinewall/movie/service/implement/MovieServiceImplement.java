@@ -450,14 +450,15 @@ public class MovieServiceImplement implements MovieService {
             if (contents.get("poster_path").isJsonNull()) {
                 continue;
             }
+            if(contents.get("genre_ids").getAsJsonArray().asList().size() == 0){
+                continue;
+            }
 
 //            System.out.println(dateFormat.parse(contents.get("release_date").toString().replace("\"", "")).toInstant()
 //                    .atZone(ZoneId.systemDefault())
 //                    .toLocalDate());
             // api에서 제공하는 이미지 경로는 아래의 주소 뒤에 붙여주면 사용가능한 주소가 되므로 재사용을 위해 변수 선언
             String ImgUrl = "https://image.tmdb.org/t/p/w500";
-            // trailer는 유튜브 영상이므로 아래 경로 뒤에 붙여줌
-//            String trailerUrl = "https://www.youtube.com/watch?v=";
 
             // Movie 데이터 저장
             movieRepository.save(
