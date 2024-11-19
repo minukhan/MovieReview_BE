@@ -185,7 +185,6 @@ public class ReviewService {
 
         ReviewEntity review = before.toBuilder()
                 .rating(editedReview.getRating())
-                .description(editedReview.getDescription())
                 .content(editedReview.getContent())
                 .createDate(LocalDateTime.now())
                 .build();
