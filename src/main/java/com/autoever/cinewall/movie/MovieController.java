@@ -150,8 +150,21 @@ public class MovieController {
 
 
     @GetMapping("/search")
-    public List<MovieSummaryDto> searchMovies(@RequestParam String title) {
-        return movieService.searchMoviesByTitle(title);
+    public List<MovieResponseDto> searchMovies(@RequestParam String title) {
+        UserEntity user = null;
+        int user_id = -1;
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if(auth != null) {
+
+            String userName = auth.getName();
+            user = userService.findById(userName);
+
+            if (user != null) user_id = user.getUserId();
+        }
+
+        return movieService.searchMoviesByTitle(title, user_id);
     }
 
     @GetMapping("/review")
