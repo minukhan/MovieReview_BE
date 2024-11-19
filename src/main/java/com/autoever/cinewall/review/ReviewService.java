@@ -302,20 +302,25 @@ public class ReviewService {
         Pageable top10 = PageRequest.of(0, 10);
         List<MovieEntity> movies = reviewRepository.findTop10(userId, top10);
 
+
+        System.out.println(movies.size());
+
         if(movies.isEmpty()) {
-            return null;
+            return "영화 관련 키워드 8개를 만들어줄래? 예를 들면, 재미있는, 판타지, 스릴있는, 우정 등과 같이 나왔으면 좋겠어." +
+                    "키워드는 랜덤으로 무조건 장르 말고 보낸 영화들과 관련된 형용사 4개, 단어 4개로 해줘" +
+                    "응답은 json 형태로 줄래? 키값은 keyword1, keyword2, ... 이런식으로 보내주고 null값은 절대 주지마";
         }
 
         String result = "내가 선호하는 영화들과 관련된 키워드 8개를 보여주려고 하는데, " +
                 "내가 선호하는 영화 리스트를 줄테니까 그거보고 키워드 8개를 만들어줄래?" +
-                "키워드는 장르 말고 보낸 영화들과 관련된 형용사 4개, 단어 4개로 해줘" +
+                "키워드는 무조건 장르 말고 보낸 영화들과 관련된 형용사 4개, 단어 4개로 해줘" +
                 " 선호하는 영화는";
 
         for(MovieEntity movie : movies) {
             result += movie.getTitle() + ", ";
         }
 
-        result += " 이렇게야. 응답은 json 형태로 줄래? 키값은 keyword1, keyword2 이런식으로 보내줘";
+        result += " 이렇게야. 응답은 json 형태로 줄래? 키값은 keyword1, keyword2, ... 이런식으로 보내주고 null값은 절대 주지마";
 
         return result;
     }

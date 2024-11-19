@@ -32,6 +32,7 @@ public class CustomBotController {
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
         ChatGPTResponse chatGPTResponse =  template.postForObject(apiURL, request, ChatGPTResponse.class);
         String responseContent = chatGPTResponse.getChoices().get(0).getMessage().getContent();
+        System.out.println(responseContent);
         // JSON 문자열을 DTO로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         KeywordDto keywordDto = null;
