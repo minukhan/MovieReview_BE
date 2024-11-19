@@ -16,5 +16,6 @@ public class SimpleReviewResponseDTO {
     private String description;
     private String content;
     private LocalDateTime createDate;
+    private int userId;
 
 }
