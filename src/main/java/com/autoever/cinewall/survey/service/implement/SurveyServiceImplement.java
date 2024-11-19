@@ -19,12 +19,6 @@ public class SurveyServiceImplement implements SurveyService {
 
     public void submit_survey(SurveyEntity surveyEntity){
         surveyRepository.save(surveyEntity);
-        List<GenreEntity> genres = surveyRepository.findGenresByUserId(surveyEntity.getUser().getUserId());
-        RecommendEntity recommend = RecommendEntity.builder()
-                .genres(genres)
-                .user(surveyEntity.getUser())
-                .build();
-        recommendRepository.save(recommend);
         return;
     }
 

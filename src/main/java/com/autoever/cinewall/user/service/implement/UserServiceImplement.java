@@ -47,18 +47,20 @@ public class UserServiceImplement implements UserService {
         return;
   }
     public List<SimpleReviewResponseDTO> getUserLatestReviews(int userId) {
+        // 유저의 최신 리뷰를 가져옴
         List<ReviewEntity> reviews = reviewRepository.findByUserUserIdOrderByCreateDateDesc(userId);
 
         // ReviewEntity를 SimpleReviewResponseDTO로 변환
-        return reviews.stream().map(review ->
-                new SimpleReviewResponseDTO(
+        return reviews.stream()
+                .map(review -> new SimpleReviewResponseDTO(
                         review.getReviewId(),
                         review.getRating(),
                         review.getDescription(),
                         review.getContent(),
-                        review.getCreateDate()
-                )
-        ).collect(Collectors.toList());
+                        review.getCreateDate(),
+                        review.getUser().getUserId() // 리뷰 작성자의 userId 추가
+                ))
+                .collect(Collectors.toList());
     }
 
 

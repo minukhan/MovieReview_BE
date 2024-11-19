@@ -31,10 +31,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.MalformedURLException;
@@ -208,11 +206,21 @@ public class MovieServiceImplement implements MovieService {
     }
 
 
-    public List<MovieSummaryDto> searchMoviesByTitle(String title) {
+    public List<MovieResponseDto> searchMoviesByTitle(String title, int user_id) {
         List<MovieEntity> movies = movieRepository.findByTitleContainingIgnoreCase(title);
-        return movies.stream()
-                .map(MovieSummaryDto::fromEntity)
-                .collect(Collectors.toList());
+        List<MovieResponseDto> result = new ArrayList<>();
+
+        for(MovieEntity movie : movies) {
+            result.add(MovieResponseDto.builder()
+                    .movie_id(movie.getMovieId())
+                    .movie_title(movie.getTitle())
+                    .poster_path(movie.getPosterPath())
+                    .vote_average(movie.getVoteAverage())
+                    .user_rating(reviewRepository.findByUserIdAndMovieId(user_id, movie.getMovieId()) != null ? reviewRepository.findByUserIdAndMovieId(user_id, movie.getMovieId()).getRating() : null)
+                    .build());
+        }
+
+        return result;
     }
 
     public ResponseEntity<List<ReviewResponseDto>> getReviewList(){
@@ -370,26 +378,57 @@ public class MovieServiceImplement implements MovieService {
         GenreEntity genre = genreRepository.findByName(genreName)
                 .orElseThrow(() -> new RuntimeException("Genre not found: " + genreName));
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        // 사용자 ID (없을 경우 -1로 처리)
+        int userId = (user != null) ? user.getUserId() : -1;
+
         // Genre ID를 사용하여 영화 목록 조회
         return movieRepository.findMoviesByGenreId(genre.getGenreId()).stream()
-                .map(movie -> MovieGenreSearchDto.builder()
-                        .movieId(movie.getMovieId())
-                        .title(movie.getTitle())
-                        .posterPath(movie.getPosterPath())
-                        .build())
+                .map(movie -> {
+                    // 리뷰 정보를 기반으로 userRating 가져오기
+                    ReviewEntity reviewEntity = null;
+                    BigDecimal userRating = BigDecimal.valueOf(0);
+                    if (userId != -1) {
+                        reviewEntity = reviewRepository.findByUserIdAndMovieId(userId, movie.getMovieId());
+                        userRating = (reviewEntity != null) ? reviewEntity.getRating() : BigDecimal.valueOf(0);
+                    }
+
+                    return MovieGenreSearchDto.builder()
+                            .movieId(movie.getMovieId())
+                            .title(movie.getTitle())
+                            .posterPath(movie.getPosterPath())
+                            .vote_average(movie.getVoteAverage()) // MovieEntity에서 vote_average 가져오기
+                            .user_rating(userRating)             // 계산된 userRating 추가
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
 
+
     public List<MovieGenreSearchDto> getMoviesByGenres(int movieId) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String id = auth.getName();
+
+        UserEntity user = userRepository.findById(id);
+
+        // 사용자 ID (없을 경우 -1로 처리)
+        int userId = (user != null) ? user.getUserId() : -1;
+
         // 1. 영화 ID로 해당 영화의 장르 목록을 가져옴
         List<GenreEntity> genres = movieGenreRepository.findGenresByMovieId(movieId);
         System.out.println("Number of genres for movie ID " + movieId + ": " + genres.size());
+
         // 2. 각 장르에 맞는 영화를 랜덤하게 가져와 하나의 리스트로 합침
         List<MovieEntity> movies = new ArrayList<>();
 
         for (GenreEntity genre : genres) {
             // 장르별로 영화를 가져와 리스트에 추가
-            Pageable top5 = PageRequest.of(0,5);
+            Pageable top5 = PageRequest.of(0, 5);
             List<MovieEntity> genreMovies = movieRepository.findRandomMoviesByGenre(genre.getGenreId(), top5);
 
             // movies 리스트에 추가하면서 중복 제거
@@ -402,7 +441,23 @@ public class MovieServiceImplement implements MovieService {
 
         // 3. MovieEntity 리스트를 MovieGenreSearchDto 리스트로 변환
         List<MovieGenreSearchDto> movieDtos = movies.stream()
-                .map(movie -> new MovieGenreSearchDto(movie.getMovieId(), movie.getTitle(), movie.getPosterPath()))
+                .map(movie -> {
+                    // 리뷰 정보를 기반으로 userRating 가져오기
+                    ReviewEntity reviewEntity = null;
+                    BigDecimal userRating = BigDecimal.valueOf(0);
+                    if (userId != -1) {
+                        reviewEntity = reviewRepository.findByUserIdAndMovieId(userId, movie.getMovieId());
+                        userRating = (reviewEntity != null) ? reviewEntity.getRating() : BigDecimal.valueOf(0);
+                    }
+
+                    return new MovieGenreSearchDto(
+                            movie.getMovieId(),
+                            movie.getTitle(),
+                            movie.getPosterPath(),
+                            movie.getVoteAverage(), // MovieEntity에서 vote_average 가져오기
+                            userRating              // 계산된 userRating 추가
+                    );
+                })
                 .collect(Collectors.toList());
 
         return movieDtos;
@@ -450,14 +505,15 @@ public class MovieServiceImplement implements MovieService {
             if (contents.get("poster_path").isJsonNull()) {
                 continue;
             }
+            if(contents.get("genre_ids").getAsJsonArray().asList().size() == 0){
+                continue;
+            }
 
 //            System.out.println(dateFormat.parse(contents.get("release_date").toString().replace("\"", "")).toInstant()
 //                    .atZone(ZoneId.systemDefault())
 //                    .toLocalDate());
             // api에서 제공하는 이미지 경로는 아래의 주소 뒤에 붙여주면 사용가능한 주소가 되므로 재사용을 위해 변수 선언
             String ImgUrl = "https://image.tmdb.org/t/p/w500";
-            // trailer는 유튜브 영상이므로 아래 경로 뒤에 붙여줌
-//            String trailerUrl = "https://www.youtube.com/watch?v=";
 
             // Movie 데이터 저장
             movieRepository.save(
