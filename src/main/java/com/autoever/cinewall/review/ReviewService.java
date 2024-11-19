@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final ReviewHeartRepository reviewHeartRepository;
 
+    @Transactional
     public ReviewEntity createReview(int movieId, ReviewRequestDto reviewRequestDto) throws Exception {
         // 영화 존재 여부 확인
         MovieEntity movie = movieRepository.findById(movieId)
@@ -40,6 +42,12 @@ public class ReviewService {
 
         // username을 통해 UserEntity 조회
         UserEntity user = userRepository.findById(id);
+
+        // 이미 작성된 리뷰가 있는지 확인
+        if(reviewRepository.findByUserIdAndMovieId(user.getUserId(), movieId) != null) {
+            throw new Exception("이미 리뷰를 작성한 영화입니다.");
+        }
+
         // ReviewEntity 객체 생성
         ReviewEntity review = ReviewEntity.builder()
                 .rating(reviewRequestDto.getRating())  // 별점
@@ -49,10 +57,7 @@ public class ReviewService {
                 .createDate(LocalDateTime.now())  // 리뷰 작성일
                 .build();
 
-        if(reviewRepository.findByUserIdAndMovieId(user.getUserId(), movieId) != null) {
-            throw new Exception("이미 리뷰를 작성한 영화입니다.");
-        }
-
+        // 파워리뷰어 여부 확인 및 업데이트
         if (!user.isPowerReviewer()) {
             int reviewCount = reviewRepository.countReviewsByUserWithAtLeastFiveHearts(user.getUserId());
             if (reviewCount >= 5) {
@@ -60,8 +65,14 @@ public class ReviewService {
                 userRepository.save(user);
             }
         }
+
         // 리뷰 저장
-        return reviewRepository.save(review);
+        ReviewEntity savedReview = reviewRepository.save(review);
+
+        // 리뷰 통계 업데이트
+        reviewRepository.updateMovieStats();
+
+        return savedReview;
     }
 
     public ReviewEntity updateReview(int reviewId, ReviewRequestDto reviewUpdateRequestDto) {
@@ -79,6 +90,8 @@ public class ReviewService {
         System.out.println(review);
 
         // 변경된 리뷰 저장
+        reviewRepository.updateMovieStats();
+
         return reviewRepository.save(review);
     }
 
@@ -95,6 +108,8 @@ public class ReviewService {
         if(review.getUser().getId() != user.getId()) {
             throw new Exception("사용자가 작성한 리뷰가 아닙니다.");
         }
+
+        reviewRepository.updateMovieStats();
 
         reviewRepository.delete(review);
     }
@@ -192,6 +207,8 @@ public class ReviewService {
         ReviewEntity after = reviewRepository.save(review);
 
         ResponseReviewDetail result = new ResponseReviewDetail(after);
+        // 리뷰 통계 업데이트
+        reviewRepository.updateMovieStats();
 
         return result;
     }
