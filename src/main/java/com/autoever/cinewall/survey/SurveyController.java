@@ -67,7 +67,6 @@ public class SurveyController {
                 .genres(genreEntities)
                 .build();
         recommendService.submit_recommend(recommend);
-
         user.setSurvey(true);
         userService.updateUser(user);
         return ResponseEntity.ok().build();
