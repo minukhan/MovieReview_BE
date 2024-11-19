@@ -223,8 +223,6 @@ public class MovieController {
                 String result = "";
                 String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey
                         + "&language=ko-KR&sort_by=release_date.desc&release_date.lte=2024-11-17&with_original_language=ko&page=" + i;
-//                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + "553bd45e42f934beb423b51c1de01f4b"
-//                        + "&release_date.gte=2013-01-01&watch_region=KR&language=ko&page=" + i;
 
                 URL url = new URL(apiURL);
 
