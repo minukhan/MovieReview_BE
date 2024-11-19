@@ -198,12 +198,9 @@ public class MovieController {
 
         try {
 
-            for (int i = 1; i <= 20; i++) {
+            for (int i = 16; i <= 25; i++) {
                 String result = "";
-                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey
-                        + "&language=ko-KR&sort_by=release_date.desc&release_date.lte=2024-11-17&with_original_language=en&page=" + i;
-//                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + "553bd45e42f934beb423b51c1de01f4b"
-//                        + "&release_date.gte=2013-01-01&watch_region=KR&language=ko&page=" + i;
+                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey + "&language=ko-KR&primary_release_date.gte=2016-01-01&primary_release_date.lte=2024-11-19&sort_by=popularity.desc&with_original_language=en&page=" + i;
 
                 URL url = new URL(apiURL);
 
@@ -214,24 +211,6 @@ public class MovieController {
                 result = bf.readLine();
 
                 res += movieService.saveInitialData(result) + " / ";
-            }
-
-            for (int i = 1; i <= 20; i++) {
-                String result = "";
-                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey
-                        + "&language=ko-KR&sort_by=release_date.desc&release_date.lte=2024-11-17&with_original_language=ko&page=" + i;
-//                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + "553bd45e42f934beb423b51c1de01f4b"
-//                        + "&release_date.gte=2013-01-01&watch_region=KR&language=ko&page=" + i;
-
-                URL url = new URL(apiURL);
-
-                BufferedReader bf;
-
-                bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-
-                result = bf.readLine();
-
-                res += movieService.saveInitialData(result);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -30,7 +30,7 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final ReviewHeartRepository reviewHeartRepository;
 
-    public ReviewEntity createReview(int movieId, ReviewRequestDto reviewRequestDto) {
+    public ReviewEntity createReview(int movieId, ReviewRequestDto reviewRequestDto) throws Exception {
         // 영화 존재 여부 확인
         MovieEntity movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new IllegalArgumentException("영화를 찾을 수 없습니다."));
@@ -48,6 +48,10 @@ public class ReviewService {
                 .user(user)  // 사용자
                 .createDate(LocalDateTime.now())  // 리뷰 작성일
                 .build();
+
+        if(reviewRepository.findByUserIdAndMovieId(user.getUserId(), movieId) != null) {
+            throw new Exception("이미 리뷰를 작성한 영화입니다.");
+        }
 
         if (!user.isPowerReviewer()) {
             int reviewCount = reviewRepository.countReviewsByUserWithAtLeastFiveHearts(user.getUserId());
