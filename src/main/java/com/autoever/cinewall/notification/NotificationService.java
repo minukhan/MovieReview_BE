@@ -63,6 +63,7 @@ public class NotificationService {
     //emitter client에게 전송(type 변환)
     private <T> void sendToClient(int userId, T data, String comment, String type) {
         SseEmitter emitter = emitterRepository.get(userId);
+
         if (emitter != null) {
             try {
                 emitter.send(SseEmitter.event()
