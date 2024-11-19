@@ -31,10 +31,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.MalformedURLException;
@@ -208,11 +206,21 @@ public class MovieServiceImplement implements MovieService {
     }
 
 
-    public List<MovieSummaryDto> searchMoviesByTitle(String title) {
+    public List<MovieResponseDto> searchMoviesByTitle(String title, int user_id) {
         List<MovieEntity> movies = movieRepository.findByTitleContainingIgnoreCase(title);
-        return movies.stream()
-                .map(MovieSummaryDto::fromEntity)
-                .collect(Collectors.toList());
+        List<MovieResponseDto> result = new ArrayList<>();
+
+        for(MovieEntity movie : movies) {
+            result.add(MovieResponseDto.builder()
+                    .movie_id(movie.getMovieId())
+                    .movie_title(movie.getTitle())
+                    .poster_path(movie.getPosterPath())
+                    .vote_average(movie.getVoteAverage())
+                    .user_rating(reviewRepository.findByUserIdAndMovieId(user_id, movie.getMovieId()) != null ? reviewRepository.findByUserIdAndMovieId(user_id, movie.getMovieId()).getRating() : null)
+                    .build());
+        }
+
+        return result;
     }
 
     public ResponseEntity<List<ReviewResponseDto>> getReviewList(){

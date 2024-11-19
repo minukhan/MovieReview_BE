@@ -17,7 +17,7 @@ public interface MovieService {
     public BigDecimal getAverageRating(int movieId);
     public ResponseEntity<List<MovieResponseDto>> getFavoriteList(int user_id);
     public ResponseEntity<List<MovieRecommendResponseDto>> getRecommendList(int user_id);
-    public List<MovieSummaryDto> searchMoviesByTitle(String title);
+    public List<MovieResponseDto> searchMoviesByTitle(String title, int user_id);
     public List<RatingCountDTO> getRoundedRatingDistribution(int movieId);
     public ResponseEntity<List<ReviewResponseDto>> getReviewList();
     public ResponseEntity<List<MovieRecommendResponseDto>> getUserBase(UserEntity user);
