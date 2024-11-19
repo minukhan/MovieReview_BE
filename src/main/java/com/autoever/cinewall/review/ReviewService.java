@@ -254,6 +254,7 @@ public class ReviewService {
                     .profileUrl(review.getUser().getProfile_url())
                     .rating(review.getRating())
                     .description(review.getDescription())
+                    .userId(review.getUser().getUserId()) // 리뷰 작성자의 userId 추가
                     .content(review.getContent())
                     .createDate(review.getCreateDate())
                     .heartCount(review.getReviewHeartCount())
@@ -283,6 +284,7 @@ public class ReviewService {
                     .posterPath(review.getMovie().getPosterPath()) // 영화 포스터 경로 추가
                     .nickname(review.getUser().getNickname())
                     .profileUrl(review.getUser().getProfile_url())
+                    .userId(review.getUser().getUserId()) // 리뷰 작성자의 userId 추가
                     .rating(review.getRating())
                     .description(review.getDescription())
                     .content(review.getContent())
