@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,16 +30,22 @@ public class GenreServiceImplement implements GenreService {
     public ResponseEntity<? super List<SurveyResponseDto>> getSurveyList() {
         List<GenreEntity> genres = genreRepository.findAll();
         List<SurveyResponseDto> responses = new ArrayList<>();
+        Set<Integer> usedMovieIds = new HashSet<>(); // 중복 방지용 Set
+
         for (GenreEntity genre : genres) {
             List<MovieEntity> movies = movieGenreRepository.findMoviesByGenre(genre.getGenreId());
-            if (!movies.isEmpty()) {
-                MovieEntity movie = movies.get(0);  // 첫 번째 영화 선택
-                SurveyResponseDto dto = SurveyResponseDto.builder()
-                        .movie_id(movie.getMovieId())
-                        .genre_id(genre.getGenreId())
-                        .poster_path(movie.getPosterPath())
-                        .build();
-                responses.add(dto);
+
+            for (MovieEntity movie : movies) {
+                if (!usedMovieIds.contains(movie.getMovieId())) { // 중복 체크
+                    usedMovieIds.add(movie.getMovieId()); // 사용된 영화 추가
+                    SurveyResponseDto dto = SurveyResponseDto.builder()
+                            .movie_id(movie.getMovieId())
+                            .genre_id(genre.getGenreId())
+                            .poster_path(movie.getPosterPath())
+                            .build();
+                    responses.add(dto);
+                    break; // 장르당 첫 번째 고유 영화만 선택
+                }
             }
         }
         return ResponseEntity.ok(responses);

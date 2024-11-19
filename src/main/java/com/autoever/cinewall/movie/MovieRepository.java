@@ -2,9 +2,11 @@ package com.autoever.cinewall.movie;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -47,4 +49,6 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
             "FROM FavoriteEntity f " +
             "WHERE f.movie.movieId = :movieId AND f.user.userId = :userId")
     boolean isMovieFavorite(@Param("userId") int userId, @Param("movieId") int movieId);
+
+
 }
