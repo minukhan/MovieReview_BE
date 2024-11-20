@@ -34,22 +34,6 @@ jobs:
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
           docker build --build-arg DEPENDENCY=build/dependency -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} --platform linux/amd64 .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-      #
-      #      - name: Save EC2 private key to a file
-      #        run: echo "${{ secrets.EC2_KEY }}" | base64 -d > /tmp/mainkey.pem
-      #
-      #      - name: Set permissions for private key
-      #        run: chmod 600 /tmp/mainkey.pem  # private key 파일에 대한 권한 설정 (읽기 전용)
-      #
-      #      - name: Debug - Check private key file
-      #        run: |
-      #          if [ -f /tmp/mainkey.pem ]; then
-      #            echo "Private key file created successfully."
-      #          else
-      #            echo "Private key file not found."
-      #          fi
-      #          echo "Key file contents (masked):"
-      #          head -c 10 /tmp/mainkey.pem  # 키의 일부만 출력 (보안상)
       - name: SSH into EC2 and deploy
         uses: appleboy/ssh-action@master  # SSH 접속을 위한 GitHub Actions 액션
         with:
