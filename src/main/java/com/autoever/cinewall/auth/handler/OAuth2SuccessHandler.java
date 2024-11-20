@@ -28,6 +28,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String id = oAuth2User.getName();
         String token = jwtProvider.create(id);
 
-        response.sendRedirect("http://localhost:3000/kakao?id=" + id + "&AccessToken=" + token);
+        response.sendRedirect("http://cinewall.shop/kakao?id=" + id + "&AccessToken=" + token);
     }
 }

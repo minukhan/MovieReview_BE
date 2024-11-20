@@ -150,8 +150,21 @@ public class MovieController {
 
 
     @GetMapping("/search")
-    public List<MovieSummaryDto> searchMovies(@RequestParam String title) {
-        return movieService.searchMoviesByTitle(title);
+    public List<MovieResponseDto> searchMovies(@RequestParam String title) {
+        UserEntity user = null;
+        int user_id = -1;
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if(auth != null) {
+
+            String userName = auth.getName();
+            user = userService.findById(userName);
+
+            if (user != null) user_id = user.getUserId();
+        }
+
+        return movieService.searchMoviesByTitle(title, user_id);
     }
 
     @GetMapping("/review")
@@ -198,12 +211,15 @@ public class MovieController {
 
         try {
 
-            for (int i = 1; i <= 20; i++) {
+            for (int i = 16; i <= 25; i++) {
                 String result = "";
+                // 이건 완전 최신순으로 가져오는 것
                 String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey
                         + "&language=ko-KR&sort_by=release_date.desc&release_date.lte=2024-11-17&with_original_language=en&page=" + i;
-//                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + "553bd45e42f934beb423b51c1de01f4b"
-//                        + "&release_date.gte=2013-01-01&watch_region=KR&language=ko&page=" + i;
+                // 이건 인기있는 영화 목록
+//                String apiURL = "https://api.themoviedb.org/3/movie/popular?api_key=" + apiKey + "553bd45e42f934beb423b51c1de01f4b&language=ko-KR&page=" + i;
+                // 이건 주간 단위로 인기 있는 영화 목록
+//                String apiURL = "https://api.themoviedb.org/3/trending/movie/week?api_key=" + apiKey + "&language=ko-KR&page=" + i;
 
                 URL url = new URL(apiURL);
 
@@ -214,24 +230,6 @@ public class MovieController {
                 result = bf.readLine();
 
                 res += movieService.saveInitialData(result) + " / ";
-            }
-
-            for (int i = 1; i <= 20; i++) {
-                String result = "";
-                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey
-                        + "&language=ko-KR&sort_by=release_date.desc&release_date.lte=2024-11-17&with_original_language=ko&page=" + i;
-//                String apiURL = "https://api.themoviedb.org/3/discover/movie?api_key=" + "553bd45e42f934beb423b51c1de01f4b"
-//                        + "&release_date.gte=2013-01-01&watch_region=KR&language=ko&page=" + i;
-
-                URL url = new URL(apiURL);
-
-                BufferedReader bf;
-
-                bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-
-                result = bf.readLine();
-
-                res += movieService.saveInitialData(result);
             }
         } catch (Exception e) {
             e.printStackTrace();

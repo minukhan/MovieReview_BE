@@ -6,9 +6,11 @@ import com.autoever.cinewall.review.dto.response.ResponseUserReviewList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -87,4 +89,23 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.reviewId = :reviewId")
     ReviewEntity findByReviewId(@Param("reviewId") int reviewId);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+        UPDATE movie m
+        JOIN (
+            SELECT
+                movie_id,
+                COUNT(*) AS vote_count,
+                AVG(rating) AS vote_average
+            FROM review
+            GROUP BY movie_id
+        ) r ON m.movie_id = r.movie_id
+        SET
+            m.vote_count = r.vote_count,
+            m.vote_average = r.vote_average
+        """, nativeQuery = true)
+    void updateMovieStats();
+
 }

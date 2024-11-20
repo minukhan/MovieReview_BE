@@ -48,6 +48,7 @@ public class WebSecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/cinewall/auth/id-check", "/cinewall/auth/email-certification", "/cinewall/auth/check-certification", "/cinewall/auth/sign-up", "/cinewall/auth/sign-in",

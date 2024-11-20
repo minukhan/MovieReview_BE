@@ -20,4 +20,5 @@ public class MovieReviewResponseDto {
     private LocalDateTime createDate;
     private int heartCount;
     private boolean heart;
+    private int userId;
 }
