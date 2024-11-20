@@ -42,6 +42,20 @@ public class FollowerController {
         return ResponseEntity.ok(followerService.getFollowerList(user_id));
     }
 
+    @GetMapping("/following-list/{userId}")
+    public ResponseEntity<? super List<FollowingResponseDto>> getUserFollowingList( @PathVariable int userId){
+        UserEntity user = userService.findByUserId(userId);
+        int user_id = user.getUserId();
+        return ResponseEntity.ok(followerService.getFollowingList(user_id));
+    }
+
+    @GetMapping("/follower-list/{userId}")
+    public ResponseEntity<? super List<FollowerResponseDto>> getUserFollowerList(@PathVariable int userId){
+        UserEntity user = userService.findByUserId(userId);
+        int user_id = user.getUserId();
+        return ResponseEntity.ok(followerService.getFollowerList(user_id));
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Integer> follow(
             HttpServletRequest request,
