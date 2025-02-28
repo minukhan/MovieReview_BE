@@ -1,8 +1,3 @@
-
-
-![image](https://github.com/user-attachments/assets/f87f166c-4990-4278-bbf7-b015960bdd71)
-![image](https://github.com/user-attachments/assets/404a99c4-e1f0-4a5c-b575-9b65b6c3385a)
-![image](https://github.com/user-attachments/assets/a0e5c057-fb2e-48cf-bd28-e4791c12a32e)
 # 🎬 CineWall - 영화 리뷰 웹 애플리케이션
 
 ![CineWall](https://github.com/user-attachments/assets/f87f166c-4990-4278-bbf7-b015960bdd71)
@@ -25,7 +20,7 @@ CineWall은 최신 영화 리뷰를 공유하고, 추천 영화를 확인할 수
 - **DevOps**: Docker, Docker Compose, Nginx
 - **CI/CD**: GitHub Actions, Docker Hub
 
-## 📸 스크린샷
+## 📸 아키텍처 및 기술스택
 
 | 홈 화면 | 영화 상세 페이지 | 리뷰 작성 |
 |---------|-----------------|----------|
