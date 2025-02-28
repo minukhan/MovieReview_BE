@@ -1,11 +1,32 @@
-#### 커밋 컨벤션
-feat : 새로운 기능 추가   
-fix : 버그 수정   
-docs : 문서 수정   
-style : 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우   
-refactor : 코드 리펙토링   
-test : 테스트 코드, 리펙토링 테스트 코드 추가   
-chore : 빌드 업무 수정, 패키지 매니저 수정   
 
-#### 브랜치 컨벤션
-feature/#이슈번호: 기능 추가
+
+![image](https://github.com/user-attachments/assets/f87f166c-4990-4278-bbf7-b015960bdd71)
+![image](https://github.com/user-attachments/assets/404a99c4-e1f0-4a5c-b575-9b65b6c3385a)
+![image](https://github.com/user-attachments/assets/a0e5c057-fb2e-48cf-bd28-e4791c12a32e)
+# 🎬 CineWall - 영화 리뷰 웹 애플리케이션
+
+![CineWall](https://github.com/user-attachments/assets/f87f166c-4990-4278-bbf7-b015960bdd71)
+
+CineWall은 최신 영화 리뷰를 공유하고, 추천 영화를 확인할 수 있는 웹 애플리케이션입니다.
+
+## 🚀 주요 기능
+
+- 🎥 영화 목록 및 상세 정보 조회
+- 📝 사용자 리뷰 작성 및 조회
+- ⭐ 영화 평점 등록
+- 🔍 장르별 추천 영화 제공
+- 🔒 JWT 기반 인증 및 OAuth2 로그인 지원
+
+## 🛠️ 기술 스택
+
+- **Frontend**: React, Tailwind CSS, React Router
+- **Backend**: Spring Boot, Spring Security, QueryDSL, JWT, Firebase Admin SDK
+- **Database**: MySQL, MongoDB
+- **DevOps**: Docker, Docker Compose, Nginx
+- **CI/CD**: GitHub Actions, Docker Hub
+
+## 📸 스크린샷
+
+| 홈 화면 | 영화 상세 페이지 | 리뷰 작성 |
+|---------|-----------------|----------|
+| ![홈](https://github.com/user-attachments/assets/404a99c4-e1f0-4a5c-b575-9b65b6c3385a) | ![영화 상세](https://github.com/user-attachments/assets/a0e5c057-fb2e-48cf-bd28-e4791c12a32e) | ![리뷰 작성](https://github.com/user-attachments/assets/f87f166c-4990-4278-bbf7-b015960bdd71) |
