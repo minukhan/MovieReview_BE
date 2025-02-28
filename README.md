@@ -29,3 +29,10 @@ CineWall은 최신 영화 리뷰를 공유하고, 추천 영화를 확인할 수
 | 시스템 아키텍처 | Backend CI/CD | Backend 기술스택 |
 |---------|-----------------|----------|
 | ![시스템 아키텍처](https://github.com/user-attachments/assets/404a99c4-e1f0-4a5c-b575-9b65b6c3385a) | ![ Backend CI/CD ](https://github.com/user-attachments/assets/a0e5c057-fb2e-48cf-bd28-e4791c12a32e) | ![Backend 기술스택](https://github.com/user-attachments/assets/f87f166c-4990-4278-bbf7-b015960bdd71) |
+
+
+## 🎥 프로젝트 시연 영상
+
+[![CineWall 시연 영상](https://img.youtube.com/vi/3X-j1Fs8tEU/maxresdefault.jpg)](https://youtu.be/3X-j1Fs8tEU)
+
+위 이미지를 클릭하면 YouTube에서 전체 영상을 볼 수 있습니다.
