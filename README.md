@@ -33,6 +33,6 @@ CineWall은 최신 영화 리뷰를 공유하고, 추천 영화를 확인할 수
 
 ## 🎥 프로젝트 시연 영상
 
-[![CineWall 시연 영상][(https://youtu.be/3X-j1Fs8tEU)](https://youtu.be/vIVot70bqFA)
+[![CineWall 시연 영상](https://img.youtube.com/vi/3X-j1Fs8tEU/maxresdefault.jpg)](https://youtu.be/3X-j1Fs8tEU)
 
 위 이미지를 클릭하면 YouTube에서 전체 영상을 볼 수 있습니다.
